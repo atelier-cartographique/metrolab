@@ -1,0 +1,17 @@
+{
+	"db": {
+	  "client": "postgresql",
+	  "connection": {
+	    "host"     : "127.0.0.1",
+	    "user"     : "pierre",
+	    "password" : "plokplok",
+	    "database" : "metrolab"
+	  }
+	},
+	"server":{
+		"port": 8000,
+		"viewEngine" : "ejs",
+		"views" : "/home/pierre/System/src/metrolab/views",
+		"static" : "/home/pierre/System/src/metrolab/static"
+	}
+}
