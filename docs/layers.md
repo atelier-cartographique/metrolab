@@ -1,31 +1,32 @@
 layers
 ======
 
-Layers can contain imported datas or can be drawn by users.
+Layers are thematic maps created by users or out of imported datas.
 
 
-Widget My Subscriptions
------------------------
-
-The widget My Subscriptions present a list of layers or groups of layers the user subscribed to. 
-It should provide the following options :
-
-- change the order of layers or groups of layers
-- make each layer and group visible or not.
- 
-
-
-Layer creation
---------------
+## Layer creation
 
 The user can add a new map layer to the collection by drawing his own map. 
 The layer creation widget has to be designed to invite the user to create thematic layers (it can be with the label of the color choice...).
 
-- give it a name
-- and a description ?
-- define color
-- choose group / create new group
-- choose the background layer 
+
+The user has to give it : 
+
+- a name
+- a description
+- a style : 
+
+	- The user can define the layer color. Gradients of that color will be generated from the entity attribut (=! number, to be defined).
+	
+	- Outlines of entities can have different strokes, depending of the entity attribut (number, to be defined)
+
+- a group / create new group
+
+
+
+## goodies
+
+- Add ability to choose the background layer 
 
 
 
