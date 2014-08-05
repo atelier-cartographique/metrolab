@@ -10,9 +10,9 @@
 
 
 var config = require('./config');
+require('./lib/db').configure(config.db);
 var app = require('./lib/server')(config.server);
 
-require('./lib/db').configure(config.db, app);
 
 require('./routes')(app);
 

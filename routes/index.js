@@ -8,17 +8,25 @@
  *
  */
 
+var _ = require('underscore');
 var express = require('express');
 
-var store = require('../lib/store');
+var routes = ['login'];
 
 module.exports = exports = function(app){
 
+
+
 	var router = express.Router();
+	_.each(routes, function(route){
+		require('./'+route)(router, app);
+	});
+
 	/* GET home page. */
 	router.get('/', function(req, res) {
 	  res.send('Welcome!');
 	});
+
 	app.use('/', router);
 
 };
