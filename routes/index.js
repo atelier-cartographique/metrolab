@@ -24,7 +24,12 @@ module.exports = exports = function(app){
 
 	/* GET home page. */
 	router.get('/', function(req, res) {
-	  res.send('Welcome!');
+		if (req.isAuthenticated()) { 
+	  		res.render('index');
+		}
+		else{
+			res.redirect('/login');
+		}
 	});
 
 	app.use('/', router);
