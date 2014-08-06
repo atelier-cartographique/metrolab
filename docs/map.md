@@ -8,4 +8,3 @@ The map component must be able to display different layers made of external mapp
 
 - scale
 - pan & zoom
--possibility to save "maps" (layers + order), give it a name and share it.
