@@ -24,13 +24,8 @@ var modelNames = ['User', 'Layer', 'Entity'];
  	var RH = base.RequestHandler.extend({
  		modelName: modelName,
  		model: store[modelName],
- 		filterResultList: function(res){
- 			console.log('>> filterResultList');
- 			var fres = [];
- 			_.each(res, function(r){
- 				fres.push(_.omit(r, 'password'));
- 			});
- 			return fres;
+ 		filterResult: function(res){
+ 			return _.omit(res, 'password');
  		},
  	});
  	var handler = new RH;

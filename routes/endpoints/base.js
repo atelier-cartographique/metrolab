@@ -35,13 +35,26 @@ module.exports.RequestHandler = object.Object.extend({
 	    }
 	},
 
+	_filterResult: function(res){
+		return this.tryMethod('filterResult', res, res);
+	},
+
+	_filterResultList: function(res){
+		var fres = [];
+		_.each(res, function(r){
+			fres.push(this._filterResult(r));
+		});
+		return fres;
+	},
+
 	_get: function(id){
 		var D = deferred();
+		var self = this;
 		this.model.where({id:id})
 			.fetch()
 			.then(function(model){
 				if(model){
-					D.resolve(model.toJSON());
+					D.resolve(self._filterResult(model.toJSON()));
 				}
 				else{
 					D.reject('NotFound');
@@ -49,6 +62,7 @@ module.exports.RequestHandler = object.Object.extend({
 			});
 		return D.promise;
 	},
+
 
 	_list: function(options){
 		var self = this;
@@ -74,7 +88,7 @@ module.exports.RequestHandler = object.Object.extend({
 	        .select()
 	        .exec(function(err, res){
 	            if(err){ return D.reject(err); }
-	            res = self.tryMethod('filterResultList', res, res);
+	            res = self._filterResultList(res);
 	            var result = {
 	                page: options.page || 0,
 	                count: count,
@@ -91,13 +105,14 @@ module.exports.RequestHandler = object.Object.extend({
 	_post: function(attributes){
 		var D = deferred();
 		var model = new this.model(attributes);
+		var self = this;
 		model.save()
 			.then(function(m){
 				if(!m){
 					D.reject('SaveError');
 				}
 				else{
-					D.resolve(m.toJSON());
+					D.resolve(self._filterResult(m.toJSON()));
 				}
 			});
 		return D.promise;
