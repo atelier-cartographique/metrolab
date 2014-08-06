@@ -27,6 +27,7 @@ requirejs.config({
         'backbone': 'backbone/backbone-min',
         'underscore': 'underscore/underscore-min',
         'leaflet': 'leaflet/leaflet',
+        'leaflet-draw': 'leaflet/leaflet.draw',
     },
     shim: {
         'backbone': {
@@ -36,22 +37,25 @@ requirejs.config({
         'underscore': {
             exports: '_'
         },
+        'leaflet-draw' : {
+            deps:['leaflet']
+        },
     },
 });
 
 
-requirejs(['backbone',],
-function(Backbone){
+requirejs(['backbone', 'app', 'core/routers', 'core/eproxy'],
+function(Backbone, app, routers, P){
     'use strict';
     
     $(document).ready(function(){
 
-        app().once('ready', function(){
+        app.once('ready', function(){
             console.log('APP READY');
             
             
             // render app
-            app().render();
+            app.render();
 
             // setup main router
             Backbone.history.start({pushState: true});
@@ -59,7 +63,7 @@ function(Backbone){
         
         var router = new routers;
         P.register('router', router);
-        app().start();
+        app.start();
     });
     
 });

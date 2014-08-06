@@ -11,11 +11,9 @@
 var _ = require('underscore');
 var express = require('express');
 
-var routes = ['login'];
+var routes = ['login', 'config', 'api'];
 
 module.exports = exports = function(app){
-
-
 
 	var router = express.Router();
 	_.each(routes, function(route){
