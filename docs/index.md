@@ -22,3 +22,24 @@ This documentation describes components, features and behaviours that we expect 
 - information display
 - notifications area
 
+
+## structure
+
+First page --> only Login + Description text + contact
+
+### once logged in : 
+
+- the map is used as the background of the viewport
+- user related widgets and buttons are collapsed and spread around the viewport to preserve map visibility.
+
+	- top-left : user's layers list and "add layer" widgets
+	- top-left : user's maps and subscribed layers widgets
+	- bottom-left : logo, info/about link, logout etc..
+	- left : entity info widget (when clicked on entity)
+	- bottom-right : notifications widgets
+	- right : layers legend
+
+-Independant pages / modules : 
+
+	-layers index 
+	-infos and contacts
