@@ -40,6 +40,46 @@ function(DT)
     var C = {};
 
 
+
+    C.User = DT.Collection.extend({
+        modelName: 'User',
+        
+        me: function(callback, ctx){
+            return this.getCursor({
+                query: 'me',
+                callback: callback,
+                context: ctx,
+            });
+        },
+
+    });    
+
+    C.Layer = DT.Collection.extend({
+        modelName: 'Layer',
+
+        forUser: function(userId, callback, ctx){
+            return this.getCursor({
+                query: 'u/'+userId,
+                callback: callback,
+                context: ctx,
+            });
+        },
+        
+    });
+
+    C.Entity = DT.Collection.extend({
+        modelName: 'Entity',
+        
+        forLayer: function(layerId, callback, ctx){
+            return this.getCursor({
+                query: 'l/'+layerId,
+                callback: callback,
+                context: ctx,
+            });
+        },
+
+    });
+
     var collections = {}
     
     for(var c in C)

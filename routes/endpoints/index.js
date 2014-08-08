@@ -17,17 +17,11 @@
 
 var handlers = []; 
 
-var modelNames = ['User', 'Layer', 'Entity'];
+var modelNames = ['user', 'layer', 'entity'];
 
  _.each(modelNames, function(modelName){
 
- 	var RH = base.RequestHandler.extend({
- 		modelName: modelName,
- 		model: store[modelName],
- 		filterResult: function(res){
- 			return _.omit(res, 'password');
- 		},
- 	});
+ 	var RH = require('./'+modelName);
  	var handler = new RH;
  	console.log('>> pushing handler', handler.modelName);
  	handlers.push(handler);

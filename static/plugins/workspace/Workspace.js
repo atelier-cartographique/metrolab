@@ -21,13 +21,56 @@
 
 
 define([
+	'underscore',
 	'core/logger',
-	'core/types', 
+	'core/types',
+	'core/collections', 
 	'leaflet', 
 	'leaflet-draw', 
 	'core/template'
 	], 
-function(log, T, L, LD, TP){
+function(_, log, T, C, L, LD, TP){
+
+
+	function MapEventHandlerBase(options){
+			this.map = options.map;
+			this.attachHandlers();
+	};
+	MapEventHandlerBase.extend = T.extend;
+
+	var MapEventHandler = MapEventHandlerBase.extend({
+		
+		attachHandler: function(event, handler){
+			this.map.on(event, _.bind(this[handler], this));
+		},
+
+		attachHandlers: function(){
+			var self = this;
+			_.each(self.events, function(method, k){
+				self.attachHandler(k, method);
+			});
+		},
+
+		events: {
+			'draw:created' : 'create',
+		},
+
+		create: function(event){
+			var type = event.layerType;
+        	var layer = event.layer;
+        	var geoJSON = layer.toGeoJSON();
+        	log.debug('create', geoJSON);
+
+    		if (type === 'marker') {
+		        // Do marker specific actions
+		    }
+
+		    // Do whatever else you need to. (save to db, add to map etc)
+		    this.map.addLayer(layer);
+		},
+
+	});
+
 
 	var Workspace = T.View.extend({
 
@@ -48,6 +91,8 @@ function(log, T, L, LD, TP){
 			    center: [50.8, 4.3],
 			    zoom: 13
 			});
+
+			this.handler = new MapEventHandler({map:this.map});
 		},
 
 		render: function(){

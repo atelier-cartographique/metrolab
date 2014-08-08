@@ -24,7 +24,8 @@ function(Backbone, _, $, P, config, logger)
 {
     'use strict';
         
-    var madeInApiUrl = config.apiUrl;
+    var apiUrl = config.apiUrl;
+    var apiName = config.apiName || 'apiNN';
     
     function makePath(){
         var parts = _.toArray(arguments);
@@ -65,7 +66,7 @@ function(Backbone, _, $, P, config, logger)
             || !('collection' in options)){
                 throw new FragmentException('A fragment needs to be instantiated with a query and a collection');
             }
-        this.qname = objectHash(options.query);
+        this.qname = options.query;
         this.current = -1;
         this.totalPages = 0;
         this.totalItems = 0;
@@ -197,7 +198,6 @@ function(Backbone, _, $, P, config, logger)
                  P.register(this.proxyName, this);
             }
             this._generateModel();
-            this._generateRelationships();
         },
         
         /**
@@ -209,67 +209,38 @@ function(Backbone, _, $, P, config, logger)
          */
         _generateModel: function(){
             this.model = Backbone.Model.extend({
-                urlRoot: madeInApiUrl + this.modelName + '/',
+                urlRoot: apiUrl + this.modelName + '/',
                 idAttribute: 'id',
             });
         },
         
-        _generateRelationships: function(){
-            var self = this;
-            _.each(this.relationships, function(val, key){
-                var f = function(id, callback, ctx){
-                    var q = [self.modelName, id, key, val];
-                    var options = {
-                        query: q,
-                        callback: callback,
-                        ctx: ctx,
-                    };
-                    
-                    return self.getCursor(options);
-                };
-                self[key] = f;
-            });
-        },
 
         sync: function(method, model, options){
-            var backboneOptions = _.omit(options, 'madeen');
-            var madeenOptions = _.result(options, 'madeen') || {};
+            var backboneOptions = _.omit(options, apiName);
+            var apiOptions = _.result(options, apiName) || {};
             var path = '';
             var params = '';
 
-            if('params' in madeenOptions){
-                params = '?' + $.param(madeenOptions.params);
-            }
-            
-            if('query' in madeenOptions){
-                var Q = _.clone(madeenOptions.query);
-                if('read' === method){
-                    var isListRequest = 'subject' in Q;
-                    if(isListRequest){
-                        backboneOptions.url = makePath(madeInApiUrl, 
-                                                           Q.subject, Q.subjectId, 
-                                                           Q.predicate, this.modelName)
-                                                    + params;
-                    }
-                    else{ 
-                        logger.warning('hm, we should not end up here', method, model, options);
-                    }
+            if('read' === method){
+                if('query' in apiOptions){
+                    backboneOptions.url = makePath(apiUrl,
+                                                    this.modelName, 
+                                                    apiOptions.query); 
                 }
                 else{
-                    logger.warning('Rien a foutre ici ?', method, this.modelName);
+                    backboneOptions.url = makePath(apiUrl,
+                                                    this.modelName) + '/'; 
                 }
             }
+
+            if('params' in apiOptions){
+                backboneOptions.url += '?' + $.param(apiOptions.params);
+            }
+            
             return Backbone.sync.apply(this,[method, model, backboneOptions]);
         },
 
-        graphCreate: function(subject, predicate, obj, options){
-            options = options || {};
-            options.url = makePath(subject.url, subject.id, predicate, this.modelName);
-            var model = new this.model(obj);
-            model.save(null, options);
-            return model;
-        },
-
+        
         parse: function(response, options){
             this.nodeCount = response.nodeCount;
             this.next = response.next;
@@ -277,46 +248,9 @@ function(Backbone, _, $, P, config, logger)
             return response.results;
         },
 
-        fetchAll: function(options){
-            var self = this;
-            options = options || {};
-            var counter = 0;
-            _.extend(options, {
-                success:function(data){
-                    self.trigger('sync:part');
-                },
-            });
-            var _syncForward = function(){
-                if(!this.nextPage(options))
-                {
-                    this.trigger('syncAll');
-                    this.off('sync:part', _syncForward);
-                };
-            };
-            this.on('sync:part', _syncForward, this);
-            return this.fetch(options);
-        },
-        
         getCursor: function(options){
             var f = new Fragment(_.extend({collection:this}, options));
             return f.next();
-        },
-
-        nextPage: function(options) {
-            if (!this.next) {
-                return false;
-            }
-            _.extend(options, { url:this.next, });
-            return this.fetch(options);
-        },
-
-        previousPage: function() {
-            if (!this.previous) {
-                return false;
-            }
-            return this.fetch({
-                    url:this.previous,
-            });
         },
 
         resetFragment: function(name){
@@ -356,18 +290,20 @@ function(Backbone, _, $, P, config, logger)
             }
             else {
                 var params = {page:page};
-                if('command' in query){
-                    params.command = query.command;
-                }
-                this.fetch({
-                    madeen: {
-                        query: query,
-                        params: params,
-                    },
+
+                
+                fetchOptions = {
                     success:function(col, resp, opt){
                         self.addFragment(name, resp, callback, ctx);
                     }
-                });
+                };
+
+                fetchOptions[apiName] =  {
+                        query: query,
+                        params: params,
+                    };
+
+                this.fetch(fetchOptions);
             }
         },
 
@@ -421,35 +357,6 @@ function(Backbone, _, $, P, config, logger)
                     self.addFragment(name, resp, callback, ctx);
                 },
             });
-        },
-
-        searchNext:function(what, from, callback, ctx){
-            var name = 'search:'+what;
-            from = from ? Number(from) : -1;
-            var page  = from + 1;
-            if(this.fragmentPointer[name]
-                &&  from < this.fragmentPointer[name].max)
-            {
-                this.trigger(name, this.fragments[name][page]);
-                if(callback){
-                    callback.apply(ctx, [this.fragments[name][page]]);
-                }
-            }
-            else
-            {
-                this.searchPage(name, what, page, callback, ctx);
-            }
-            return this;
-        },
-
-        searchPrevious: function(what, from){
-            var name = 'search:'+what;
-            var page  = from - 1;
-            if(page > -1)
-            {
-                this.trigger(name, this.fragments[name][page]);
-            }
-            return this;
         },
 
         getOrCreate:function(id, callback, checkList, ctx){

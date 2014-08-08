@@ -40,9 +40,10 @@ module.exports.RequestHandler = object.Object.extend({
 	},
 
 	_filterResultList: function(res){
+		var self = this;
 		var fres = [];
 		_.each(res, function(r){
-			fres.push(this._filterResult(r));
+			fres.push(self._filterResult(r));
 		});
 		return fres;
 	},
@@ -63,25 +64,37 @@ module.exports.RequestHandler = object.Object.extend({
 		return D.promise;
 	},
 
+	_parseWhere:function(Q, options){
+		var self = this;
+		if('where' in options){
+			var wheres = options.where;
+			if(!_.isArray(wheres)){
+				wheres = [wheres];
+			}
+			_.each(wheres, function(w){
+				self._applyWhere(Q, w);
+			});
+		}
+	},
 
 	_list: function(options){
 		var self = this;
 		var D = deferred();
 		var Q = self.model.query();
 		
-		if('where' in options){
-			self._applyWhere(Q, options.where);
-		}
+		self._parseWhere(Q, options);
 		
+// FIXME
+		var parserModel = new self.model;
+		var parse = _.bind(parserModel.parse, parserModel);
+
 		Q.count('id')
 		 .exec(function(err, c){
 	        if(err){ return D.reject(err); }
 	        var count = parseInt(c[0].count);
 	        var Q2 = self.model.query();
 
-	        if('where' in options){
-				self._applyWhere(Q2, options.where);
-			}
+			self._parseWhere(Q2, options);
 
 	        Q2.offset(self._offset(options.page))
 	        .limit(self.pageSize)
@@ -89,6 +102,10 @@ module.exports.RequestHandler = object.Object.extend({
 	        .exec(function(err, res){
 	            if(err){ return D.reject(err); }
 	            res = self._filterResultList(res);
+	            results = _.map(res, function(attrs){
+	            	var m = new self.model(parse(attrs));
+	            	return m.toJSON();
+	            });
 	            var result = {
 	                page: options.page || 0,
 	                count: count,
@@ -138,7 +155,7 @@ module.exports.RequestHandler = object.Object.extend({
 			&& _.isFunction(this.listOptions)){
 			_.extend(options, this.listOptions(req));
 		}
-		options.page = req.params.page;
+		options.page = req.query.page;
 		this._list(options)
 			.done(function(result){
 				res.json(result);
@@ -197,11 +214,12 @@ module.exports.RequestHandler = object.Object.extend({
 
 	getEndpoints: function(withDefault){
 		var endpoints = {};
+		var declaredEndpoints = _.result(this, 'endpoints');
+		_.extend(endpoints, declaredEndpoints);
+		
 		if(withDefault){
 			_.extend(endpoints, this.defaultEndpoints());
 		}
-		var declaredEndpoints = _.result(this.endpoints);
-		_.extend(endpoints, declaredEndpoints);
 		return endpoints;
 	},
 
