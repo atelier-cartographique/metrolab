@@ -8,9 +8,9 @@ Layers are thematic maps created by users or out of imported datas.
 # Layer creation
 
 Button "add layer" :
--close all open widgets (except notifications ?) 
--open layer information widget in edition mode (top-left) 
--map edition tools + *save* button appear on top-left of the map viewport
+- close all open widgets (except notifications ?) 
+- open layer information widget in edition mode (top-left) 
+- map edition tools + *save* button appear on top-left of the map viewport
 
 The user has to give the layer : 
 
@@ -24,14 +24,14 @@ The user has to give the layer :
 # Layer edition
 
 
--All layers belonging to a user can be directly edited by him.
+- All layers belonging to a user can be directly edited by him.
 
--Modifications has to be saved by the user.
+- Modifications has to be saved by the user.
 
--When visualizing a group of layers, an *edit* button or equivalent is 
+- When visualizing a group of layers, an *edit* button or equivalent is 
 displayed for each layer belonging to the current user in the legend.
 
--When a layer is in edition mode, it is displayed on top the others.
+- When a layer is in edition mode, it is displayed on top the others.
 
 
 
@@ -43,8 +43,8 @@ displayed for each layer belonging to the current user in the legend.
 ## Entities
 
 On-click : i
--close all open widgets (except notifications ?) 
--open layer information widget (top-left) 
+- close all open widgets (except notifications ?) 
+- open layer information widget (top-left) 
 
 ## Visual aspects
 

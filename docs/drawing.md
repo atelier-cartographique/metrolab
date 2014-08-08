@@ -1,12 +1,11 @@
 drawing
 =======
 
-Tools to draw and attach informations:
+Tools to draw entities and attach informations:
 
 - points
 - lines
 - polygons
-
 - edit
 - delete
 

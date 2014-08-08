@@ -11,6 +11,14 @@ This documentation describes components, features and behaviours that we expect 
 *metrolab* is a colaborative mapping program. As such, its main interface is built upon a geographic viewport equipped with editing tools.
 
 
+## glossary
+
+In the following documentation we assume that 
+
+- a single layer is called a *layer* 
+- a group of layers is called a *map*.
+- a point, line, polygon etc is called an *entity*
+
 ## modules
 
 - map
