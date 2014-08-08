@@ -1,24 +1,31 @@
 layers
 ======
 
-Layers are thematic maps created by users or out of imported datas.
+A layer is a thematics group of entities, all displayed at once.
+They are created manualy by users or out of imported datas.
 
 
 
 # Layer creation
 
 Button "add layer" :
-- close all open widgets (except notifications ?) 
-- open layer information widget in edition mode (top-left) 
-- map edition tools + *save* button appear on top-left of the map viewport
+	- close all open widgets (except notifications ?) 
+	- open layer information widget in edition mode (top-left) 
+	- map edition tools + *save* button appear on top-left of the map viewport
 
 The user has to give the layer : 
 
-- a name
-- a description
-- a fill color
-- a stroke color (?) 
-- + possibility to add other (key,value) 
+	- a name
+	- a description
+	- a fill color
+	- a stroke color (?) 
+	- + possibility to add other (key,value) 
+
+*GOODIE : import shapefile* 
+			- projection detection 	
+				- if not projection ref --> clear error message
+			- projection adaption if needed
+			- select elements to import from shapefile
 
 
 # Layer edition
