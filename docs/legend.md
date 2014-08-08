@@ -1,31 +1,44 @@
 legends
 =======
 
-The Legend widget provide both a classic map legend, and the list of displayed layers. As such, it provides the ability to re-order the visible layers.
+The legend widget is used :
+- as a legend for the current visible map
+- as a tool box for organizing the current visible map 
+
+The legend widget appear on right of the screen
 
 
-## Legend per layer 
+The legend widget provides : 
 
-- Each layer has it's own legend, automaticaly generated from the layer style (color gradient per attribut + attribut name, idem for outline strokes)
+- map informations
+
+	- a *name* field for the map
+	- a *description* field for the map
+	- +add other (key,value) (?)
+
+- list of visibles layers in their order of appearance
+
+	- functions per layer (not collapsible, goes next to layers title)
+
+		- re-order function (icon + drag and drop layer title in the list)
+		- ability to show/hide each layer (icon)
+		- ability to remove a layer from the map (icon)
+			- ask confirmation to user
+		- *edit* button for each layer belonging to the current user (icon)
+
+	- legend of each layer (collapsible)
+
+		- Layer name 
+			- (header of the collapsible block, use the layer color for design)
+		
+		- Description and others (key,value)
+			-(maybe a global link openning another box with thoses infos ?)
+		
+		- legend items, generated from layer styles (color and outline)
+			- color gradients in small squares (15px) + attribut value
+			- outline strokes (30px)+ attribut value
+			- alpha gradients + attribut value (?)
+			- markers legend in layer's color (generated pictos + attribut value)
 
 
-- The legend displays :
-	- layer name 
-	- layer description (?)
-	- legend items
 
-
-
-## Legend behaviour with several layers displayed
-
-- If several layers are displayed (My Layers + Subscribed Layers), each legend is displayed in the same order as the layers.
-
-- Each legend is collapsible (layer title remain visible)
-
-- The legends list provide the list of the visible layers. We can use that to offer the possibility to re-order them (drag and drop or so..)
-
-
-
-## Design : 
-
-re-use the layer color somewhere for visual coherency.

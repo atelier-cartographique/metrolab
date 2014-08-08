@@ -1,12 +1,11 @@
 drawing
 =======
 
-Tools to draw and attach informations:
+Tools to draw entities and attach informations:
 
 - points
 - lines
 - polygons
-
 - edit
 - delete
 
@@ -34,9 +33,6 @@ optionaly:
 
 ## Points
 
-- Design : Two characters can be chosen (automaticaly from text / description ?) and used as symbole for the marker. 
-First letter capitalzed, the second is not. (See periodic element table as reference).
-Below this symbol, the exact name used to create the symbole is displayed. Small font.
 
 
 ## Lines
