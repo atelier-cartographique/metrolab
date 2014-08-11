@@ -7,6 +7,8 @@ The legend widget is used :
 
 The legend widget appear on right of the screen
 
+If the map belong to the user, map infos can always be edited and saved.
+
 
 The legend widget provides : 
 
@@ -15,6 +17,8 @@ The legend widget provides :
 	- a *name* field for the map
 	- a *description* field for the map
 	- +add other (key,value) (?)
+	- *save* button + confirmation
+	- *delete* button + confirmation
 
 - list of visibles layers in their order of appearance
 
@@ -24,7 +28,8 @@ The legend widget provides :
 		- ability to show/hide each layer (icon)
 		- ability to remove a layer from the map (icon)
 			- ask confirmation to user
-		- *edit* button for each layer belonging to the current user (icon)
+		- Ability to edit layers infos that belong to the user 
+			-if not possible display an *edit* button for each layer belonging to the current user (icon)
 
 	- legend of each layer (collapsible)
 
