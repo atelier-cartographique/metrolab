@@ -18,3 +18,21 @@
 	height:100%;
 }
 
+.layers{
+	position:absolute;
+	top:32px;
+	right:32px;
+	width:220px;
+	height:220px;
+	border: 1px solid gray;
+	padding: 12px;
+	background-color: white;
+}
+
+.layer{
+
+}
+
+.layer.active{
+	font-weight: bold;
+}

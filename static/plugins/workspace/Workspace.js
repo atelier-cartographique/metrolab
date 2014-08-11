@@ -22,23 +22,25 @@
 
 define([
 	'underscore',
+	'backbone',
 	'core/logger',
 	'core/types',
 	'core/collections', 
 	'leaflet', 
 	'leaflet-draw', 
-	'core/template'
+	'core/template',
+	'plugins/user/User',
+	'plugins/workspace/LayerManager'
 	], 
-function(_, log, T, C, L, LD, TP){
+function(_, B, log, T, C, L, LD, TP, User, LayerManager){
 
 
-	function MapEventHandlerBase(options){
+	function MapEventHandler(options){
 			this.map = options.map;
 			this.attachHandlers();
 	};
-	MapEventHandlerBase.extend = T.extend;
 
-	var MapEventHandler = MapEventHandlerBase.extend({
+	_.extend(MapEventHandler.prototype, {
 		
 		attachHandler: function(event, handler){
 			this.map.on(event, _.bind(this[handler], this));
@@ -61,15 +63,15 @@ function(_, log, T, C, L, LD, TP){
         	var geoJSON = layer.toGeoJSON();
         	log.debug('create', geoJSON);
 
-    		if (type === 'marker') {
-		        // Do marker specific actions
-		    }
+    		// if (type === 'marker') {
+		    //     // Do marker specific actions
+		    // }
 
-		    // Do whatever else you need to. (save to db, add to map etc)
-		    this.map.addLayer(layer);
+		    this.trigger('create', layer);
+		    // this.map.addLayer(layer);
 		},
 
-	});
+	}, B.Events);
 
 
 	var Workspace = T.View.extend({
@@ -78,7 +80,8 @@ function(_, log, T, C, L, LD, TP){
 		template: 'workspace/main',
 
 		initialize: function(options){
-		
+
+			this.layerManager = new LayerManager;
 		},
 
 		setupMap: function(){
@@ -93,13 +96,25 @@ function(_, log, T, C, L, LD, TP){
 			});
 
 			this.handler = new MapEventHandler({map:this.map});
+			this.handler.on('create', function(layer){
+				if(this.layerManager.getCurrentLayer()){
+					this.layerManager.getCurrentLayer().createFeature(layer);
+				}
+			}, this);
+
+			User(function(user){
+				this.layerManager.start(this.map, user);
+			}, this);
+			
 		},
 
 		render: function(){
 			TP.render(TP.name(this.template), this, function(t){
-				this.$el.html(t({}))
+				this.$el.html(t({}));
+				this.attachToAnchor(this.layerManager, 'layers');
 				this.setupMap();
 			});
+			return this;
 		},
 
 	});

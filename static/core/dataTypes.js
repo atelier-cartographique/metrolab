@@ -80,8 +80,8 @@ function(Backbone, _, $, P, config, logger)
     _.extend(Fragment.prototype, {
         
         _endInit: function(page){
-            this.totalPages = page.pageCount;
-            this.totalItems = page.nodeCount;
+            this.totalPages = page.numPages;
+            this.totalItems = page.count;
             this.ready = true;
             this.trigger('ready');
         },
@@ -186,8 +186,6 @@ function(Backbone, _, $, P, config, logger)
 
         constructor: function(){
             Backbone.Collection.apply(this, arguments);
-            this._create = this.create;
-            this.create = this.graphCreate;
             this.fragments = {};
         },
 
@@ -242,9 +240,9 @@ function(Backbone, _, $, P, config, logger)
 
         
         parse: function(response, options){
-            this.nodeCount = response.nodeCount;
-            this.next = response.next;
-            this.previous = response.previous;
+            // this.count = response.count;
+            // this.next = response.next;
+            // this.previous = response.previous;
             return response.results;
         },
 
@@ -266,8 +264,8 @@ function(Backbone, _, $, P, config, logger)
 
             var fragment = {};
             
-            fragment.nodeCount = data.nodeCount;
-            fragment.pageCount = data.pageCount;
+            fragment.count = data.count;
+            fragment.numPages = data.numPages;
             fragment.page = data.page;
             fragment.references = [];
             _.each(data.results, function(obj){
@@ -292,7 +290,7 @@ function(Backbone, _, $, P, config, logger)
                 var params = {page:page};
 
                 
-                fetchOptions = {
+                var fetchOptions = {
                     success:function(col, resp, opt){
                         self.addFragment(name, resp, callback, ctx);
                     }
@@ -316,48 +314,6 @@ function(Backbone, _, $, P, config, logger)
             }
         },
 
-        queryNext: function(qname, query, from, callback, ctx){
-            var name = 'query:'+qname;
-            from = from ? Number(from) : 0;
-            var page  = from;
-            if(this.fragmentPointer[name]
-                &&  from < this.fragmentPointer[name].max)
-            {
-                this.trigger(name, this.fragments[name][page]);
-                if(callback){
-                    callback.apply(ctx, [this.fragments[name][page]]);
-                }
-            }
-            else
-            {
-                this.queryPage(name, query, page, callback, ctx);
-            }
-            return this;
-        },
-
-        queryPrevious: function(qname, from){
-            var name = 'query:'+qname;
-            var page  = from - 1;
-            if(page > -1)
-            {
-                this.trigger(name, this.fragments[name][page]);
-            }
-            return this;
-        },
-
-        searchPage: function(name, what, page, callback, ctx){
-            var self = this;
-            var url = this.url({
-                search: what,
-                page: page + 1,
-            });
-            this.fetch({
-                url:url,
-                success:function(col, resp, opt){
-                    self.addFragment(name, resp, callback, ctx);
-                },
-            });
-        },
 
         getOrCreate:function(id, callback, checkList, ctx){
             var model = this.get(id);

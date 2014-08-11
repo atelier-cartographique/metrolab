@@ -21,22 +21,29 @@
 
 
 define([
-	'logger',
+	'core/logger',
 	'underscore',
 	'core/types',
 	'core/collections',
+	'core/template',
 	'leaflet'
 	], 
-function(log, _, T, C, L){
+function(log, _, T, C, TP, L){
 
 	var Layer = T.View.extend({
 
 		className: 'layer',
+		template: 'workspace/layer-item',
+
+		events:{
+			'click .layer-name': 'selectLayer',
+			'click .layer-zoom': 'zoomLayer',
+		},
 
 		initialize: function(options){
 			this.visible = !!('visible' in options) ? options.visible : true;
 			this.map = options.map;
-			this.group = new L.LayerGroup().addTo(this.map);
+			this.group = new L.FeatureGroup().addTo(this.map);
 
 			this.entities = {};
 		},
@@ -53,23 +60,60 @@ function(log, _, T, C, L){
 		},
 
         dataAvailable: function (data) {
-            data = this.prepareData(data);
             _.each(data.references, function (reference) {
-                var subview = this.instantiateSubview(reference);
-                this.includeSubview(subview);
+            	this.renderEntity(reference);
             }, this);
             this.trigger('dataAvailable', this);
         },
 
 		render: function(){
+			var data = this.model.toJSON().properties;
+			TP.render(TP.name(this.template), this, function(t){
+				this.$el.html(t(data));
+			});
+
+
+			return this;
+		},
+
+		selectLayer: function(e){
+			this.trigger('select', this);
+			this.$el.addClass('active');
+			this.showFeatures();
+		},
+
+		deselectLayer: function(){
+			this.$el.removeClass('active');
+		},
+
+		zoomLayer: function(e){
+			this.map.fitBounds(this.group.getBounds());
+		},
+
+		showFeatures: function(){
 			if(!this.cursor){
 				this.cursor = C.Entity.forLayer(this.model.id, 
 												this.dataAvailable, this);
 			}
 		},
 
+		createFeature: function(layer){
+			var self = this;
+			C.Entity.create({
+				layer_id:this.model.id,
+				geometry:layer.toGeoJSON(),
+				properties: {
+					xxYY:'AAAA'
+				}
+			},{
+				wait:true,
+			}).on('sync', function(model){
+				self.renderEntity(model);
+			});
+		},
 	});
 
+	return Layer;	
 });
 
 

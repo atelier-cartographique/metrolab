@@ -36,7 +36,10 @@ module.exports = exports = base.RequestHandler.extend({
  		getMe: function(req, res){
  			if ('user' in req 
  				&& req.user) {
- 				this._get(req.user.id)
+ 				options = {
+ 					where : base.where('id', '=', req.user.id)
+ 				};
+ 				this._list(options)
 					.done(function(model){
 						res.json(model);
 					}, function(err){

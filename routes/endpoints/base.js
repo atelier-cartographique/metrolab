@@ -16,6 +16,22 @@ var store = require('../../lib/store'),
 	object = require('../../lib/object');
 
 
+var Where = object.Object.extend({
+	initialize: function(col, op, val){
+		this.col = col;
+		this.op = op;
+		this.val = val;
+	},
+
+	use: function(Q){
+		Q.where(this.col, this.op, this.val);
+	}
+});
+module.exports.Where = Where;
+module.exports.where = function(c, o , v){
+	return new Where(c,o,v);
+};
+
 
 module.exports.RequestHandler = object.Object.extend({
 
@@ -26,14 +42,6 @@ module.exports.RequestHandler = object.Object.extend({
 		return page * this.pageSize;
 	},
 
-	_applyWhere: function(qb,w){
-	    if(_.isArray(w)){
-	        qb.where.apply(qb, w);
-	    }
-	    else{
-	        qb.where(w);
-	    }
-	},
 
 	_filterResult: function(res){
 		return this.tryMethod('filterResult', res, res);
@@ -72,7 +80,7 @@ module.exports.RequestHandler = object.Object.extend({
 				wheres = [wheres];
 			}
 			_.each(wheres, function(w){
-				self._applyWhere(Q, w);
+				w.use(Q);
 			});
 		}
 	},
@@ -216,7 +224,7 @@ module.exports.RequestHandler = object.Object.extend({
 		var endpoints = {};
 		var declaredEndpoints = _.result(this, 'endpoints');
 		_.extend(endpoints, declaredEndpoints);
-		
+
 		if(withDefault){
 			_.extend(endpoints, this.defaultEndpoints());
 		}

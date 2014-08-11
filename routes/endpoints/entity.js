@@ -32,9 +32,7 @@ module.exports = exports = base.RequestHandler.extend({
 
  		layer: function(req, res) {
  			var options = {
- 				where: [
- 					['layer_id', '=', req.params.layer_id]
- 				],
+ 				where: base.where('layer_id', '=', req.params.layer_id),
  				page : req.query.page,
  			};
 
