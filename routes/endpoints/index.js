@@ -17,7 +17,7 @@
 
 var handlers = []; 
 
-var modelNames = ['user', 'layer', 'entity'];
+var modelNames = ['user', 'layer', 'entity', 'group'];
 
  _.each(modelNames, function(modelName){
 

@@ -80,6 +80,11 @@ function(DT)
 
     });
 
+    C.Group = DT.Collection.extend({
+        modelName: 'Group',
+
+    });
+
     var collections = {}
     
     for(var c in C)

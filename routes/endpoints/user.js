@@ -17,6 +17,7 @@ var store = require('../../lib/store');
 
 
 module.exports = exports = base.RequestHandler.extend({
+
  		modelName: 'User',
  		model: store.User,
 
@@ -28,6 +29,7 @@ module.exports = exports = base.RequestHandler.extend({
  			}
  		},
 
+ 		related: ['groups'],
 
  		filterResult: function(res){
  			return _.omit(res, 'password');

@@ -69,7 +69,7 @@ function (_, T, C, TP, Layer) {
 					self.addLayers(data);
 				}, 400);
 			}
-			_.each(data.references, this.renderLayerItem.bind(this));
+			_.each(data.references, this.renderLayerItem, this);
 		},
 
 		renderLayerItem: function(layer){

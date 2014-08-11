@@ -59,8 +59,13 @@ module.exports.RequestHandler = object.Object.extend({
 	_get: function(id){
 		var D = deferred();
 		var self = this;
+		var related = _.result(self, 'related');
+		var fetchOptions = {};
+		if(related){
+			fetchOptions.withRelated = related;
+		}
 		this.model.where({id:id})
-			.fetch()
+			.fetch(fetchOptions)
 			.then(function(model){
 				if(model){
 					D.resolve(self._filterResult(model.toJSON()));
@@ -89,6 +94,7 @@ module.exports.RequestHandler = object.Object.extend({
 		var self = this;
 		var D = deferred();
 		var Q = self.model.query();
+		var related = _.result(self, 'related');
 		
 		self._parseWhere(Q, options);
 		
@@ -110,17 +116,33 @@ module.exports.RequestHandler = object.Object.extend({
 	        .exec(function(err, res){
 	            if(err){ return D.reject(err); }
 	            res = self._filterResultList(res);
-	            results = _.map(res, function(attrs){
-	            	var m = new self.model(parse(attrs));
-	            	return m.toJSON();
-	            });
+
 	            var result = {
 	                page: options.page || 0,
 	                count: count,
 	                numPages: Math.ceil(count / self.pageSize),
-	                results: res,
+	                results: [],
 	            };
-	            return D.resolve(result);
+	            
+	            var resolve = _.after(res.length, function(){
+	            	D.resolve(result);
+	            });
+
+	            _.each(res, function(attrs){
+	            	var m = new self.model(parse(attrs));
+	            	if(related){
+	            		m.load(related)
+	            		 .then(function(model){
+	            		 	result.results.push(model.toJSON());
+		            		resolve();
+	            		 });
+	            	}
+	            	else{
+		            	result.results.push(m.toJSON());
+		            	resolve();	
+	            	}
+	            });
+	   
 	        });
 	    });
 

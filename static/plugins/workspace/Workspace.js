@@ -30,9 +30,10 @@ define([
 	'leaflet-draw', 
 	'core/template',
 	'plugins/user/User',
-	'plugins/workspace/LayerManager'
+	'plugins/workspace/LayerManager',
+	'plugins/workspace/Subscription'
 	], 
-function(_, B, log, T, C, L, LD, TP, User, LayerManager){
+function(_, B, log, T, C, L, LD, TP, User, LayerManager, Subscription){
 
 
 	function MapEventHandler(options){
@@ -82,6 +83,7 @@ function(_, B, log, T, C, L, LD, TP, User, LayerManager){
 		initialize: function(options){
 
 			this.layerManager = new LayerManager;
+			this.subscription = new Subscription;
 		},
 
 		setupMap: function(){
@@ -104,6 +106,7 @@ function(_, B, log, T, C, L, LD, TP, User, LayerManager){
 
 			User(function(user){
 				this.layerManager.start(this.map, user);
+				this.subscription.start(this.map, user);
 			}, this);
 			
 		},
@@ -112,6 +115,7 @@ function(_, B, log, T, C, L, LD, TP, User, LayerManager){
 			TP.render(TP.name(this.template), this, function(t){
 				this.$el.html(t({}));
 				this.attachToAnchor(this.layerManager.render(), 'layers');
+				this.attachToAnchor(this.subscription.render(), 'groups');
 				this.setupMap();
 			});
 			return this;

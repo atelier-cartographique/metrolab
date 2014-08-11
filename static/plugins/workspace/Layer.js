@@ -43,7 +43,8 @@ function(log, _, T, C, TP, L){
 		initialize: function(options){
 			this.visible = !!('visible' in options) ? options.visible : true;
 			this.map = options.map;
-			this.group = new L.FeatureGroup().addTo(this.map);
+			this.group = new L.FeatureGroup();
+			this.group.addTo(this.map);
 
 			this.entities = {};
 		},
@@ -52,6 +53,9 @@ function(log, _, T, C, TP, L){
 			if(e.id in this.entities) return;
 			var geometry = e.get('geometry');
 			var layer = L.geoJson(geometry);
+			layer.on('click', function(){
+				log.debug('layer', e.id);
+			});
 			this.entities[e.id] = {
 				model: e,
 				layer: layer,
@@ -71,7 +75,7 @@ function(log, _, T, C, TP, L){
 			TP.render(TP.name(this.template), this, function(t){
 				this.$el.html(t(data));
 			});
-
+			this.showFeatures();
 
 			return this;
 		},
@@ -79,15 +83,19 @@ function(log, _, T, C, TP, L){
 		selectLayer: function(e){
 			this.trigger('select', this);
 			this.$el.addClass('active');
-			this.showFeatures();
 		},
 
 		deselectLayer: function(){
 			this.$el.removeClass('active');
 		},
 
+		getBounds: function(){
+			var bounds = this.group.getBounds();
+			return new L.LatLngBounds(bounds.getSouthWest(), bounds.getNorthEast());
+		},		
+
 		zoomLayer: function(e){
-			this.map.fitBounds(this.group.getBounds());
+			this.map.fitBounds(this.getBounds());
 		},
 
 		showFeatures: function(){

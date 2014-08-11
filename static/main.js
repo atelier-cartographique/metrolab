@@ -26,7 +26,7 @@ requirejs.config({
         "jquery": "jquery/jquery.min",
         'backbone': 'backbone/backbone-min',
         'underscore': 'underscore/underscore-min',
-        'leaflet': 'leaflet/leaflet',
+        'leaflet': 'leaflet/leaflet-src',
         'leaflet-draw': 'leaflet/leaflet.draw',
     },
     shim: {
