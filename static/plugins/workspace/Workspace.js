@@ -111,7 +111,7 @@ function(_, B, log, T, C, L, LD, TP, User, LayerManager){
 		render: function(){
 			TP.render(TP.name(this.template), this, function(t){
 				this.$el.html(t({}));
-				this.attachToAnchor(this.layerManager, 'layers');
+				this.attachToAnchor(this.layerManager.render(), 'layers');
 				this.setupMap();
 			});
 			return this;
