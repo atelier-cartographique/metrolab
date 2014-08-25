@@ -2,12 +2,10 @@ legends
 =======
 
 The legend widget is used :
--1- as a legend for the current visible map
--2- as a tool box for organizing the current visible map 
+- 1 as a legend for the current visible map
+- 2 as a tool box for organizing the current visible map 
 
-The legend widget appear on right of the screen
-
-If the map belong to the user, map infos can always be edited and saved.
+The legend widget is organized per layers, and appear on the right of the screen.
 
 
 # 1- Legend & informations of the visible map
