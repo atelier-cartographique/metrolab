@@ -45,6 +45,7 @@ The legend widget is organized per layers, and appear on the right of the screen
 
 # 2- Legend as a tool box 
 (when map belong to current user)
+
 	- ##map informations
 		- editable *name* field of the map
 		- editable *description* field of the map
