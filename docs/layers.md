@@ -23,6 +23,7 @@ The user can chose :
 - a fill color + attribut to generate a color gradient
 - a stroke color (not a priority) + attribut to generate the stroke thickness
 
+
 * About attribut and style : to display the list of all the entities key + min value/max value of the current layer would be helpfull (to chose the attribut for the gradient, and to have a reminder when adding an entity)* 
 
 # Layer edition
