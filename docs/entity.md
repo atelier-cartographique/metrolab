@@ -46,7 +46,9 @@ NO *edit* since we can edit on the fly
 ## Points
 
 multiple (key,value) possible
+
 A typographic pictogram is generated out of a (key,value)
+
 - out of default *name* field ? 
 - out of other attribut user can chose ? 
 
