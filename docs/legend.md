@@ -2,48 +2,73 @@ legends
 =======
 
 The legend widget is used :
-- as a legend for the current visible map
-- as a tool box for organizing the current visible map 
+1- as a legend for the current visible map
+2- as a tool box for organizing the current visible map 
 
 The legend widget appear on right of the screen
 
 If the map belong to the user, map infos can always be edited and saved.
 
 
-The legend widget provides : 
+# 1- Legend & informations of the visible map
 
-- map informations
+- ##map informations
 
-	- a *name* field for the map
-	- a *description* field for the map
-	- +add other (key,value) (?)
-	- *save* button + confirmation
-	- *delete* button + confirmation
+	- *name* of the map
+	- *description* of the map
 
-- list of visibles layers in their order of appearance
+- ##list of visibles layers 
+	- order of appearance on the map
+	-layer name
+	-font-color = layer color
+	- click on layer-title expand the layer legend 
 
-	- functions per layer (not collapsible, goes next to layers title)
+- ##legend per layer 
+	
+	- Description
+	
+	- ###legend items, generated from layer styles (color and outline)
 
-		- re-order function (icon + drag and drop layer title in the list)
+		- colors (point, line, polygon)
+			- (key) as *label* 
+			- gradient bar  
+			- lowest (value) / highest (value) 
+
+		- pictos (points)
+			- generated picto
+			- key as label
+
+
+		- outline strokes (line, polygon)
+			- (key) as *label*
+			- stroke bar (thin to big)
+			- lowest (value) / highest (value) 
+
+
+# 2- Legend as a tool box
+When map belong to current user
+
+	- ##map informations
+
+		- editable *name* field of the map
+		- editable *description* field of the map
+		- *save* button + confirmation
+		- *delete* button + confirmation
+
+
+	- ##functions per layer 
+
+		- re-order layers function (icon + drag and drop layer title in the list)
 		- ability to show/hide each layer (icon)
 		- ability to remove a layer from the map (icon)
 			- ask confirmation to user
 		- Ability to edit layers infos that belong to the user 
-			-if not possible display an *edit* button for each layer belonging to the current user (icon)
+			-if not possible display an *edit* button, or icon, for each layer belonging to the current user
 
-	- legend of each layer (collapsible)
 
-		- Layer name 
-			- (header of the collapsible block, use the layer color for design)
-		
-		- Description and others (key,value)
-			-(maybe a global link openning another box with thoses infos ?)
-		
-		- legend items, generated from layer styles (color and outline)
-			- color gradients in small squares (15px) + attribut value
-			- outline strokes (30px)+ attribut value
-			- alpha gradients + attribut value (?)
-			- markers legend in layer's color (generated pictos + attribut value)
+
+##goodies :
+- size of the picto depend on attribut
 
 
 
