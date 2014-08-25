@@ -15,8 +15,8 @@ optionaly:
 - import .gpx files
 
 
-- *save*, *delete* are in the info-box
-- NO *edit* since we can edit on the fly
+*save*, *delete* are in the info-box. 
+NO *edit* since we can edit on the fly
 
 ## General behavior
 
