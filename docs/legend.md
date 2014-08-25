@@ -10,18 +10,18 @@ The legend widget is organized per layers, and appear on the right of the screen
 
 # 1- Legend & informations of the visible map
 
-##map informations
+- ##map informations
 
 	- *name* of the map
 	- *description* of the map
 
-##list of visibles layers 
+- ##list of visibles layers 
 	- order of appearance on the map
 	- layer name
 	- font-color = layer color
 	- click on layer-title expand the layer legend 
 
-##legend per layer 
+- ##legend per layer 
 	
 	- Description
 	
@@ -45,24 +45,23 @@ The legend widget is organized per layers, and appear on the right of the screen
 
 # 2- Legend as a tool box 
 (when map belong to current user)
+	- ##map informations
+		- editable *name* field of the map
+		- editable *description* field of the map
+		- *save* button + confirmation
+		- *delete* button + confirmation
 
-##map informations
-	- editable *name* field of the map
-	- editable *description* field of the map
-	- *save* button + confirmation
-	- *delete* button + confirmation
-
-##functions per layer 
-	- re-order layers function (icon + drag and drop layer title in the list)
-	- ability to show/hide each layer (icon)
-	- ability to remove a layer from the map (icon)
-	- ask confirmation to user
-	- Ability to edit layers infos that belong to the user 
-		-if not possible display an *edit* button, or icon, for each layer belonging to the current user
-
+	- ##functions per layer 
+		- re-order layers function (icon + drag and drop layer title in the list)
+		- ability to show/hide each layer (icon)
+		- ability to remove a layer from the map (icon)
+			- ask confirmation to user
+		- Ability to edit layers infos that belong to the user 
+			-if not possible display an *edit* button, or icon, for each layer belonging to the current user
 
 
-###goodies :
+
+##goodies :
 - marker/picto size depend on attribut
 
 
