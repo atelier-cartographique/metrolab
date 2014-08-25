@@ -14,8 +14,9 @@ optionaly:
 - images (medias) 
 - import .gpx files
 
-*save*, *delete* are in the info-box
-NO *edit* since we can edit on the fly
+
+- *save*, *delete* are in the info-box
+- NO *edit* since we can edit on the fly
 
 ## General behavior
 
@@ -29,9 +30,13 @@ NO *edit* since we can edit on the fly
 ### usage scenario
 
 1- the user create an entity with one of the provided tools (point, line, polygon etc.)
+
 2- once the entity is created, the information box appear like described in the related doc (information.md)
+
 3- user fills the infos
+
 4- user save the entity
+
 5- info-box closed, entity saved
 
 
@@ -63,7 +68,7 @@ Text notes can be added by user by :
 - click & drag the text zone box
 - type the text
 
- *add (key,value) ? is the text a (value) ?*
+*add (key,value) ? is the text a (value) ?*
 
 ### Text zone
 
