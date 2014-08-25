@@ -63,7 +63,7 @@ Text notes can be added by user by :
 - click & drag the text zone box
 - type the text
 
-+ add (key,value) ? is the text a (value) ?
+ *add (key,value) ? is the text a (value) ?*
 
 ### Text zone
 
