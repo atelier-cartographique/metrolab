@@ -43,15 +43,14 @@ The legend widget is organized per layers, and appear on the right of the screen
 			- lowest (value) / highest (value) 
 
 
-# 2- Legend as a tool box (when map belong to current user)
-
+# 2- Legend as a tool box 
+(when map belong to current user)
 
 	- ##map informations
 		- editable *name* field of the map
 		- editable *description* field of the map
 		- *save* button + confirmation
 		- *delete* button + confirmation
-
 
 	- ##functions per layer 
 		- re-order layers function (icon + drag and drop layer title in the list)
