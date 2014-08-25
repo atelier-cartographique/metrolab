@@ -49,7 +49,6 @@ If the map belong to the user, map infos can always be edited and saved.
 When map belong to current user
 
 	- ##map informations
-
 		- editable *name* field of the map
 		- editable *description* field of the map
 		- *save* button + confirmation
@@ -57,7 +56,6 @@ When map belong to current user
 
 
 	- ##functions per layer 
-
 		- re-order layers function (icon + drag and drop layer title in the list)
 		- ability to show/hide each layer (icon)
 		- ability to remove a layer from the map (icon)
@@ -68,7 +66,7 @@ When map belong to current user
 
 
 ##goodies :
-- size of the picto depend on attribut
+- marker/picto size depend on attribut
 
 
 
