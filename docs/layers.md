@@ -24,7 +24,7 @@ The user can chose :
 - a stroke color (not a priority) + attribut to generate the stroke thickness
 
 
-*About attribut and style : to display the list of all the entities key + min value/max value of the current layer would be helpfull (to chose the attribut for the gradient, and to have a reminder when adding an entity)* 
+*About attribut and style : to display the list of all the entities key + min value/max value would be helpfull (to chose the attribut for the gradient, and to have a reminder when adding an entity)* 
 
 # Layer edition
 
@@ -45,18 +45,18 @@ On-click :
 
 ## Visual aspects
 
-Each layer as a color defined by its author during the layer creation.
+Each layer has a color defined by its author.
 
-Gradients of that color are generated for entities, based on an attributs chosen by the user.
+Gradients of that color are generated for entities, based on an attribut chosen by the user.
 
-Outlines and strokes are also generated for entities, based on an attributs chosen by the user.
+Outlines and strokes are also generated for entities, based on an attribut chosen by the user.
 
 
 ### points 
 
 *Markers / Icons*
 
-The icon of the marker will be automaticaly generated from an attributs. (eg name)
+The icon of the marker will be automaticaly generated from an attribut. (eg name)
 
 First two characters of the point attribut are used as symbole for the marker. 
 First letter capitalzed, the second is not. (See periodic element table as reference).
@@ -82,14 +82,17 @@ general behavior as described above
 ### texts
 
 font-color : layer-color
+
 no outline
+
 size defined by user
 
 
 ### shapefiles 
 
 general behavior as described above
-+ automatic generation of Markers / Icons, see above.
+
++automatic generation of Markers / Icons, see above.
 
 
 
