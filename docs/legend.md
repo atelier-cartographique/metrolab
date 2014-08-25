@@ -2,8 +2,8 @@ legends
 =======
 
 The legend widget is used :
-1- as a legend for the current visible map
-2- as a tool box for organizing the current visible map 
+-1- as a legend for the current visible map
+-2- as a tool box for organizing the current visible map 
 
 The legend widget appear on right of the screen
 
