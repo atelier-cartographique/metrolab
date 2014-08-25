@@ -25,7 +25,7 @@ The legend widget is organized per layers, and appear on the right of the screen
 	
 	- Description
 	
-	- ###legend items, generated from layer styles (color and outline)
+	- Legend items, generated from layer styles & (key,value)
 
 		- colors (point, line, polygon)
 			- (key) as *label* 
@@ -46,19 +46,19 @@ The legend widget is organized per layers, and appear on the right of the screen
 # 2- Legend as a tool box 
 (when map belong to current user)
 
-	- ##map informations
-		- editable *name* field of the map
-		- editable *description* field of the map
-		- *save* button + confirmation
-		- *delete* button + confirmation
+- ##map informations
+	- editable *name* field of the map
+	- editable *description* field of the map
+	- *save* button + confirmation
+	- *delete* button + confirmation
 
-	- ##functions per layer 
-		- re-order layers function (icon + drag and drop layer title in the list)
-		- ability to show/hide each layer (icon)
-		- ability to remove a layer from the map (icon)
-			- ask confirmation to user
-		- Ability to edit layers infos that belong to the user 
-			-if not possible display an *edit* button, or icon, for each layer belonging to the current user
+- ##functions per layer 
+	- re-order layers function (icon + drag and drop layer title in the list)
+	- ability to show/hide each layer (icon)
+	- ability to remove a layer from the map (icon)
+		- ask confirmation to user
+	- Ability to edit layers infos that belong to the user 
+		-if not possible display an *edit* button, or icon, for each layer belonging to the current user
 
 
 
