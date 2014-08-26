@@ -64,6 +64,14 @@ function(DT)
                 context: ctx,
             });
         },
+
+        browse: function(callback, ctx){
+            return this.getCursor({
+                query: '',
+                callback: callback,
+                context: ctx,
+            });
+        },
         
     });
 

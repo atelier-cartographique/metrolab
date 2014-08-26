@@ -24,13 +24,14 @@
 
 define([
 	'underscore',
+	'core/logger',
 	'core/types',
 	'core/collections',
 	'core/template',
 	'leaflet',
 	'plugins/workspace/Layer'
 	],	 
-function (_, T, C, TP, L, Layer) {
+function (_, log, T, C, TP, L, Layer) {
 	'use strict';
 
 	var GroupItem = T.BView.extend({
@@ -69,15 +70,16 @@ function (_, T, C, TP, L, Layer) {
 		},
 
 		fitGroup: function(){
-			var bounds;
+			var bounds = undefined;
 			_.each(this.layers, function(layer){
 				if(!bounds){
-					bounds = layer.group.getBounds();
+					bounds = layer.getBounds();
 				}
 				else{
-					bounds.extend(layer.group.getBounds());
+					bounds.extend(layer.getBounds());
 				}
 			});
+			log.debug('fitGroup', bounds.toBBoxString());
 			this.map.fitBounds(bounds);
 		},
 

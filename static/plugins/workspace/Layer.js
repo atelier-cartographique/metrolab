@@ -26,9 +26,10 @@ define([
 	'core/types',
 	'core/collections',
 	'core/template',
-	'leaflet'
+	'leaflet',
+	'plugins/workspace/Creator'
 	], 
-function(log, _, T, C, TP, L){
+function(log, _, T, C, TP, L, Creator){
 
 	var Layer = T.View.extend({
 
@@ -55,7 +56,9 @@ function(log, _, T, C, TP, L){
 			var layer = L.geoJson(geometry);
 			layer.on('click', function(){
 				log.debug('layer', e.id);
-			});
+				var model =  this.entities[e.id].model;
+				this.editFeatureMeta(model);
+			}, this);
 			this.entities[e.id] = {
 				model: e,
 				layer: layer,
@@ -105,19 +108,32 @@ function(log, _, T, C, TP, L){
 			}
 		},
 
+		removeFeature: function(){
+			
+		},
+
 		createFeature: function(layer){
 			var self = this;
-			C.Entity.create({
+			var model = C.Entity.add({
 				layer_id:this.model.id,
 				geometry:layer.toGeoJSON(),
 				properties: {
-					xxYY:'AAAA'
+					_main:''
 				}
-			},{
-				wait:true,
-			}).on('sync', function(model){
-				self.renderEntity(model);
 			});
+
+			if(this.creator){
+				this.creator.remove();
+			}
+			this.creator = (new Creator({model:model})).render();
+			this.renderEntity(model);
+		},
+
+		editFeatureMeta: function(model){
+			if(this.creator){
+				this.creator.remove();
+			}
+			this.creator = (new Creator({model:model})).render();
 		},
 	});
 
