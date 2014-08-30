@@ -44,11 +44,18 @@ requirejs.config({
 });
 
 
-requirejs(['backbone', 'app', 'core/routers', 'core/eproxy'],
-function(Backbone, app, routers, P){
+requirejs(['backbone', 'jquery','app', 'core/routers', 'core/eproxy'],
+function(Backbone, $, app, routers, P){
     'use strict';
     
     $(document).ready(function(){
+
+         $('body').on('click', '.route', function(evt){
+            var that = $(this);
+            that.addClass('visited');
+            P.delegate('router', 'navigate', that.attr('data-route'));
+        });
+
 
         app.once('ready', function(){
             console.log('APP READY');

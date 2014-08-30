@@ -84,16 +84,6 @@ function( Backbone, _, P) {
             });
             this._states = [];
         },
-        
-        routes:{
-            '': 'index',
-//             'index': 'index',
-        },
-        
-        index:function(){
-            console.log('INDEX');
-            setComponents('menu');
-        },
 
     });
         

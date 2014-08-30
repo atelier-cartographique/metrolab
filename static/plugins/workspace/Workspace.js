@@ -93,8 +93,10 @@ function(_, B, log, T, C, L, LD, TP, User, LayerManager, Subscription){
 			log.debug('setupMap', mapElement);
 			this.map = L.map(mapElement, {
 				drawControl: true,
-			    center: [50.8, 4.3],
-			    zoom: 13
+			    center: [50.854075572144815, 4.38629150390625],
+			    crs: L.CRS.EPSG4326,
+			    // crs: L.CRS.EPSG900913,
+			    zoom: 8
 			});
 
 			this.handler = new MapEventHandler({map:this.map});

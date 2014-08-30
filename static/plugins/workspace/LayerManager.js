@@ -27,9 +27,10 @@ define([
 	'core/types',
 	'core/collections',
 	'core/template',
-	'plugins/workspace/Layer'
+	'plugins/workspace/Layer',
+	'plugins/workspace/WMSLayer'
 	],	 
-function (_, T, C, TP, Layer) {
+function (_, T, C, TP, Layer, WMSLayer) {
 	'use strict';
 
 	var LayerManager = T.View.extend({
@@ -73,10 +74,24 @@ function (_, T, C, TP, Layer) {
 		},
 
 		renderLayerItem: function(layer){
-			var layerItem = new Layer({
-				model:layer,
-				map:this.map,
-			}); 
+
+			var layerItem;
+			var layerType = layer.get('type');
+			
+			if('wms' === layerType){
+				layerItem = new WMSLayer({
+					model:layer,
+					map:this.map,
+				});	
+			}
+			else if('geojson' === layerType){
+				layerItem = new Layer({
+					model:layer,
+					map:this.map,
+				});	
+			}
+
+			  
 			this.layers.push(layerItem);
 			// this.$el.append(layerItem.render().$el);
 			this.attachToAnchor(layerItem.render(), 'items');
@@ -84,12 +99,16 @@ function (_, T, C, TP, Layer) {
 			var self = this;
 			layerItem.on('select', function(l){
 				_.each(self.layers, function(ly){
-					if(ly !== l) ly.deselectLayer();
+					if(ly.deselectLayer 
+						&& ly !== l){
+						ly.deselectLayer();
+					}
 				});
 				self.currentLayer = l;
 			});
 
-			if(!this.currentLayer){
+			if(layerItem.selectLayer 
+				&& !this.currentLayer){
 				layerItem.selectLayer();
 			}
 		},

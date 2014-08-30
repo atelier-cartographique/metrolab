@@ -1,0 +1,41 @@
+<div class="jumbotron">
+	<h1>WMS editor</h1>
+	<div class="form-group">
+		 <label class="control-label">name</label>
+		<input type="url" 
+			class="form-control input" 
+			name="name" 
+			placeholder="WMS name"
+			value="<%= data.name %>"
+			/>
+
+
+		 <label class="control-label">URL</label>
+		<input type="url" 
+			class="form-control input" 
+			name="url" 
+			placeholder="WMS URL"
+			value="<%= data.url %>"
+			/>
+	</div>
+
+<p>
+	<div class="row">
+		  <div class="col-xs-5"><h4>key</h4> </div> 
+		  <div class="col-xs-5"><h4>value</h4> </div> 
+		  </div>
+	<div class="form-group" data-anchor='properties'>
+	<label class="control-label">Options 
+	(<a href="http://leafletjs.com/reference.html#tilelayer-wms" target="_blank">leaflet options</a>)
+	</label>
+	</div>
+
+	<button type="button" class="btn btn-default" data-role="kvnew">
+		Add Key
+	</button>
+</p>
+	<button type="button" class="btn btn-default" data-role="close">
+		close
+	</button>
+</div>
+

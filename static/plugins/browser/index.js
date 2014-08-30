@@ -29,16 +29,17 @@ define(['core/eproxy', 'plugins/browser/Browser'],
                    'registerComponent', 
                    comp);
 
-		var route = [
-	    'browse',
-	    'browse',
-	        function(){
-	            proxy.delegate('app',
+		function browse(){
+			proxy.delegate('app',
 	                        'setComponents',
 	                        [['browser']]);
-	        }
-	    ];
-	    proxy.delegate('router', 'route', route);
+		};
+
+		var route = ['', 'browse', browse ]; 
+		var routeCanon = ['browse', 'browse', browse ]; 
+
+		proxy.delegate('router', 'route', route);
+		proxy.delegate('router', 'route', routeCanon);
 	    
 	    return true;
 
