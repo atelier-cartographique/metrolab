@@ -27,9 +27,10 @@ define([
 	'core/collections',
 	'core/template',
 	'leaflet',
-	'plugins/workspace/Creator'
+	'plugins/workspace/Creator',
+	'plugins/workspace/LayerForm'
 	], 
-function(log, _, T, C, TP, L, Creator){
+function(log, _, T, C, TP, L, Creator, LayerForm){
 
 	var Layer = T.View.extend({
 
@@ -40,6 +41,7 @@ function(log, _, T, C, TP, L, Creator){
 			'click [data-role=select]': 'selectLayer',
 			'click [data-role=zoom]': 'zoomLayer',
 			'click [data-role=visible]': 'toggleVisible',
+			'click [data-role=settings]': 'settings',
 		},
 
 		initialize: function(options){
@@ -129,6 +131,13 @@ function(log, _, T, C, TP, L, Creator){
 
 		toggleVisible: function(){
 
+		},
+
+		settings: function (argument) {
+			var form = new LayerForm({
+				model:this.model
+			});	
+			form.render();
 		},
 
 		createFeature: function(layer){
