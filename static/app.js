@@ -171,6 +171,7 @@ function(T, $, P, config){
          
         initialize:function(){
         	this.components = {};
+            this.permanentComps = {};
             this.pendingComponents = {};
             this.setupLayout();
         },

@@ -60,6 +60,10 @@ function(Backbone, $, app, routers, P){
         window.setInterval(function(){
             $('.closer').attr('data-role', 'close');
         }, 500);
+
+        // $(document).on('click', '*', function(e){
+        //     console.log('click!', e.currentTarget);
+        // });
         //> helpers
 
         app.once('ready', function(){

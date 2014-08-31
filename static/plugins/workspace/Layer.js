@@ -22,6 +22,7 @@
 
 define([
 	'core/logger',
+	'core/eproxy',
 	'underscore',
 	'core/types',
 	'core/collections',
@@ -30,7 +31,7 @@ define([
 	'plugins/workspace/Creator',
 	'plugins/workspace/LayerForm'
 	], 
-function(log, _, T, C, TP, L, Creator, LayerForm){
+function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 
 	var Layer = T.View.extend({
 
@@ -137,7 +138,7 @@ function(log, _, T, C, TP, L, Creator, LayerForm){
 			var form = new LayerForm({
 				model:this.model
 			});	
-			form.render();
+			proxy.delegate('modal', 'show', form);			
 		},
 
 		createFeature: function(layer){
