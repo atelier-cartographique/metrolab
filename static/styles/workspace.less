@@ -1,0 +1,55 @@
+@import "typo.less";
+
+@brown : #996600;
+
+body {
+	font-family: 'roboto_slablight', serif;
+}
+
+.layers {
+	position:absolute;
+	top:32px;
+	right:32px;
+	width:220px;
+	height:auto;
+	border: 1px solid gray;
+	padding: 12px;
+	background-color: white;
+
+	h3 {
+		color: @brown;
+	}
+
+	.list-group {
+		font-size: 9pt;
+
+		.list-group-item {
+		position: relative;
+		display: block;
+		padding: 2px 5px;
+		margin-bottom: -1px;
+		background-color: #fff;
+		border: 1px solid @brown;
+
+			&:first-child {
+			border-top-left-radius: 2px;
+			border-top-right-radius: 2px;
+			}
+
+			&:last-child {
+			border-bottom-left-radius: 2px;
+			border-bottom-right-radius: 2px;
+			}
+
+			&.active {
+			background-color: #ccc;
+			}
+		
+
+			.glyphs {
+				position: absolute;
+				right: 5px;
+			}
+		}
+	}
+}

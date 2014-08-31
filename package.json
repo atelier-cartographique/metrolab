@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "prestart": "./lessc.sh style login"
+    "prestart": "./lessc.sh style login workspace"
   },
   "dependencies": {
     "body-parser": "~1.0.0",
