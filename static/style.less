@@ -1,17 +1,28 @@
 
+.absPos(@top, @right, @bottom, @left){
+	position: absolute;
+  	top:@top;right: @right;bottom: @bottom;left: @left;
+}
 
-.app{
+.fillParent{
+	height: 100%;
 	width:100%;
-	height:100%;
+}
+
+
+#app{
+	.absPos(0,0,0,0);
+}
+
+
+#viewport{
+	.absPos(0,0,0,0);
 	background-color:red;
 }
 
-
-.viewport{
-	width:100%;
-	height:100%;
+.workspace{
+	.fillParent();
 }
-
 
 .map{
 	width:100%;
