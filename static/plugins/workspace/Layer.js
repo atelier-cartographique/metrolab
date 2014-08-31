@@ -35,7 +35,7 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 
 	var Layer = T.View.extend({
 
-		className: 'layer',
+		className: 'list-group-item layer',
 		template: 'workspace/layer-item',
 
 		events:{

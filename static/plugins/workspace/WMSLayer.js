@@ -186,7 +186,7 @@ function(log, _, T, C, TP, L){
 
 	var Layer = T.View.extend({
 
-		className: 'layer',
+		className: 'list-group-item layer',
 		template: 'workspace/layer-wms-item',
 
 		events:{
