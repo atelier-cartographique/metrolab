@@ -1,9 +1,75 @@
+@import "typo.less";
+
+
+body { 
+  background: url("imgs/fond-login.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
 .container {
-	border: 1px solid red;
-	font-family: 'Roboto Slab', serif;
-	width: 30%;
-	min-width: 300px;
-	label {
-		display: none;
+	font-family: 'roboto_slablight', serif;
+	width: 70%;
+	
+	&.logo {
+		opacity: 0.8;
+		text-align: center;
+		margin-top: 100px;
 	}
+
+
+	&.login form {
+		width: 200px;
+		margin-left: auto;
+		margin-right: auto;
+
+			label {
+				display: none;
+			}
+			.col-sm-10 {
+				width: 100%;
+			}
+	}	
+
+	&.text {
+		width: 90%;
+		margin-left: 5%;
+		color: #ffffff;
+		position: absolute;
+		bottom: 2.5%;
+		margin-bottom: 0px;
+		
+		.description{
+			font-size: 10pt;
+			-webkit-column-count: 2;
+			-moz-column-count: 2;
+			column-count: 2;
+			-webkit-column-gap: 10px;
+			-moz-column-gap: 10px;
+			column-gap: 10px;
+			margin-bottom: 2.5%;
+
+			p {
+				margin-bottom: 10px;
+			}
+			a {
+				font-style: italic;
+			}
+		}
+
+		.credits {
+				font-size: 9pt;
+				color: #ffffff;
+				text-align: center;
+
+				a {
+					color: #ffffff;
+					font-style: italic;
+				}
+			}
 	}
+
+}
