@@ -7,5 +7,5 @@ STYLES=$*
 
 for STYLE in  $STYLES;
 	do
-		${LESSC} static/${STYLE}.less static/${STYLE}.css
+		${LESSC} static/styles/${STYLE}.less static/styles/${STYLE}.css
 	done

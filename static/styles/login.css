@@ -1,0 +1,9 @@
+.container {
+  border: 1px solid red;
+  font-family: 'Roboto Slab', serif;
+  width: 30%;
+  min-width: 300px;
+}
+.container label {
+  display: none;
+}
