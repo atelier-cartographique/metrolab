@@ -35,7 +35,7 @@ function (_, log, T, C, TP, L, Layer) {
 	'use strict';
 
 	var GroupItem = T.BView.extend({
-
+		className: 'group-item panel panel-default',
 		templateName: 'workspace/group-item',
 
 		events:{
@@ -45,7 +45,11 @@ function (_, log, T, C, TP, L, Layer) {
 		initialize: function(options){
 			this.layers = [];
 			this.map = options.map;
-			_.each(this.model.get('layers'), this.addLayer, this);
+
+			this.on('rendered', function(self){
+				_.each(self.model.get('layers'), self.addLayer, self);
+			});
+			
 			this.ready = true;
 		},
 
@@ -59,7 +63,9 @@ function (_, log, T, C, TP, L, Layer) {
 				model: model,
 				map: this.map
 			});
-			this.layers.push(layer);
+			this.layers.push(layer.render());
+			layer.addClass('pull-right');
+			this.attachToAnchor(layer, 'group-layers');
 		},
 
 

@@ -18,6 +18,14 @@
 	height:100%;
 }
 
+.interaction{
+	cursor:pointer;
+	color:gray;
+}
+.interaction:hover{
+	color:black;
+}
+
 .layers{
 	position:absolute;
 	top:32px;

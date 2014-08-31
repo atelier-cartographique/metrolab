@@ -78,7 +78,7 @@ function(_, $, B, log, T, C, TP){
 
 	var Creator = T.View.extend({
 
-		className: 'creator container',
+		className: 'creator container closer',
 
 		template: 'workspace/creator',
 

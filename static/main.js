@@ -50,12 +50,17 @@ function(Backbone, $, app, routers, P){
     
     $(document).ready(function(){
 
+        //< helpers
          $('body').on('click', '.route', function(evt){
             var that = $(this);
             that.addClass('visited');
             P.delegate('router', 'navigate', that.attr('data-route'));
         });
 
+        window.setInterval(function(){
+            $('.closer').attr('data-role', 'close');
+        }, 500);
+        //> helpers
 
         app.once('ready', function(){
             console.log('APP READY');

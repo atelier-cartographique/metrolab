@@ -37,8 +37,9 @@ function(log, _, T, C, TP, L, Creator){
 		template: 'workspace/layer-item',
 
 		events:{
-			'click .layer-name': 'selectLayer',
-			'click .layer-zoom': 'zoomLayer',
+			'click [data-role=select]': 'selectLayer',
+			'click [data-role=zoom]': 'zoomLayer',
+			'click [data-role=visible]': 'toggleVisible',
 		},
 
 		initialize: function(options){
@@ -50,10 +51,23 @@ function(log, _, T, C, TP, L, Creator){
 			this.entities = {};
 		},
 
+		style: function(feature){
+			var props = this.model.get('properties');
+			// TODO the styling thing based on the feature
+
+			return _.extend({}, props.style); 
+		},
+
 		renderEntity: function(e){
 			if(e.id in this.entities) return;
 			var geometry = e.get('geometry');
-			var layer = L.geoJson(geometry);
+
+			var style = _.bind(this.style, this);
+			var options = {
+				style:style,
+			};
+			var layer = L.geoJson(geometry, options);
+			
 			layer.on('click', function(){
 				log.debug('layer', e.id);
 				var model =  this.entities[e.id].model;
@@ -75,6 +89,7 @@ function(log, _, T, C, TP, L, Creator){
 
 		render: function(){
 			var data = this.model.toJSON().properties;
+			data.visible = this.visible;
 			TP.render(TP.name(this.template), this, function(t){
 				this.$el.html(t(data));
 			});
@@ -110,6 +125,10 @@ function(log, _, T, C, TP, L, Creator){
 
 		removeFeature: function(){
 			
+		},
+
+		toggleVisible: function(){
+
 		},
 
 		createFeature: function(layer){

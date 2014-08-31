@@ -78,7 +78,7 @@ function(log, _, T, C, TP, L){
 
 	var Editor = T.View.extend({
 
-		className: 'wmseditor container',
+		className: 'wmseditor container closer',
 
 		template: 'workspace/wms-editor',
 
@@ -218,12 +218,18 @@ function(log, _, T, C, TP, L){
 
 			var props = this.model.get('properties');
 			this.wms = L.tileLayer.wms(props.url, _.extend({}, props.options));		
+			this.wms.on('click', function(e){
+				log.debug('pffff');
+			});
 			this.wms.addTo(this.map);
 			this.onMap = true;
 		},
 
 		hide: function(){
-			
+			if(this.onMap){
+				this.map.removeLayer(this.wms);
+			}	
+			this.onMap = false;
 		},
 
 		configureLayer: function(e){

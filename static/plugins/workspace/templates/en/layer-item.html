@@ -1,7 +1,15 @@
-<span class="layer-name">
+<span class="layer-name interaction" data-role="select">
 <%= data.name %>
 </span>
 
-<span class="layer-zoom">
-☉
+<span class="layer-zoom interaction"  data-role="zoom">
+<span class="glyphicon  glyphicon-fullscreen"></span>
+</span>
+
+<span class="layer-visible interaction"  data-role="visible">
+<% if(data.visible){ %>
+<span class="glyphicon  glyphicon-eye-open"></span>
+<% }else{ %>
+<span class="glyphicon  glyphicon-eye-close"></span>
+<% } %>
 </span>
