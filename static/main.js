@@ -24,6 +24,7 @@ requirejs.config({
     baseUrl: '/',
     paths: {
         "jquery": "jquery/jquery.min",
+        "iris": "jquery/iris",
         'backbone': 'backbone/backbone-min',
         'underscore': 'underscore/underscore-min',
         'leaflet': 'leaflet/leaflet-src',
@@ -40,6 +41,10 @@ requirejs.config({
         'leaflet-draw' : {
             deps:['leaflet']
         },
+        'iris': {
+            deps: ['jquery']
+        }
+        
     },
 });
 
