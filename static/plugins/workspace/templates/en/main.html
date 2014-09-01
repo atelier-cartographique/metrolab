@@ -1,3 +1,16 @@
 <div class="map" data-anchor="map" />
-<div class="layers" data-anchor="layers" />
-<div class="groups" data-anchor="groups" />
+
+<div id="mapWidget" class="container">
+
+	<ul class="nav nav-tabs"  role="tablist">
+	  <li class="active"><a href="#mapWidgetLayers"  role="tab" data-toggle="tab">layers</a></li>
+	  <li><a href="#mapWidgetGroups"  role="tab" data-toggle="tab">maps</a></li>
+	</ul>
+
+	<div class="tab-content">
+		<div class="layers tab-pane fade in active" id="mapWidgetLayers" data-anchor="layers" />
+		<div class="groups tab-pane fade in"  id="mapWidgetGroups" data-anchor="groups" />
+	</div>
+
+</div>
+

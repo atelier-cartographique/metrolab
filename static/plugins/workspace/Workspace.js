@@ -22,6 +22,7 @@
 
 define([
 	'underscore',
+	'bootstrap',
 	'backbone',
 	'core/logger',
 	'core/types',
@@ -33,7 +34,7 @@ define([
 	'plugins/workspace/LayerManager',
 	'plugins/workspace/Subscription'
 	], 
-function(_, B, log, T, C, L, LD, TP, User, LayerManager, Subscription){
+function(_, bootstrap, B, log, T, C, L, LD, TP, User, LayerManager, Subscription){
 
 
 	function MapEventHandler(options){
