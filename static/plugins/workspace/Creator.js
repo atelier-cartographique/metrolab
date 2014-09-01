@@ -129,7 +129,6 @@ function(_, $, B, log, T, C, TP){
 			var props = this.model.get('properties') || {};
 			TP.render(TP.name(this.template), this, function(t){
 				this.$el.html(t(props));
-				$('#viewport').append(this.$el);
 				this.updateKeys();
 			});
 			return this;

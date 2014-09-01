@@ -52,6 +52,9 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 			this.group.addTo(this.map);
 
 			this.entities = {};
+			
+			this.cursor = C.Entity.forLayer(this.model.id, 
+												this.dataAvailable, this);
 		},
 
 		style: function(feature){
@@ -61,9 +64,9 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 			return _.extend({}, props.style); 
 		},
 
-		renderEntity: function(e){
-			if(e.id in this.entities) return;
-			var geometry = e.get('geometry');
+
+		createEntityLayer: function(model){
+			var geometry = model.get('geometry');
 
 			var style = _.bind(this.style, this);
 			var options = {
@@ -72,12 +75,35 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 			var layer = L.geoJson(geometry, options);
 			
 			layer.on('click', function(){
-				log.debug('layer', e.id);
-				var model =  this.entities[e.id].model;
 				this.editFeatureMeta(model);
 			}, this);
-			this.entities[e.id] = {
-				model: e,
+
+			model.once('change', this.updateEntity, this);
+
+			return layer;
+		},
+
+		updateEntity: function(model){
+			if(model.id in this.entities){
+				var c = this.entities[model.id];
+				var l = c.layer;
+				if(l){
+					this.group.removeLayer(l);
+				}
+				var layer = this.createEntityLayer(model);
+				c.layer = layer;
+				this.group.addLayer(layer);	
+			}
+			else{
+				this.renderEntity(model);
+			}
+		},
+
+		renderEntity: function(model){
+			if(model.id in this.entities) return;
+			var layer = this.createEntityLayer(model);
+			this.entities[model.id] = {
+				model: model,
 				layer: layer,
 			};
 			this.group.addLayer(layer);
@@ -93,21 +119,22 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 		render: function(){
 			var data = this.model.toJSON().properties;
 			data.visible = this.visible;
+			data.active = this.active;
 			TP.render(TP.name(this.template), this, function(t){
 				this.$el.html(t(data));
 			});
-			this.showFeatures();
-
 			return this;
 		},
 
 		selectLayer: function(e){
 			this.trigger('select', this);
 			this.$el.addClass('active');
+			this.active = true;
 		},
 
 		deselectLayer: function(){
 			this.$el.removeClass('active');
+			this.active = false;
 		},
 
 		getBounds: function(){
@@ -120,18 +147,31 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 		},
 
 		showFeatures: function(){
-			if(!this.cursor){
-				this.cursor = C.Entity.forLayer(this.model.id, 
-												this.dataAvailable, this);
-			}
+			var self = this;
+			_.each(self.entities, function(e, id){
+				self.updateEntity(e.model);
+			});
 		},
 
-		removeFeature: function(){
-			
+		removeFeatures: function(){
+			var self = this;
+			_.each(self.entities, function(e, id){
+				log.debug('removeFeature', id);
+				self.group.removeLayer(e.layer);
+				self.entities[id].layer = null;
+			});
 		},
 
 		toggleVisible: function(){
-
+			if(this.visible){
+				this.removeFeatures();
+				this.visible = false;
+			}
+			else{
+				this.showFeatures();
+				this.visible = true;
+			}
+			this.render();
 		},
 
 		settings: function (argument) {
@@ -151,18 +191,14 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 				}
 			});
 
-			if(this.creator){
-				this.creator.remove();
-			}
-			this.creator = (new Creator({model:model})).render();
-			this.renderEntity(model);
+			model.once('sync', this.renderEntity, this);
+			var creator = new Creator({model:model});
+			proxy.delegate('modal', 'show', creator);
 		},
 
 		editFeatureMeta: function(model){
-			if(this.creator){
-				this.creator.remove();
-			}
-			this.creator = (new Creator({model:model})).render();
+			var creator = new Creator({model:model});
+			proxy.delegate('modal', 'show', creator);
 		},
 	});
 
