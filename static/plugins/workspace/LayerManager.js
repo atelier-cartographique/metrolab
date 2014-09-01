@@ -46,7 +46,7 @@ function (_, proxy, T, C, TP, Layer, WMSLayer, LayerForm, WMSForm) {
 		},
 
 		initialize: function(options){
-			this.layers = [];
+			this.layers = {};
 			this.currentLayer = undefined;
 			this.ready = false;
 			this.rendered = false;
@@ -78,6 +78,7 @@ function (_, proxy, T, C, TP, Layer, WMSLayer, LayerForm, WMSForm) {
 		},
 
 		renderLayerItem: function(layer){
+			if(layer.id in this.layers)return;
 
 			var layerItem;
 			var layerType = layer.get('type');
@@ -96,7 +97,7 @@ function (_, proxy, T, C, TP, Layer, WMSLayer, LayerForm, WMSForm) {
 			}
 
 			  
-			this.layers.push(layerItem);
+			this.layers[layer.id] = layerItem;
 			// this.$el.append(layerItem.render().$el);
 			this.attachToAnchor(layerItem.render(), 'items');
 
