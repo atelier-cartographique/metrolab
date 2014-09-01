@@ -62,7 +62,7 @@ function(log, _, T, C, TP, Stylist){
 			var $name = this.$el.find('[name=name]');
 			var $description = this.$el.find('[name=description]');
 			var props = this.model.getProperties();
-			props.name = $.name.val().trim();
+			props.name = $name.val().trim();
 			props.description = $description.val().trim();
 			this.model.setProperties(props).save();
 		},
