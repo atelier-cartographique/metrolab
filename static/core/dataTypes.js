@@ -209,6 +209,14 @@ function(Backbone, _, $, P, config, logger)
             this.model = Backbone.Model.extend({
                 urlRoot: apiUrl + this.modelName + '/',
                 idAttribute: 'id',
+                getProperties: function(){
+                    return this.get('properties');
+                },
+                setProperties: function(props){
+                    this.set({properties:props});
+                    this.trigger('change');
+                    return this;
+                },
             });
         },
         
