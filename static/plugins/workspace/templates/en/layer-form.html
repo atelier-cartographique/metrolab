@@ -1,26 +1,29 @@
 
 <div class="jumbotron">
-	<h1>layer form</h1>
+	<div class="layer-box">
+		<h2>layer form</h2>
 
-	<div class="form-group">
-		 <label class="control-label">name</label>
-		<input type="url" 
-			class="form-control input" 
-			name="name" 
-			placeholder="WMS name"
-			value="<%= data.name %>"
-			/>
+		<div class="form-group">
+			<div class="layer-name">
+				<label class="control-label">name</label>
+				<input type="url" 
+					class="form-control input" 
+					name="name" 
+					placeholder="WMS name"
+					value="<%= data.name %>"
+					/>
+			</div>
+			<div class="layer-description">
+				<label class="control-label">description</label>
+				<input type="url" 
+					class="form-control input" 
+					name="description" 
+					placeholder="description"
+					value="<%= data.description %>"
+					/>
+			</div>
+		</div>
 
-
-		 <label class="control-label">description</label>
-		<input type="url" 
-			class="form-control input" 
-			name="description" 
-			placeholder="description"
-			value="<%= data.description %>"
-			/>
+		<div data-anchor="stylist" />
 	</div>
-
-	<div data-anchor="stylist" />
-	
 </div>
