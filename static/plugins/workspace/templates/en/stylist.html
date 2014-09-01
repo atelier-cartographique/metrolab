@@ -80,6 +80,7 @@ fillOpacity	Number
 	    <div class="col-xs-2">
 		    <input data-role="input"
 		    	class="form-control"
+			    	<% if(!data.fill){ %> disabled="disabled" <% } %>
 		    	id="stylistFillColor" 
 		    	name="fillColor"
 		    	value="<%= data.fillColor %>" 
@@ -93,6 +94,7 @@ fillOpacity	Number
 	    <div class="col-xs-2">
 		    <input data-role="input"
 		    	class="form-control"
+			    	<% if(!data.fill){ %> disabled="disabled" <% } %>
 		    	id="stylistFillOpacity" 
 		    	name="fillOpacity"
 		    	value="<%= data.fillOpacity %>" 
