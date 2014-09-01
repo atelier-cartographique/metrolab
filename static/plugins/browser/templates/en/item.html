@@ -1,4 +1,51 @@
-<div class="layer-name"><%= data.properties.name %></div>
-<% if(data.properties.description){ %>
-<div class="layer-description"><%= data.properties.description %></div>
+<% console.log(data) %>
+
+<div class="container browser-item">
+<% if('geojson' === data.type) { %>
+
+	<div class="col-md-6" id="geojson ">
+		<div class="LayerName"><%= data.properties.name %></div>
+		<% if(data.properties.description){ %>
+			<div class="LayerDesc"><%= data.properties.description %></div>
+		<% } %>
+
+
+		<!-- To add : if used on any 'map' : print 'map-names' by 'username' -->
+			<div class="OnMapView">
+				<span class="label">Used in :</span>
+				<li>
+					<span class="MapName">map name</span> 
+					by 
+					<span class="UserName">username</span>
+				</li>
+			</div>
+
+
+		<!-- To add : Add to map  -->	
+			<div class="AddToMap">
+				<input data-role=""
+					class="btn btn-xs" 
+					id="" 
+					name="addtomap"
+					type="button"
+					value="Add to map" 
+				/>
+			</div>
+	</div>
+
+<% }else{ %> 
+	<div class="col-md-6" id="wms">
+		<div class="layer-name"><%= data.properties.name %></div>
+
+		<% if(data.properties.description){ %>
+			<div class="layer-description"><%= data.properties.description %></div>
+		<% } %>
+
+		<!-- To add : if used on any 'map' : print 'map-names' -->
+		<!-- To add : Add to map  -->	
+
+</div>
+
 <% } %>
+</div>
+
