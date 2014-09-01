@@ -24,13 +24,16 @@
 
 define([
 	'underscore',
+	'core/eproxy',
 	'core/types',
 	'core/collections',
 	'core/template',
 	'plugins/workspace/Layer',
-	'plugins/workspace/WMSLayer'
+	'plugins/workspace/WMSLayer',
+	'plugins/workspace/LayerForm',
+	'plugins/workspace/WMSForm',
 	],	 
-function (_, T, C, TP, Layer, WMSLayer) {
+function (_, proxy, T, C, TP, Layer, WMSLayer, LayerForm, WMSForm) {
 	'use strict';
 
 	var LayerManager = T.View.extend({
@@ -38,7 +41,8 @@ function (_, T, C, TP, Layer, WMSLayer) {
 		template: 'workspace/layer-widget',
 
 		events: {
-			'click .layer-create': 'createLayer',
+			'click [data-role=new-layer]': 'createLayer',
+			'click [data-role=new-wms]': 'createWMS',
 		},
 
 		initialize: function(options){
@@ -119,19 +123,36 @@ function (_, T, C, TP, Layer, WMSLayer) {
 
 		createLayer: function(){
 			if(!this.ready) return;
-			var $input = this.$el.find('[name=layer-name]');
-			var name = $input.val();
-			if(name && name.trim().length > 0){
-				C.Layer.create({
+			
+			var model = new C.Layer.model({
 					user_id:this.user.id,
+					type: 'geojson',
 					properties:{
-						name:name.trim(),
+						name:'untitled',
 					}
-				},{
-					wait:true
-				}).on('sync', this.renderLayerItem, this);
-			}
-			$input.val('');
+				});
+
+			model.on('sync', this.renderLayerItem, this);
+
+			var form = new LayerForm({model:model});
+			proxy.delegate('modal', 'show', form);
+		},
+
+		createWMS: function(){
+			if(!this.ready) return;
+			
+			var model = new C.Layer.model({
+					user_id:this.user.id,
+					type: 'wms',
+					properties:{
+						name:'untitled',
+					}
+				});
+
+			model.on('sync', this.renderLayerItem, this);
+
+			var form = new WMSForm({model:model});
+			proxy.delegate('modal', 'show', form);
 		},
 	});
 
