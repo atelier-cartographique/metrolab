@@ -55,6 +55,12 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 			
 			this.cursor = C.Entity.forLayer(this.model.id, 
 												this.dataAvailable, this);
+
+			this.model.on('change', function(){
+				if(this.visible){
+					this.showFeatures();
+				}
+			}, this);
 		},
 
 		style: function(feature){

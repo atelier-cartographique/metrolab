@@ -22,13 +22,14 @@
 
 define([
 	'core/logger',
+	'core/eproxy',
 	'underscore',
 	'core/types',
 	'core/collections',
 	'core/template',
 	'leaflet',
 	], 
-function(log, _, T, C, TP, L){
+function(log, proxy, _, T, C, TP, L){
 
 
 
@@ -131,7 +132,6 @@ function(log, _, T, C, TP, L){
 			var props = this.model.get('properties') || {};
 			TP.render(TP.name(this.template), this, function(t){
 				this.$el.html(t(props));
-				$('#viewport').append(this.$el);
 				this.updateKeys();
 			});
 			return this;
@@ -233,10 +233,8 @@ function(log, _, T, C, TP, L){
 		},
 
 		configureLayer: function(e){
-			if(this.editor){
-				this.editor.remove();
-			}
-			this.editor = (new Editor({model:this.model})).render();
+			var editor = new Editor({model:this.model});
+			proxy.delegate('modal', 'show', editor);
 		},
 
 	});
