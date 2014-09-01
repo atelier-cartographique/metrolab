@@ -39,9 +39,6 @@ function(log, _, T, C, TP, Stylist){
 
 		template: 'workspace/layer-form',
 
-		events: {
-			'click [data-input=close]' : 'update',
-		},
 
 		initialize: function(options){
 
@@ -78,6 +75,7 @@ function(log, _, T, C, TP, Stylist){
 		},
 
 		close: function(e){
+			this.update();
 			this.isClosing = true;
 			this.remove();
 		},
