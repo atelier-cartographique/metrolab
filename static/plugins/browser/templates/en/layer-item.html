@@ -1,45 +1,55 @@
 <% console.log(data) %>
 
-<div class="container browser-item">
+<div class="BrowserItem">
 <% if('geojson' === data.type) { %>
 
-	<div class="col-md-6" id="geojson ">
+	<div class="GeojsonLayer">
 		<div class="LayerName"><%= data.properties.name %></div>
+		<div class="glyphs <% if(data.active){ %>active<% } %>">
+			<span class="glyphicon layer-color"></span>
+			<span class="layer-zoom interaction"  data-role="zoom">
+				<span class="glyphicon  glyphicon-fullscreen"></span>
+			</span>
+
+			<span class="layer-visible interaction"  data-role="visible">
+			<% if(data.visible){ %>
+				<span class="glyphicon  glyphicon-eye-open"></span>
+			<% }else{ %>
+				<span class="glyphicon  glyphicon-eye-close"></span>
+			<% } %>
+			</span>
+		</div>
 		<% if(data.properties.description){ %>
 			<div class="LayerDesc"><%= data.properties.description %></div>
 		<% } %>
 
 <% _.each(data.groups, function(group){ %>
 
-			<div class="OnMapView" style="border:1px solid black" >
+			<div class="OnMapView" >
 				<span class="label">Used in :</span>
-				<li>
-					<span class="MapName"><%= group.properties.name %></span> 
-				</li>
+				<span class="MapName"><%= group.properties.name %> - </span> 
 			</div>
 
 <% }); %>
 
-
-
-		<!-- To add : Add to map  -->	
-			<div class="AddToMap">
-				<input data-role=""
-					class="btn btn-xs" 
-					id="" 
-					name="addtomap"
-					type="button"
-					value="Add to map" 
-				/>
-			</div>
 	</div>
 
 <% }else{ %> 
-	<div class="col-md-6" id="wms">
-		<div class="layer-name"><%= data.properties.name %></div>
+	<div class="WmsLayer">
+		<div class="LayerName"><%= data.properties.name %></div>
+		<div class="glyphs <% if(data.active){ %>active<% } %>">
+			<span class="glyphicon icon-wms">wms</span>
+			<span class="layer-visible interaction"  data-role="visible">
+			<% if(data.visible){ %>
+			<span class="glyphicon  glyphicon-eye-open"></span>
+			<% }else{ %>
+			<span class="glyphicon  glyphicon-eye-close"></span>
+			<% } %>
+			</span>
+		</div>
 
 		<% if(data.properties.description){ %>
-			<div class="layer-description"><%= data.properties.description %></div>
+			<div class="LayerDesc"><%= data.properties.description %></div>
 		<% } %>
 
 		<!-- To add : if used on any 'map' : print 'map-names' -->
