@@ -40,6 +40,15 @@ function (_, config, L, T, C, TP, Layer) {
 		templateName: 'browser/layer-item',
 		ready: true,
 		className: "list-group-item",
+
+		events: {
+			'click .LayerName' : 'select',
+		},
+
+		select: function(){
+			this.trigger('select:layer', this.model);
+		},
+
 	});
 
 	var UserItem = T.ContainerView.extend({
@@ -52,6 +61,16 @@ function (_, config, L, T, C, TP, Layer) {
 		initialize: function(options){
 			this.ready = true;
 			this.cursor = C.Layer.forUser(this.model.id, this.dataAvailable, this);
+		},
+
+		viewEvents: {
+			'include:view': 'listenLayer',
+		},
+
+		listenLayer: function(layerItem){
+			layerItem.on('select:layer', function(model){
+				this.trigger('select:layer', model);
+			}, this);
 		},
 
 	});
@@ -94,6 +113,26 @@ function (_, config, L, T, C, TP, Layer) {
 			this.cursor = C.User.browse(this.dataAvailable, this);
 			this.on('rendered', this.setupMap, this); 
 		},
+
+
+		viewEvents: {
+			'include:view': 'listenUser',
+		},
+
+		listenUser: function(userItem){
+			userItem.on('select:layer', this.showLayer, this);
+		},
+
+		showLayer: function(model){
+			if(this.CurrentLayer){this.CurrentLayer.remove()};
+
+			this.CurrentLayer = new Layer({model:model,map:this.map});
+			this.CurrentLayer.once('features:end', function(cl){
+				cl.zoomLayer();
+			});
+			this.CurrentLayer.showFeatures();	
+		},
+
 	});
 
 	return Browser;

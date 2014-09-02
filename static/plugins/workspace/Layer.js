@@ -104,6 +104,7 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 			else{
 				this.renderEntity(model);
 			}
+			return this;
 		},
 
 		renderEntity: function(model){
@@ -114,6 +115,7 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 				layer: layer,
 			};
 			this.group.addLayer(layer);
+			return this;
 		},
 
         dataAvailable: function (data) {
@@ -137,11 +139,13 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 			this.trigger('select', this);
 			this.$el.addClass('active');
 			this.active = true;
+			return this;
 		},
 
 		deselectLayer: function(){
 			this.$el.removeClass('active');
 			this.active = false;
+			return this;
 		},
 
 		getBounds: function(){
@@ -151,6 +155,7 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 
 		zoomLayer: function(e){
 			this.map.fitBounds(this.getBounds());
+			return this;
 		},
 
 		showFeatures: function(){
@@ -158,6 +163,8 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 			_.each(self.entities, function(e, id){
 				self.updateEntity(e.model);
 			});
+			self.trigger('features:end', this);
+			return this;
 		},
 
 		removeFeatures: function(){
@@ -167,6 +174,7 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 				self.group.removeLayer(e.layer);
 				self.entities[id].layer = null;
 			});
+			return this;
 		},
 
 		toggleVisible: function(){
@@ -178,14 +186,15 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 				this.showFeatures();
 				this.visible = true;
 			}
-			this.render();
+			return this.render();
 		},
 
 		settings: function (argument) {
 			var form = new LayerForm({
 				model:this.model
 			});	
-			proxy.delegate('modal', 'show', form);			
+			proxy.delegate('modal', 'show', form);	
+			return this;		
 		},
 
 		createFeature: function(layer){
@@ -201,11 +210,13 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 			model.once('sync', this.renderEntity, this);
 			var creator = new Creator({model:model});
 			proxy.delegate('modal', 'show', creator);
+			return this;
 		},
 
 		editFeatureMeta: function(model){
 			var creator = new Creator({model:model});
 			proxy.delegate('modal', 'show', creator);
+			return this;
 		},
 	});
 
