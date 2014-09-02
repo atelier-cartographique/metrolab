@@ -66,7 +66,11 @@ function(log, proxy, _, T, C, TP, L, Editor){
 			}		
 
 			var props = this.model.get('properties');
-			this.wms = L.tileLayer.wms(props.url, _.extend({}, props.options));		
+			var options = _.extend({}, props.options);
+			if('crs' in options){
+				options.crs = L.CRS[options.crs];
+			}
+			this.wms = L.tileLayer.wms(props.url, options);		
 			this.wms.on('click', function(e){
 				log.debug('pffff');
 			});

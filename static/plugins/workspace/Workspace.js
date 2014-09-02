@@ -24,6 +24,7 @@ define([
 	'underscore',
 	'bootstrap',
 	'backbone',
+	'config',
 	'core/logger',
 	'core/types',
 	'core/collections', 
@@ -34,13 +35,19 @@ define([
 	'plugins/workspace/LayerManager',
 	'plugins/workspace/Subscription'
 	], 
-function(_, bootstrap, B, log, T, C, L, LD, TP, User, LayerManager, Subscription){
+function(_, bootstrap, B, config, log, T, C, L, LD, TP, User, LayerManager, Subscription){
 
 
 	function MapEventHandler(options){
 			this.map = options.map;
 			this.attachHandlers();
 	};
+
+	var mapDefaults = {
+		center: [0,0],
+		crs : 'EPSG4326',
+		zoom: 10,
+	}
 
 	_.extend(MapEventHandler.prototype, {
 		
@@ -89,16 +96,23 @@ function(_, bootstrap, B, log, T, C, L, LD, TP, User, LayerManager, Subscription
 
 		setupMap: function(){
 			if(this.map) return;
+			var mapConfig = _.defaults(_.extend({}, config.map), mapDefaults);
 			var anchors = this.collectAnchors();
 			var mapElement = anchors.$map[0];
 			log.debug('setupMap', mapElement);
 			this.map = L.map(mapElement, {
 				drawControl: true,
-			    center: [50.854075572144815, 4.38629150390625],
-			    crs: L.CRS.EPSG4326,
-			    // crs: L.CRS.EPSG900913,
-			    zoom: 8
+			    center: mapConfig.center,
+			    crs: L.CRS[mapConfig.crs],
+			    zoom: mapConfig.zoom,
 			});
+
+			if('base' in mapConfig){
+				var base = mapConfig.base;
+				if('tile' === base.type){
+					this.baseLayer = L.tileLayer(base.url, base.options).addTo(this.map);
+				}
+			}
 
 			this.handler = new MapEventHandler({map:this.map});
 			this.handler.on('create', function(layer){
