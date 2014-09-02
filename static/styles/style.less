@@ -1,40 +1,9 @@
+@import "typo";
+@import "mixins";
+@import "base";
 
-.absPos(@top, @right, @bottom, @left){
-	position: absolute;
-  	top:@top;right: @right;bottom: @bottom;left: @left;
-}
-
-.fillParent{
-	height: 100%;
-	width:100%;
-}
-
-
-#app{
-	.absPos(0,0,0,0);
-}
-
-
-#viewport{
-	.absPos(0,0,0,0);
-	background-color:#444;
-}
-
-.workspace{
-	.fillParent();
-}
-
-.map{
-	width:100%;
-	height:100%;
-}
-
-.interaction{
-	cursor:pointer;
-}
-.interaction:hover{
-	color:black;
-}
-
-
+@import "browser";
+@import "login";
+@import "modal";
+@import "workspace";
 

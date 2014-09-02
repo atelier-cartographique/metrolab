@@ -22,13 +22,14 @@
 
 define([
 	'underscore',
+	'config',
 	'leaflet',
 	'core/types',
 	'core/collections',
 	'core/template',
 	'plugins/workspace/Layer',
 	],	 
-function (_, L, T, C, TP, Layer) {
+function (_, config, L, T, C, TP, Layer) {
 	'use strict';
 	
 	// var BrowseLayer = Layer.extend({
@@ -55,6 +56,12 @@ function (_, L, T, C, TP, Layer) {
 
 	});
 
+	var mapDefaults = {
+		center: [0,0],
+		crs : 'EPSG4326',
+		zoom: 10,
+	}
+
 	var Browser = T.ContainerView.extend({
 
 		templateName: 'browser/browser',
@@ -63,9 +70,29 @@ function (_, L, T, C, TP, Layer) {
 		className: "BrowserView",
 
 
+		setupMap: function(){
+			if(this.map) return;
+			var mapConfig = _.defaults(_.extend({}, config.map), mapDefaults);
+			var anchors = this.collectAnchors();
+			var mapElement = anchors.$map[0];
+			this.map = L.map(mapElement, {
+			    center: mapConfig.center,
+			    crs: L.CRS[mapConfig.crs],
+			    zoom: mapConfig.zoom,
+			});
+
+			if('base' in mapConfig){
+				var base = mapConfig.base;
+				if('tile' === base.type){
+					this.baseLayer = L.tileLayer(base.url, base.options).addTo(this.map);
+				}
+			}
+		},
+
 		initialize: function(options){
 			this.ready = true;
 			this.cursor = C.User.browse(this.dataAvailable, this);
+			this.on('rendered', this.setupMap, this); 
 		},
 	});
 
