@@ -1,6 +1,9 @@
 @import "typo.less";
 
 @brown : #996600;
+@hover-item : #eee;
+@dark-grey: #444;
+
 
 body {
 	font-family: 'roboto_slabregular', serif;
@@ -12,12 +15,12 @@ body {
 	position: absolute;
 	top: 10px;
 	right: 10px;
-	width: 220px;
+	width: @widget;
 	height: auto;
 	/* border: 1px solid gray; */
-	padding: 0px;
-	/* background-color: white; */
-	// border-radius: 4px;
+	padding: @margin;
+	background-color: white; 
+	border-radius: 4px;
 
 	.nav-tabs {
 	border-bottom: 0px solid #3D1C1C;
@@ -42,6 +45,12 @@ body {
 		margin-bottom: -1px;
 		background-color: #fff;
 		border: 1px solid #ccc;
+		width: 100%;
+		color: @dark-grey;
+
+			&:hover {
+				background-color: @hover-item;
+			}
 
 			&:first-child {
 			border-top-left-radius: 2px;
@@ -54,17 +63,51 @@ body {
 			}
 
 			&.active {
-			background-color: #eee;
+			background-color: #EEE;
+
+				.layer-name{
+				// border-bottom: 1px solid @dark-grey;
+				font-family: 'roboto_slabbold';
+				}
 			}
 		
 
-			.glyphs {
+			.glyphs,
+			.glyphs .active {
 				position: absolute;
 				right: 5px;
+
+				.glyphicon {
+					margin: 0px 2px;
+
+					&.glyphicon-eye-close:before {
+						color: (@dark-grey + 75%);
+					}
+				}
+
+				.layer-color {
+					width: 24px;
+					height: 12px;
+					border: 1px solid #8d9092;
+					background-color: #FF8300;
+					margin-right: 5px;
+				}
 			}
 		}
 	}
 }
+
+.btn-new-layer,
+.btn-new-wms {
+	width: calc(50% - 5px) ;
+	background-color: #fff;
+	border: 1px solid #ccc;
+
+	&:hover{
+		background-color: @hover-item;
+	}
+}
+.btn-new-layer {margin-right: 2 * @margin }
 
 .logo-main {
 	position: absolute;
