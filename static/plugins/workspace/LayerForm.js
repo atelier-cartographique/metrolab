@@ -40,6 +40,10 @@ function(log, _, T, C, TP, Stylist){
 		template: 'workspace/layer-form',
 
 
+		events: {
+			'change .input' : 'updateModel',
+		},
+
 		initialize: function(options){
 
 			var style = _.extend({}, this.model.getProperties().style);

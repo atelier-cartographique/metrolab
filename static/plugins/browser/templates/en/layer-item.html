@@ -9,16 +9,17 @@
 			<div class="LayerDesc"><%= data.properties.description %></div>
 		<% } %>
 
+<% _.each(data.groups, function(group){ %>
 
-		<!-- To add : if used on any 'map' : print 'map-names' by 'username' -->
-			<div class="OnMapView">
+			<div class="OnMapView" style="border:1px solid black" >
 				<span class="label">Used in :</span>
 				<li>
-					<span class="MapName">map name</span> 
-					by 
-					<span class="UserName">username</span>
+					<span class="MapName"><%= group.properties.name %></span> 
 				</li>
 			</div>
+
+<% }); %>
+
 
 
 		<!-- To add : Add to map  -->	

@@ -21,6 +21,40 @@ module.exports = exports = base.RequestHandler.extend({
  		modelName: 'Group',
  		model: store.Group,
 
- 		related: ['users', 'layers'],
+ 		related: ['layers'],
+ 		
+ 		endpoints: {
+ 			layer: {
+ 				verb: 'get',
+				handler: 'layer',
+				url: 'Group/l/:layer_id'
+ 			}
+ 		},
+
+ 		layer: function(req, res) {
+ 		
+ 		
+ 		// FIXME
+ 			var lid = req.params.layer_id;
+ 			function joinAndFilter(Q){
+ 				Q.innerJoin('compositions', 'groups.id', 'compositions.group_id');
+ 				Q.where('layer_id', '=', lid);
+ 				Q.column( 'groups.id', 'groups.properties');
+ 				console.log(Q.toString());
+ 			};
+ 		
+ 			var options = {
+ 				where: base.where(joinAndFilter),
+ 				page : req.query.page,
+ 			};
+
+			this._list(options)
+				.done(function(result){
+					res.json(result);
+				}, function(err){
+					res.json(500, err);
+				});
+ 		},
+
 
  	});

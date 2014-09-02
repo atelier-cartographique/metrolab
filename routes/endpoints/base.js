@@ -24,7 +24,12 @@ var Where = object.Object.extend({
 	},
 
 	use: function(Q){
-		Q.where(this.col, this.op, this.val);
+		if('function' === (typeof this.col)){
+			this.col.apply(this.op, [Q]);
+		}
+		else{
+			Q.where(this.col, this.op, this.val);
+		}
 	}
 });
 module.exports.Where = Where;
@@ -151,7 +156,7 @@ module.exports.RequestHandler = object.Object.extend({
 
 	_post: function(attributes){
 		var D = deferred();
-		var model = new this.model(attributes);
+		var model = new this.model(attributes, {parse: true});
 		var self = this;
 		model.save()
 			.then(function(m){

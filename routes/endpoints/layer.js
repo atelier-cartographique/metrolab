@@ -21,6 +21,7 @@ module.exports = exports = base.RequestHandler.extend({
  		
  		modelName: 'Layer',
  		model: store.Layer,
+ 		related: ['groups'],
 
  		endpoints: {
  			userLayers: {
@@ -41,7 +42,7 @@ module.exports = exports = base.RequestHandler.extend({
 				}, function(err){
 					res.json(500, err);
 				});
- 		},
+ 		},	
 
 
  	});

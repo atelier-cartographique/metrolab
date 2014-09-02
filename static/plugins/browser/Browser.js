@@ -30,56 +30,34 @@ define([
 	],	 
 function (_, L, T, C, TP, Layer) {
 	'use strict';
+	
 
-	var BrowsedItem = T.Subview.extend({
-		templateName: 'browser/item',
+	var LayerItem = T.Subview.extend({
+		templateName: 'browser/layer-item',
 		ready: true,
-
 	});
 
+	var UserItem = T.ContainerView.extend({
+		templateName: 'browser/user-item',
+		subviewContainer : 'layers',
+		SubviewPrototype: LayerItem,
 
-		// var Map = T.View.extend({
-		// 	templateName: 'browser/map',
-		// 	// ready: true,
+		initialize: function(options){
+			this.ready = true;
+			this.cursor = C.Layer.forUser(this.model.id, this.dataAvailable, this);
+		},
 
-
-		// 	setupMap: function(){
-		// 		if(this.map) return;
-		// 		var anchors = this.collectAnchors();
-		// 		var mapElement = anchors.$map[0];
-		// 		log.debug('setupMap', mapElement);
-		// 		this.map = L.map(mapElement, {
-		// 			drawControl: true,
-		// 		    center: [50.8, 4.3],
-		// 		    zoom: 13
-		// 		});
-				
-		// 	},
-
-		// 	render: function(){
-		// 		TP.render(TP.name(this.template), this, function(t){
-		// 			this.$el.html(t({}));
-		// 			this.attachToAnchor(this.layerManager.render(), 'layers');
-		// 			this.attachToAnchor(this.subscription.render(), 'groups');
-		// 			this.setupMap();
-		// 		});
-		// 		return this;
-		// 	},
-
-		// });
-
-		// Map.mixin(T.Overlay);
-
+	});
 
 	var Browser = T.ContainerView.extend({
 
 		templateName: 'browser/browser',
-		subviewContainer : 'layers',
-		SubviewPrototype: BrowsedItem,
+		subviewContainer : 'users',
+		SubviewPrototype: UserItem,
 
 		initialize: function(options){
 			this.ready = true;
-			this.cursor = C.Layer.browse(this.dataAvailable, this);
+			this.cursor = C.User.browse(this.dataAvailable, this);
 		},
 	});
 

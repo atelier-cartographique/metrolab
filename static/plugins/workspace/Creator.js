@@ -84,7 +84,6 @@ function(_, $, B, log, T, C, TP){
 
 		events: {
 			'change .input' : 'updateModel',
-			'click [data-role=close]' : 'close',
 			'click [data-role=kvnew]' : 'newProperty',
 		},
 
