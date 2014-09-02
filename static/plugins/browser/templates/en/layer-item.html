@@ -5,17 +5,17 @@
 
 	<div class="GeojsonLayer">
 
-		<% if(data.properties.description){ %>
-			<div class="LayerName" data-toggle="tooltip" data-placement="left" title data-original-title="<%= data.properties.description %>"><%= data.properties.name %></div>
+	 	<% if(data.properties.description){ %>
+			<div class="LayerName" data-toggle="tooltip" data-placement="left" title="<%= data.properties.description %>"><%= data.properties.name %></div>
+		
 		<% }else {%>
 			<div class="LayerName"><%= data.properties.name %></div>
 		<% } %>
+		
 		<div class="glyphs <% if(data.active){ %>active<% } %>">
 			<span class="glyphicon layer-color"></span>
 		</div>
 		
-
-
 <!-- 	<div class="GeojsonLayer">
 		<div class="LayerName"><%= data.properties.name %></div>
 		<div class="glyphs <% if(data.active){ %>active<% } %>">
