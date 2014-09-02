@@ -57,6 +57,7 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 												this.dataAvailable, this);
 
 			this.model.on('change', function(){
+				this.render();
 				if(this.visible){
 					this.showFeatures();
 				}
