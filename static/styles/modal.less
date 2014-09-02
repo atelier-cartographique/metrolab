@@ -6,21 +6,16 @@
 	background-color: rgba(123,123,123,0.5);
 	height: 100%;
 
-	#btnclose {
-		position: absolute;
-		top: 25px;
-		right: 25px;
+	.btn-link {
+		z-index: 100;
+		top: (@padding + 7px);
+		right: (@padding + 7px);
 	}
 
-	.layer-box {
-		width: @widget;
-		background-color: #fff;
-		padding: @margin;
-		float: right;
-		clear: both;
-		margin-right: -5px;
-		margin-top: -5px;
-		border-radius: 4px;
+	.layer-box,
+	.layer-wms-box,
+	.entity-box {
+		.Widget;
 
 		.layer-name {
 			margin-bottom: @margin;
@@ -41,7 +36,7 @@
  padding-left: 0px; 
 }
 .jumbotron {
-	padding: @margin 0px 0px 0px;
+	padding: @padding 0px 0px 0px;
 	background-color: transparent;
 
 
@@ -58,6 +53,7 @@
 		background-color: #fff;
 		border-radius: 2px;
 		padding: 0px;
+		width: @widget;
 
 		.col-md-4 {
 			font-size: @font-normal;
@@ -88,8 +84,8 @@
 		}
 
 		.style-infos {
-			padding-bottom: (1.5 * @margin);
-			padding-top: @margin;
+			padding-bottom: @padding;
+			padding-top: @padding;
 		}
 
 		.col-item {

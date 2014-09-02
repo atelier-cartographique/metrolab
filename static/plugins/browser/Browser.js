@@ -31,16 +31,22 @@ define([
 function (_, L, T, C, TP, Layer) {
 	'use strict';
 	
+	// var BrowseLayer = Layer.extend({
+	// 	template: 
+	// });
 
 	var LayerItem = T.Subview.extend({
 		templateName: 'browser/layer-item',
 		ready: true,
+		className: "list-group-item",
 	});
 
 	var UserItem = T.ContainerView.extend({
 		templateName: 'browser/user-item',
 		subviewContainer : 'layers',
 		SubviewPrototype: LayerItem,
+		className: "BrowserUserItem",
+
 
 		initialize: function(options){
 			this.ready = true;
@@ -54,6 +60,8 @@ function (_, L, T, C, TP, Layer) {
 		templateName: 'browser/browser',
 		subviewContainer : 'users',
 		SubviewPrototype: UserItem,
+		className: "BrowserView",
+
 
 		initialize: function(options){
 			this.ready = true;

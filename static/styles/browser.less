@@ -4,22 +4,23 @@
 
 
 .BrowserList {
-	width: @widget;
-	background-color: #fff;
-	border-radius: 4px;
-	padding: @padding;
-	position: absolute;
-	right: 5px;
-	top: 5px;
+	.Widget;
 
 	.BrowserItem {
-		
+		min-height: 17px;
+
 		.LayerName {
 			width: 220px;
 			float: left;
-			margin-top: 5px;
+			.font-small;
 		}
+
+		.glyphs {
+			width: 40px;
+		}
+
 		.LayerDesc {
+			.font-small;
 			font-style: italic;
 			display: block;
 			float: none;
@@ -36,11 +37,13 @@
 			.label,
 			.MapName {
 				color: #000;
-				font-size: 7pt;
-				letter-spacing: 0.5px;
+				.font-small;
 			}
 		}
 
+	}
+	.list-group {
+		.Stylelist-group;
 	}
 
 }

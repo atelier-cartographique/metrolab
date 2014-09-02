@@ -70,11 +70,19 @@
 @h4: 14pt;
 @h5: 12pt;
 @font-normal : 9pt;
+
+.font-small { 
+    font-size: 7.5pt;
+    letter-spacing: 0.5px;
+}
+
 @margin: 15px;
-@padding: @margin;
+@padding: 10px;
 @widget: 350px;
-@hover-item: #eee;
+@lightgrey: #eee;
 @darkgrey: #444;
+@blue: #428bca;
+@hover-item: @lightgrey;
 
 
 
@@ -121,7 +129,78 @@ h5 {
     text-transform: uppercase;
     margin : 0px 0px 5px 0px;
     text-decoration: underline
+}
 
+.Widget {
+    width: @widget;
+    background-color: #fff;
+    padding: @padding;
+    position: absolute;
+    border-radius: 4px;
+    top: 7px;
+    right: 7px;
+}
+
+.btn-link {
+    border: 1px solid @blue;
+    padding: 2.5px 5px;
+    position: absolute;
+    right: @padding;
+    top: @padding;
+
+    &:hover{
+     background-color: @lightgrey;
+     text-decoration: none;   
+    }
+    & .active{
+        background-color: @blue;
+        text-decoration: none;
+    }
+}
+
+.form-control {
+    height: 24px;
+    padding: 6px 5px;
+    font-size: 9pt;
+    border-radius: 2px;
+}
+
+.Stylelist-group {
+    font-size: 9pt;
+
+    .list-group-item {
+    position: relative;
+    display: block;
+    padding: 2px 5px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    width: 100%;
+    color: @darkgrey;
+
+        &:hover {
+            background-color: @hover-item;
+        }
+
+        &:first-child {
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+        }
+
+        &:last-child {
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
+        }
+
+        &.active {
+        background-color: #EEE;
+
+            .layer-name{
+            // border-bottom: 1px solid @dark-grey;
+            font-family: 'roboto_slabbold';
+            }
+        }
+    }
 }
 
 .glyphs,
