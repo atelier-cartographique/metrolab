@@ -51,6 +51,12 @@ function (_, config, L, T, C, TP, Layer) {
 			'rendered' : 'tooltips',
 		},
 
+		templateData:function (){
+			var data = this.model.toJSON();
+			data.active = this.active;
+			return data;
+		},
+
 		select: function(){
 			this.trigger('select:layer', this);
 		},
@@ -58,6 +64,7 @@ function (_, config, L, T, C, TP, Layer) {
 		zoom: function(){
 			this.trigger('zoom:layer');
 		},
+
 
 		tooltips: function(){
 	        this.$el.tooltip({selector: '[data-toggle="tooltip"]'});
