@@ -45,9 +45,17 @@ function (_, config, L, T, C, TP, Layer) {
 			'click [data-role=select]' : 'select',
 		},
 
+		viewEvents:{
+			'rendered' : 'tooltips',
+		},
+
 		select: function(){
 			this.trigger('select:layer', this.model);
 		},
+
+		tooltips: function(){
+	        this.$el.tooltip({selector: '[data-toggle="tooltip"]'});
+		}
 
 	});
 

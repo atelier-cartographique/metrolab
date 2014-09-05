@@ -49,8 +49,8 @@ requirejs.config({
 });
 
 
-requirejs(['backbone', 'jquery','app', 'core/routers', 'core/eproxy'],
-function(Backbone, $, app, routers, P){
+requirejs(['backbone', 'jquery', 'bootstrap', 'app', 'core/routers', 'core/eproxy'],
+function(Backbone, $, bootstrap, app, routers, P){
     'use strict';
     
     $(document).ready(function(){
@@ -69,6 +69,7 @@ function(Backbone, $, app, routers, P){
         // $(document).on('click', '*', function(e){
         //     console.log('click!', e.currentTarget);
         // });
+
         //> helpers
 
         app.once('ready', function(){
