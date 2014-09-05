@@ -34,6 +34,7 @@
 @darkgrey: #444;
 @blue: #428bca;
 @hover-item: @lightgrey;
+@greyed-glyph : (@darkgrey + 75%);
 
 
 
@@ -163,7 +164,7 @@ h5 {
         margin: 0px 2px;
 
         &.glyphicon-eye-close:before {
-            color: (@darkgrey + 75%);
+            color: @greyed-glyph;
         }
     }
 
