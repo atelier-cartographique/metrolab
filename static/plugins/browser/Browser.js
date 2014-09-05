@@ -44,6 +44,7 @@ function (_, config, L, T, C, TP, Layer) {
 		events: {
 			'click [data-role=select]' : 'select',
 			'click [data-role=zoom]' : 'zoom',
+			'click [data-role=subscribe]' : 'subscribe',
 		},
 
 		viewEvents:{
