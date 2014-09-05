@@ -1,11 +1,9 @@
 <% console.log(data) %>
 
 <div class="BrowserItem">
-<% if('geojson' === data.type) { %>
+	<div class="layer <% if('geojson' === data.type){ print('geojson'); }else{print('wms');} %>">
 
-	<div class="GeojsonLayer">
-
-		<div class="LayerName"
+		<div class="LayerName interaction"
 			 data-role="select"
 			<% if(data.properties.description){ %>
 		     data-toggle="tooltip" 
@@ -17,37 +15,24 @@
 		</div>
 		
 		<div class="glyphs <% if(data.active){ print("active"); } %>">
-			<span class="glyphicon layer-color"></span>
+			<% if('geojson' === data.type){ %>
+				<span class="layer-zoom interaction"  data-role="zoom">
+					<span class="glyphicon  glyphicon-fullscreen"></span>
+				</span>
+				<span class="layer-color"></span>
+			<% }else{ %>
+				<span class="glyphicon icon-wms">wms</span>
+			<% } %>
 		</div>
-		
 
-		<% _.each(data.groups, function(group){ %>
 
-			<div class="OnMapView" >
-				<span class="label">Used in :</span>
+		<div class="OnMapView" >
+			<% _.each(data.groups, function(group){ %>
 				<span class="MapName"><%= group.properties.name %> - </span> 
-			</div>
-
-		<% }); %>
+			<% }); %>
+		</div>
 
 	</div>
 
-<% } else { %> 
-	<div class="WmsLayer">
-		<div class="LayerName"><%= data.properties.name %></div>
-		<div class="glyphs <% if(data.active){ %>active<% } %>">
-			<span class="glyphicon icon-wms">wms</span>
-		</div>
-
-		<% if(data.properties.description){ %>
-			<div class="LayerDesc"><%= data.properties.description %></div>
-		<% } %>
-
-		<!-- To add : if used on any 'map' : print 'map-names' -->
-		<!-- To add : Add to map  -->	
-
-</div>
-
-<% } %>
 </div>
 

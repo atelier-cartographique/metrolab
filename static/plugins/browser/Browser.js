@@ -43,6 +43,7 @@ function (_, config, L, T, C, TP, Layer) {
 
 		events: {
 			'click [data-role=select]' : 'select',
+			'click [data-role=zoom]' : 'zoom',
 		},
 
 		viewEvents:{
@@ -50,7 +51,11 @@ function (_, config, L, T, C, TP, Layer) {
 		},
 
 		select: function(){
-			this.trigger('select:layer', this.model);
+			this.trigger('select:layer', this);
+		},
+
+		zoom: function(){
+			this.trigger('zoom:layer');
 		},
 
 		tooltips: function(){
@@ -76,8 +81,23 @@ function (_, config, L, T, C, TP, Layer) {
 		},
 
 		listenLayer: function(layerItem){
-			layerItem.on('select:layer', function(model){
-				this.trigger('select:layer', model);
+			layerItem.on('select:layer', function(view){
+				this.trigger('select:layer', view.model);
+
+				_.each(this.subviews, function(sv){
+					if(view.cid === sv.cid){
+						sv.active = true;
+					}
+					else{
+						sv.active = false;
+					}
+					sv.render();
+				});
+
+			}, this);
+
+			layerItem.on('zoom:layer', function(){
+				this.trigger('zoom:layer');
 			}, this);
 		},
 
