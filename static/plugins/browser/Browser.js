@@ -27,7 +27,7 @@ define([
 	'core/types',
 	'core/collections',
 	'core/template',
-	'plugins/workspace/Layer',
+	'plugins/browser/Layer',
 	],	 
 function (_, config, L, T, C, TP, Layer) {
 	'use strict';
@@ -42,7 +42,7 @@ function (_, config, L, T, C, TP, Layer) {
 		className: "list-group-item",
 
 		events: {
-			'click .LayerName' : 'select',
+			'click [data-role=select]' : 'select',
 		},
 
 		select: function(){
@@ -121,16 +121,22 @@ function (_, config, L, T, C, TP, Layer) {
 
 		listenUser: function(userItem){
 			userItem.on('select:layer', this.showLayer, this);
+			userItem.on('zoom:layer', this.zoomToLayerExtent, this);
 		},
 
 		showLayer: function(model){
-			if(this.CurrentLayer){this.CurrentLayer.remove()};
+			if(this.CurrentLayer){
+				this.CurrentLayer.remove()
+			};
 
 			this.CurrentLayer = new Layer({model:model,map:this.map});
-			this.CurrentLayer.once('features:end', function(cl){
-				cl.zoomLayer();
-			});
-			this.CurrentLayer.showFeatures();	
+		},
+
+		zoomToLayerExtent: function(){
+			if(this.CurrentLayer 
+				&& this.CurrentLayer.zoomLayer){
+				this.CurrentLayer.zoomLayer();
+			}
 		},
 
 	});

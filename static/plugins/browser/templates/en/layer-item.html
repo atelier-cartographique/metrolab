@@ -5,38 +5,36 @@
 
 	<div class="GeojsonLayer">
 
-	 	<% if(data.properties.description){ %>
-			<div class="LayerName" data-toggle="tooltip" data-placement="left" title="<%= data.properties.description %>"><%= data.properties.name %></div>
+		<div class="LayerName"
+			 data-role="select"
+			<% if(data.properties.description){ %>
+		     data-toggle="tooltip" 
+		     data-placement="left" 
+		     title="<%= data.properties.description %>"
+			 <% } else { %>
+			 title="<%= data.properties.name %>"
+			 <% } %> 
+			 >
+		<%= data.properties.name %>
+		</div>
 		
-		<% }else {%>
-			<div class="LayerName"><%= data.properties.name %></div>
-		<% } %>
-		
-		<div class="glyphs <% if(data.active){ %>active<% } %>">
+		<div class="glyphs <% if(data.active){ print("active"); } %>">
 			<span class="glyphicon layer-color"></span>
 		</div>
 		
-<!-- 	<div class="GeojsonLayer">
-		<div class="LayerName"><%= data.properties.name %></div>
-		<div class="glyphs <% if(data.active){ %>active<% } %>">
-			<span class="glyphicon layer-color"></span>
-		</div>
-		<% if(data.properties.description){ %>
-			<div class="LayerDesc"><%= data.properties.description %></div>
-		<% } %> -->
 
-<% _.each(data.groups, function(group){ %>
+		<% _.each(data.groups, function(group){ %>
 
 			<div class="OnMapView" >
 				<span class="label">Used in :</span>
 				<span class="MapName"><%= group.properties.name %> - </span> 
 			</div>
 
-<% }); %>
+		<% }); %>
 
 	</div>
 
-<% }else{ %> 
+<% } else { %> 
 	<div class="WmsLayer">
 		<div class="LayerName"><%= data.properties.name %></div>
 		<div class="glyphs <% if(data.active){ %>active<% } %>">
