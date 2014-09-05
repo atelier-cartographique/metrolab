@@ -28,8 +28,7 @@ module.exports = exports = base.RequestHandler.extend({
  				verb: 'get',
 				handler: 'layer',
 				url: 'Group/l/:layer_id'
- 			}
-
+ 			},
 
  			subscribe: {
  				verb: 'post',
