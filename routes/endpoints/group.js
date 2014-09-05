@@ -58,9 +58,15 @@ module.exports = exports = base.RequestHandler.extend({
 			this._list(options)
 				.done(function(result){
 					res.json(result);
-				}, function(err){
-					res.json(500, err);
-				});
+				}, this.queryError(res));
+ 		},
+
+ 		subscribe: function(req, res){
+ 			var user = req.user;
+ 			var groupQuery = this._get(req.params.id);
+ 			groupQuery.done(function(group){
+ 				group.users().attach(user);
+ 			}, this.queryError(res))
  		},
 
 

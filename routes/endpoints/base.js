@@ -175,6 +175,12 @@ module.exports.RequestHandler = object.Object.extend({
 		return this.post(attributes);
 	},
 
+	queryError: function(res){
+		return _.bind(function(err){
+			res.json(500, err);
+		}, this);
+	},
+
 	get: function(req, res){
 		this._get(req.params.id)
 			.done(function(model){
