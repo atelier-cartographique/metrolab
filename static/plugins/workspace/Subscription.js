@@ -25,13 +25,14 @@
 define([
 	'underscore',
 	'core/logger',
+	'core/eproxy',
 	'core/types',
 	'core/collections',
 	'core/template',
 	'leaflet',
 	'plugins/workspace/Layer'
 	],	 
-function (_, log, T, C, TP, L, Layer) {
+function (_, log, proxy, T, C, TP, L, Layer) {
 	'use strict';
 
 	var GroupItem = T.BView.extend({
@@ -98,14 +99,52 @@ function (_, log, T, C, TP, L, Layer) {
 		initialize: function(options){
 			this.groups = {};
 			this.ready = false;
+			this.rendered = false;
+			proxy.register('Subscription', this);
 		},
 
 		render: function(){
 			TP.render(TP.name(this.template), this, function(t){
 				this.$el.html(t({}));
+
+			console.log('subscription.rendered');
 				this.rendered = true;
 			});
 			return this;
+		},
+
+		addGroup: function(model){
+			var self = this;
+
+			if(!self.map){
+				self.pendingGroups = self.pendingGroups || [];
+				self.pendingGroups.push(model);
+				self.once('map:ready', function(){
+					_.each(self.pendingGroups, function(g){
+						self.addGroup(g);
+					});
+				});
+				return;
+			}
+
+			self.groups[model.id] = new GroupItem({
+						model: model,
+						map: self.map
+					})
+					
+			self.groups[model.id].on('rendered', function(){
+				self.groups[model.id].showLayers();
+			});
+			console.log('addGroup');
+			if(this.rendered){
+				self.attachToAnchor(self.groups[model.id].render(), 'items');
+			}
+			else{
+				self.on('rendered', function(){
+					self.attachToAnchor(self.groups[model.id].render(), 'items');
+				});
+			}
+			
 		},
 
 		start: function(map, user){
@@ -115,19 +154,9 @@ function (_, log, T, C, TP, L, Layer) {
 			var groups = user.get('groups');
 
 			_.each(groups, function(groupData){
-				var group = C.Group.getOrCreate(groupData.id, function(model){
-					self.groups[model.id] = new GroupItem({
-						model: model,
-						map: self.map
-					})
-					
-					self.groups[model.id].on('rendered', function(){
-						self.groups[model.id].showLayers();
-					});
-					self.attachToAnchor(self.groups[model.id].render(), 'items');
-				}, ['layers'], self);
-			})
-
+				C.Group.getOrCreate(groupData.id, self.addGroup, self);
+			});
+			self.trigger('map:ready');
 		},
 
 	});

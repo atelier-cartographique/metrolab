@@ -24,12 +24,13 @@ define([
 	'underscore',
 	'config',
 	'leaflet',
+	'core/eproxy',
 	'core/types',
 	'core/collections',
 	'core/template',
 	'plugins/browser/Layer',
 	],	 
-function (_, config, L, T, C, TP, Layer) {
+function (_, config, L, proxy, T, C, TP, Layer) {
 	'use strict';
 	
 	// var BrowseLayer = Layer.extend({
@@ -65,6 +66,14 @@ function (_, config, L, T, C, TP, Layer) {
 			this.trigger('zoom:layer');
 		},
 
+		subscribe: function(e){
+			var data = this.collectEventData(e);
+			if('id' in data){
+				C.Group.subscribe(data.id, function(model){
+					proxy.delegate('Subscription', 'addGroup', model);
+				});
+			}
+		},
 
 		tooltips: function(){
 	        this.$el.tooltip({selector: '[data-toggle="tooltip"]'});

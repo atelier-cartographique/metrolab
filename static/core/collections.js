@@ -108,6 +108,15 @@ function(DT)
             });
         },
 
+        subscribe: function(groupId, callback, ctx){
+            var self = this;
+            this.getOrCreate(groupId, function(model){
+                model.urlRoot = self.apiUrl + 'group/subscribe/';
+                model.save();
+                callback.apply(ctx, [model]);
+            }, null, this);
+        },
+
     });
 
     var collections = {}

@@ -61,7 +61,7 @@ module.exports.RequestHandler = object.Object.extend({
 		return fres;
 	},
 
-	_get: function(id){
+	_get: function(id, keepAlive){
 		var D = deferred();
 		var self = this;
 		var related = _.result(self, 'related');
@@ -73,7 +73,12 @@ module.exports.RequestHandler = object.Object.extend({
 			.fetch(fetchOptions)
 			.then(function(model){
 				if(model){
-					D.resolve(self._filterResult(model.toJSON()));
+					if(keepAlive){
+						D.resolve(model);
+					}
+					else{
+						D.resolve(self._filterResult(model.toJSON()));
+					}
 				}
 				else{
 					D.reject('NotFound');

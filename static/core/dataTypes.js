@@ -184,6 +184,8 @@ function(Backbone, _, $, P, config, logger)
 
     var Collection = Backbone.Collection.extend({
 
+        apiUrl: apiUrl,
+
         constructor: function(){
             Backbone.Collection.apply(this, arguments);
             this.fragments = {};
@@ -248,9 +250,6 @@ function(Backbone, _, $, P, config, logger)
 
         
         parse: function(response, options){
-            // this.count = response.count;
-            // this.next = response.next;
-            // this.previous = response.previous;
             return response.results;
         },
 
