@@ -33,90 +33,16 @@ define([
 function (_, config, L, proxy, T, C, TP, Layer) {
 	'use strict';
 	
-	// var BrowseLayer = Layer.extend({
-	// 	template: 
-	// });
-
-	var LayerItem = T.Subview.extend({
-		templateName: 'browser/layer-item',
-		ready: true,
-		className: "list-group-item",
-
-		events: {
-			'click [data-role=select]' : 'select',
-			'click [data-role=zoom]' : 'zoom',
-			'click [data-role=subscribe]' : 'subscribe',
-		},
-
-		viewEvents:{
-			'rendered' : 'tooltips',
-		},
-
-		templateData:function (){
-			var data = this.model.toJSON();
-			data.active = this.active;
-			return data;
-		},
-
-		select: function(){
-			this.trigger('select:layer', this);
-		},
-
-		zoom: function(){
-			this.trigger('zoom:layer');
-		},
-
-		subscribe: function(e){
-			var data = this.collectEventData(e);
-			if('id' in data){
-				C.Group.subscribe(data.id, function(model){
-					proxy.delegate('Subscription', 'addGroup', model);
-				});
-			}
-		},
-
-		tooltips: function(){
-	        this.$el.tooltip({selector: '[data-toggle="tooltip"]'});
-		}
-
-	});
-
-	var UserItem = T.ContainerView.extend({
-		templateName: 'browser/user-item',
-		subviewContainer : 'layers',
-		SubviewPrototype: LayerItem,
-		className: "BrowserUserItem",
+	
+	var GroupItem = T.Subview.extend({
+		templateName: 'browser/group-item',
+		className: "group-item",
 
 
 		initialize: function(options){
 			this.ready = true;
-			this.cursor = C.Layer.forUser(this.model.id, this.dataAvailable, this);
 		},
 
-		viewEvents: {
-			'include:view': 'listenLayer',
-		},
-
-		listenLayer: function(layerItem){
-			layerItem.on('select:layer', function(view){
-				this.trigger('select:layer', view.model);
-
-				_.each(this.subviews, function(sv){
-					if(view.cid === sv.cid){
-						sv.active = true;
-					}
-					else{
-						sv.active = false;
-					}
-					sv.render();
-				});
-
-			}, this);
-
-			layerItem.on('zoom:layer', function(){
-				this.trigger('zoom:layer');
-			}, this);
-		},
 
 	});
 
@@ -129,59 +55,13 @@ function (_, config, L, proxy, T, C, TP, Layer) {
 	var Browser = T.ContainerView.extend({
 
 		templateName: 'browser/browser',
-		subviewContainer : 'users',
-		SubviewPrototype: UserItem,
-		className: "BrowserView",
-
-
-		setupMap: function(){
-			if(this.map) return;
-			var mapConfig = _.defaults(_.extend({}, config.map), mapDefaults);
-			var anchors = this.collectAnchors();
-			var mapElement = anchors.$map[0];
-			this.map = L.map(mapElement, {
-			    center: mapConfig.center,
-			    crs: L.CRS[mapConfig.crs],
-			    zoom: mapConfig.zoom,
-			});
-
-			if('base' in mapConfig){
-				var base = mapConfig.base;
-				if('tile' === base.type){
-					this.baseLayer = L.tileLayer(base.url, base.options).addTo(this.map);
-				}
-			}
-		},
+		subviewContainer : 'groups',
+		SubviewPrototype: GroupItem,
+		className: "group-browser",
 
 		initialize: function(options){
 			this.ready = true;
-			this.cursor = C.User.browse(this.dataAvailable, this);
-			this.on('rendered', this.setupMap, this); 
-		},
-
-
-		viewEvents: {
-			'include:view': 'listenUser',
-		},
-
-		listenUser: function(userItem){
-			userItem.on('select:layer', this.showLayer, this);
-			userItem.on('zoom:layer', this.zoomToLayerExtent, this);
-		},
-
-		showLayer: function(model){
-			if(this.CurrentLayer){
-				this.CurrentLayer.remove()
-			};
-
-			this.CurrentLayer = new Layer({model:model,map:this.map});
-		},
-
-		zoomToLayerExtent: function(){
-			if(this.CurrentLayer 
-				&& this.CurrentLayer.zoomLayer){
-				this.CurrentLayer.zoomLayer();
-			}
+			this.cursor = C.Group.browse(this.dataAvailable, this);
 		},
 
 	});

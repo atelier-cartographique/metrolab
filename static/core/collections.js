@@ -108,6 +108,14 @@ function(DT)
             });
         },
 
+        browse: function(callback, ctx){
+            return this.getCursor({
+                query: '',
+                callback: callback,
+                context: ctx,
+            });
+        },
+        
         subscribe: function(groupId, callback, ctx){
             var self = this;
             this.getOrCreate(groupId, function(model){
