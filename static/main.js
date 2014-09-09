@@ -25,7 +25,7 @@ requirejs.config({
     paths: {
         "jquery": "jquery/jquery.min",
         "bootstrap": "bootstrap/js/bootstrap",
-        'backbone': 'backbone/backbone-min',
+        'backbone': 'backbone/backbone',
         'underscore': 'underscore/underscore-min',
         'leaflet': 'leaflet/leaflet-src',
         'leaflet-draw': 'leaflet/leaflet.draw',
@@ -50,7 +50,7 @@ requirejs.config({
 
 
 requirejs(['backbone', 'jquery', 'bootstrap', 'app', 'core/routers', 'core/eproxy'],
-function(Backbone, $, bootstrap, app, routers, P){
+function(backbone, $, bootstrap, app, routers, P){
     'use strict';
     
     $(document).ready(function(){
@@ -65,11 +65,6 @@ function(Backbone, $, bootstrap, app, routers, P){
         window.setInterval(function(){
             $('.closer').attr('data-role', 'close');
         }, 500);
-
-        // $(document).on('click', '*', function(e){
-        //     console.log('click!', e.currentTarget);
-        // });
-
         //> helpers
 
         app.once('ready', function(){
@@ -80,7 +75,7 @@ function(Backbone, $, bootstrap, app, routers, P){
             app.render();
 
             // setup main router
-            Backbone.history.start({pushState: true});
+            backbone.history.start({pushState: true});
         });
         
         var router = new routers;
