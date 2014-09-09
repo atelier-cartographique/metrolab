@@ -1,6 +1,5 @@
-<% console.log(data) %>
-
-<div class="panel panel-default">
+<% var panelClass = data.isSubscribed ? 'panel-success' : 'panel-default'; %>
+<div class="panel <%= panelClass %>">
 	<div class="group-name panel-heading">
 		<h2 class="panel-title">
 			<span class="route" 
@@ -11,6 +10,23 @@
 	</div>
 
 	<div class="panel-body"><%= data.properties.description %></div>
+
+	 
+	<% if(data.isSubscribed){ %>
+	<div class="panel-footer">
+		<span class="interaction"
+			  data-role="unsubscribe">
+			unsubscribe
+		</span>
+	</div>
+	<% } else { %>
+	<div class="panel-footer">
+		<span class="interaction"
+			  data-role="subscribe">
+			subscribe
+		</span>
+	</div>
+	<% } %>
 </div>
 
 

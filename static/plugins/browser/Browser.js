@@ -29,8 +29,9 @@ define([
 	'core/collections',
 	'core/template',
 	'plugins/browser/Layer',
+	'plugins/user/User',
 	],	 
-function (_, config, L, proxy, T, C, TP, Layer) {
+function (_, config, L, proxy, T, C, TP, Layer, User) {
 	'use strict';
 	
 	
@@ -40,9 +41,37 @@ function (_, config, L, proxy, T, C, TP, Layer) {
 
 
 		initialize: function(options){
-			this.ready = true;
+			User(function(user){
+				this.user = user;
+				this.user.on('change', this.render, this);
+				this.markReady();
+			}, this);
 		},
 
+		templateData: function(){
+			var data = this.model.toJSON();
+			var groups = this.user.get('groups');
+			data.isSubscribed = false;
+			_.each(groups, function(group){
+				if(group.id === data.id){
+					data.isSubscribed = true;
+				}
+			});
+			return data;
+		},
+
+
+		events: {
+			'click [data-role=subscribe]' : 'subscribe',
+		},
+		
+		subscribe: function(e){
+			var user = this.user;
+			C.Group.subscribe(this.model.id, function(model){
+				user.fetch();
+				proxy.delegate('Subscription', 'addGroup', model);
+			});
+		},
 
 	});
 
@@ -59,9 +88,11 @@ function (_, config, L, proxy, T, C, TP, Layer) {
 		SubviewPrototype: GroupItem,
 		className: "group-browser",
 
+
 		initialize: function(options){
 			this.ready = true;
 			this.cursor = C.Group.browse(this.dataAvailable, this);
+
 		},
 
 	});

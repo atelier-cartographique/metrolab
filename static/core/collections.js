@@ -121,7 +121,9 @@ function(DT)
             this.getOrCreate(groupId, function(model){
                 model.urlRoot = self.apiUrl + 'group/subscribe/';
                 model.save();
-                callback.apply(ctx, [model]);
+                model.once('sync', function(){
+                    callback.apply(ctx, [model]);    
+                });
             }, null, this);
         },
 

@@ -30,8 +30,9 @@ define([
 	'core/collections',
 	'core/template',
 	'plugins/display/Layer',
+	'plugins/user/User',
 	],	 
-function (log, _, config, L, proxy, T, C, TP, Layer) {
+function (log, _, config, L, proxy, T, C, TP, Layer, User) {
 	'use strict';
 
 
@@ -41,7 +42,6 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 
 		events: {
 			'click [data-role=zoom]' : 'zoom',
-			'click [data-role=subscribe]' : 'subscribe',
 		},
 
 		viewEvents:{
@@ -105,8 +105,13 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 		className: "display",
 
 
+
 		initialize: function(options){
 			this.once('rendered', this.setupMap, this); 
+			User(function(user){
+				this.user = user;
+				this.trigger('user:ready');
+			}, this);
 		},
 
 		setupMap: function(){
@@ -151,10 +156,17 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 			log.debug('Display.load', mapId);
 
 			var self = this;
+			if(!self.user){
+				self.once('user:ready', function(){
+					self.load(mapId);
+				});
+				return;
+			}
 			C.Group.getOrCreate(mapId, function(model){
 				log.debug('Display.load.model', model);
 
 				self.group = model;
+
 				self.once('map:rendered', function(){
 					var layers = self.group.get('layers');
 					_.each(layers, function(layer){
@@ -163,12 +175,6 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 				});
 
 				self.markReady();
-			});
-		},
-
-		subscribe: function(e){
-			C.Group.subscribe(this.model.id, function(model){
-				proxy.delegate('Subscription', 'addGroup', model);
 			});
 		},
 
