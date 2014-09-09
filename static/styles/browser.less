@@ -2,46 +2,15 @@
 @brown : #996600;
 
 
-#browserMap{
-	.absPos(0,0,0,0);	
-	z-index: 1;
-}
+.browser-list {
+	.absPos(0,0,0,0);
+	padding: 32px;
+	background-color: white;
 
-.BrowserList {
-	.Widget;	
-	z-index: 2;
-
-	.list-group {
-		.Stylelist-group;
-		min-height: 17px;
-
-		.LayerName {
-			.font-small;
-			width: 220px;
-			float: left;
-			cursor:pointer;
-		}
-
-		.glyphs {
-			width: 40px;
-			color: @greyed-glyph;
-
-			&.active {
-					color: black;
-			}
-		}
-
-		.OnMapView {
-			display: block;
-			float: none;
-			clear: both;
-			.label,
-			.MapName {
-				color: #000;
-				.font-small;
-			}
-		}
-
+	.group-item {
+		float:left;
+		width:300px;
+		margin: 12px;
 	}
 
 

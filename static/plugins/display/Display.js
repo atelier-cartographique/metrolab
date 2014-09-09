@@ -49,20 +49,21 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 		},
 
 		initialize: function(options){
-			this.layer = new Layer(options);
-			C.User.getOrCreate(this.model.get('user_id'), this.setAuthor, 
-								['name'], this);
+
+			C.Layer.getOrCreate(options.model.id, function(layer){
+				this.layer = new Layer(options);
+				this.model = layer;
+				this.markReady();
+			}, ['user'], this);
+			
 		},
 
-		setAuthor: function(user){
-			log.debug('setAuthor', this.model.id, user.get('name'));
-			this.author = user.get('name');
-			this.markReady();
-		},
 
 		templateData:function (){
 			log.debug('templateData', this.model.id);
 			var props = this.model.get('properties');
+			var user = this.model.get('user');
+
 			var description = props.description 
 							  ? props.description
 							  : '*';
@@ -72,7 +73,7 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 				name: props.name,
 				description: description,
 				excerpt: excerpt,
-				author: this.author , 
+				author: user.name , 
 			};
 			return data;
 		},

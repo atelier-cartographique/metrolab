@@ -1,10 +1,16 @@
 <% console.log(data) %>
 
-<div><%= data.properties.name %></div>
-<div><%= data.properties.description %></div>
-<span class="route" 
-	 data-route="/display/<%= data.id %>">
-	 <span>display</span>
-</span>
+<div class="panel panel-default">
+	<div class="group-name panel-heading">
+		<h2 class="panel-title">
+			<span class="route" 
+				  data-route="/display/<%= data.id %>">
+				<span><%= data.properties.name %></span>
+			</span>
+		</h2>
+	</div>
+
+	<div class="panel-body"><%= data.properties.description %></div>
+</div>
 
 

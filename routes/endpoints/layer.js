@@ -21,7 +21,7 @@ module.exports = exports = base.RequestHandler.extend({
  		
  		modelName: 'Layer',
  		model: store.Layer,
- 		related: ['groups'],
+ 		related: ['groups', 'user'],
 
  		endpoints: {
  			userLayers: {
