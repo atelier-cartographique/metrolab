@@ -91,12 +91,13 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 
 		initialize: function(options){
 			this.ready = true;
-			this.once('rendered', this.setupMap, this); 
+			this.on('rendered', this.setupMap, this); 
 		},
 
 		setupMap: function(){
-			if(this.map) return;
-			log.debug('Display.setupMap');
+			if(this.map){
+				this.map.remove();
+			}
 			var mapConfig = _.defaults(_.extend({}, config.map), mapDefaults);
 			var anchors = this.collectAnchors();
 			var mapElement = anchors.$map[0];
@@ -105,13 +106,13 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 			    crs: L.CRS[mapConfig.crs],
 			    zoom: mapConfig.zoom,
 			});
-
 			if('base' in mapConfig){
 				var base = mapConfig.base;
 				if('tile' === base.type){
 					this.baseLayer = L.tileLayer(base.url, base.options).addTo(this.map);
 				}
 			}
+			log.debug('Display.setupMap');
 			this.trigger('map:rendered');
 		},
 
@@ -120,6 +121,7 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 			var props = ('properties' in data) ? data.properties : {};
 
 			TP.render(TP.name(this.template), this, function(t){
+				log.debug('Display.render');
 				this.$el.html(t(props));
 			});
 			return this;
