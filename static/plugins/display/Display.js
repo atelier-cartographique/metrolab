@@ -112,6 +112,7 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 					this.baseLayer = L.tileLayer(base.url, base.options).addTo(this.map);
 				}
 			}
+			this.trigger('map:rendered');
 		},
 
 		render: function(){
@@ -126,6 +127,12 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 
 		load: function(mapId){
 			log.debug('Display.load', mapId);
+			if(!this.map){
+				this.once('map:rendered', function(){
+					this.load(mapId);
+				}, this);
+				return;
+			}
 			var self = this;
 			C.Group.getOrCreate(mapId, function(model){
 				log.debug('Display.load.model', model);
