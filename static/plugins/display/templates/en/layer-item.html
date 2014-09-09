@@ -1,0 +1,10 @@
+<% console.log('layer-item', data) %>
+
+<td><%= data.id %></td>
+<td class="interaction" data-role="zoom"><%= data.name %></td>
+<td><%= data.author %></td>
+<td data-toggle="tooltip" 
+	data-placement="left"
+	title="<%= data.description %>">
+	<%= data.excerpt %>
+</td>

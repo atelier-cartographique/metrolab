@@ -29,7 +29,7 @@ define([
 	'core/template',
 	'leaflet',
 	], 
-function(log, proxy, _, T, C, TP, L){
+function (log, proxy, _, T, C, TP, L){
 
 	function Layer(options){
 			this.map = options.map;
@@ -49,7 +49,6 @@ function(log, proxy, _, T, C, TP, L){
 		style: function(feature){
 			var props = this.model.get('properties');
 			// TODO the styling thing based on the feature
-			console.log(feature);
 			return _.extend({}, props.style); 
 		},
 

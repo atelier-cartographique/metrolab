@@ -519,6 +519,7 @@ function(B, _, $, $$, C, T, G, CSS, A){
         * Renders if view is ready. Otherwise awaits the ready event
         */
         render: function () {
+            console.log('BView.render', this.ready, this.template);
             if (this.ready) {
                 if (this.template) {
                     var html = this.applyTemplate(this.template);
@@ -526,9 +527,11 @@ function(B, _, $, $$, C, T, G, CSS, A){
                     this.anchors = this.collectAnchors();
                     this.markRendered();
                 } else {
+                    console.log('BView.render subscribes to ready:template event');
                     this.on('ready:template', this.render);
                 }
             } else {
+                console.log('BView.render subscribes to ready event');
                 this.on('ready', this.render);
             }
 
@@ -581,6 +584,14 @@ function(B, _, $, $$, C, T, G, CSS, A){
         markRendered: function () {
             this.rendered = true;
             this.trigger('rendered', this);
+        },  
+
+        /**
+        * Marks view as ready and triggers a rendered event
+        */
+        markReady: function () {
+            this.ready = true;
+            this.trigger('ready', this);
         },
 
         /**

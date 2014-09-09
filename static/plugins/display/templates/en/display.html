@@ -1,9 +1,36 @@
 
 <div class="map" data-anchor="map" />
 
+<div class="widget group-info">
 
-<div>
-	<div><%= data.name %></div>
-	<div><%= data.description %></div>
-	<div data-anchor="layers" />
+	<div class="panel panel-default">
+		<div class="group-name panel-heading">
+			
+			<span class="route pull-right btn btn-link btn-xs" 
+				  data-route="browse">
+				maps
+			</span>
+			
+			<h2 class="panel-title">
+			<%= data.name %>
+			</h2>
+			
+	
+		</div>
+
+
+		<div class="panel-body"><%= data.description %></div>
+
+		<table class="table">
+        <thead> 
+        	<tr> 
+        		<th>#</th> <th>name</th> <th>author</th> <th>description</th> 
+        	</tr>
+        </thead>
+
+        <tbody data-anchor="layers">
+
+        </tbody>
+      </table>
+	</div>
 </div>

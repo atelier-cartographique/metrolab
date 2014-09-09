@@ -37,8 +37,7 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 
 	var LayerItem = T.Subview.extend({
 		templateName: 'display/layer-item',
-		ready: true,
-		className: "list-group-item",
+		tagName: 'tr',
 
 		events: {
 			'click [data-role=zoom]' : 'zoom',
@@ -49,26 +48,42 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 			'rendered' : 'tooltips',
 		},
 
+		initialize: function(options){
+			this.layer = new Layer(options);
+			C.User.getOrCreate(this.model.get('user_id'), this.setAuthor, 
+								['name'], this);
+		},
+
+		setAuthor: function(user){
+			log.debug('setAuthor', this.model.id, user.get('name'));
+			this.author = user.get('name');
+			this.markReady();
+		},
+
 		templateData:function (){
-			var data = this.model.toJSON();
-			data.active = this.active;
+			log.debug('templateData', this.model.id);
+			var props = this.model.get('properties');
+			var description = props.description 
+							  ? props.description
+							  : '*';
+			var excerpt = description.split(' ').slice(0,4).join(' ');
+			var data = {
+				id : this.model.id,
+				name: props.name,
+				description: description,
+				excerpt: excerpt,
+				author: this.author , 
+			};
 			return data;
 		},
 
 
 
 		zoom: function(){
-			this.trigger('zoom:layer');
+			this.layer.zoomLayer();
 		},
 
-		subscribe: function(e){
-			var data = this.collectEventData(e);
-			if('id' in data){
-				C.Group.subscribe(data.id, function(model){
-					proxy.delegate('Subscription', 'addGroup', model);
-				});
-			}
-		},
+
 
 		tooltips: function(){
 	        this.$el.tooltip({selector: '[data-toggle="tooltip"]'});
@@ -83,15 +98,14 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 		zoom: 10,
 	}
 
-	var Display = T.View.extend({
+	var Display = T.BView.extend({
 
-		template: 'display/display',
+		templateName: 'display/display',
 		className: "display",
 
 
 		initialize: function(options){
-			this.ready = true;
-			this.on('rendered', this.setupMap, this); 
+			this.once('rendered', this.setupMap, this); 
 		},
 
 		setupMap: function(){
@@ -106,6 +120,7 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 			    crs: L.CRS[mapConfig.crs],
 			    zoom: mapConfig.zoom,
 			});
+
 			if('base' in mapConfig){
 				var base = mapConfig.base;
 				if('tile' === base.type){
@@ -116,38 +131,44 @@ function (log, _, config, L, proxy, T, C, TP, Layer) {
 			this.trigger('map:rendered');
 		},
 
-		render: function(){
+		templateData: function(){
 			var data = this.group ? this.group.toJSON() : {};
 			var props = ('properties' in data) ? data.properties : {};
+			return props;
+		},
 
-			TP.render(TP.name(this.template), this, function(t){
-				log.debug('Display.render');
-				this.$el.html(t(props));
+		renderLayer: function (attrs){
+			var layer = C.Layer.add(attrs);
+			var layerItem = new LayerItem({
+				model: layer,
+				map: this.map,
 			});
-			return this;
+			this.attachToAnchor(layerItem.render(), 'layers');
 		},
 
 		load: function(mapId){
 			log.debug('Display.load', mapId);
-			if(!this.map){
-				this.once('map:rendered', function(){
-					this.load(mapId);
-				}, this);
-				return;
-			}
+
 			var self = this;
 			C.Group.getOrCreate(mapId, function(model){
 				log.debug('Display.load.model', model);
+
 				self.group = model;
-				self.render();
+				self.once('map:rendered', function(){
+					var layers = self.group.get('layers');
+					_.each(layers, function(layer){
+						self.renderLayer(layer);
+					});
+				});
+
+				self.markReady();
 			});
 		},
 
-		zoomToLayerExtent: function(){
-			if(this.CurrentLayer 
-				&& this.CurrentLayer.zoomLayer){
-				this.CurrentLayer.zoomLayer();
-			}
+		subscribe: function(e){
+			C.Group.subscribe(this.model.id, function(model){
+				proxy.delegate('Subscription', 'addGroup', model);
+			});
 		},
 
 	});

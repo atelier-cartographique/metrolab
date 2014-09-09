@@ -27,6 +27,7 @@
 }
 
 
+
 @margin: 15px;
 @padding: 10px;
 @padding-navpills : 3px 7px;
@@ -37,6 +38,16 @@
 @blue: #428bca;
 @hover-item: @lightgrey;
 @greyed-glyph : (@darkgrey + 75%);
+
+
+.route{
+    cursor:pointer;
+    border-bottom: 1px solid;
+}
+
+.interaction:hover{
+    color:@darkgrey;
+}
 
 
 
@@ -54,9 +65,9 @@
 .btn-link {
     border: 1px solid @blue;
     padding: @padding-btn;
-    position: absolute;
-    right: @padding;
-    top: @padding;
+    // position: absolute;
+    // right: @padding;
+    // top: @padding;
 
     &:hover{
      background-color: @lightgrey;
