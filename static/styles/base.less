@@ -65,17 +65,27 @@
 .btn-link {
     border: 1px solid @blue;
     padding: @padding-btn;
-    // position: absolute;
-    // right: @padding;
-    // top: @padding;
 
     &:hover{
-     background-color: @lightgrey;
-     text-decoration: none;   
+    border: 1px solid @blue;
+    background-color: @lightgrey;
+    text-decoration: none;   
     }
-    & .active{
-        background-color: @blue;
+    &:active, &:focus{
+        // background-color: @blue;
+        outline: none;
         text-decoration: none;
+        border: 1px solid @blue;
+        box-shadow:
+                0 0 0 3px #fff,
+                0 0 0 4px @blue;
+    }
+
+    &.btn-abspos {
+        position: absolute;     
+        z-index: 100;
+        top: (@padding * 2);
+        right: (@widget + @padding * 2);
     }
 }
 
