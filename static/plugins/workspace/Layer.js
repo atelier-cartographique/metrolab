@@ -32,6 +32,7 @@ define([
 	'plugins/workspace/LayerForm'
 	], 
 function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
+	'use strict';
 
 	var Layer = T.View.extend({
 
@@ -125,10 +126,35 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
             this.trigger('dataAvailable', this);
         },
 
-		render: function(){
+        prepareData: function(){
 			var data = this.model.toJSON().properties;
+			log.debug('prepareData', data);
+
+			data.fillColor = "#F00";  					
+			if(data.style){ 								
+			  if('fillColor' in data.style){ 			
+			  	data.fillColor = data.style.fillColor; 		
+			  } 											
+			} 											
+
+			data.borderStyle = ""; 						
+			if(data.style) { 							
+				if('stroke' in data.style 					
+				    && data.style.stroke) {					
+			 			data.borderStyle = "; border: " 
+			 								+ data.style.weight 
+			 								+ "px solid " 
+			 								+ data.style.color;
+				  } 										
+			} 		
+
 			data.visible = this.visible;
 			data.active = this.active;
+			return data;									
+        },
+
+		render: function(){
+			var data = this.prepareData();
 			TP.render(TP.name(this.template), this, function(t){
 				this.$el.html(t(data));
 			});

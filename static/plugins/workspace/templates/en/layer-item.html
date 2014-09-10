@@ -1,18 +1,25 @@
+<% console.log("workspace/layer-item", data); %>
 <%  $("body").tooltip({selector: '[data-toggle="tooltip"]'}); %>
 
+
+
 <div class="glyphs <% if(data.active){ %>active<% } %>">
-	<span class="glyphicon layer-color"></span>
+	<span class="icon-layer-color" 
+	      style="background-color: <%= data.fillColor %><%= data.borderStyle %>" />
+
 	
 	<span class="layer-zoom interaction"  data-role="zoom">
 		<span class="glyphicon  glyphicon-fullscreen"></span>
 	</span>
 
 	<span class="layer-visible interaction"  data-role="visible">
+
 	<% if(data.visible){ %>
-	<span class="glyphicon  glyphicon-eye-open"></span>
+		<span class="glyphicon  glyphicon-eye-open"></span>
 	<% }else{ %>
-	<span class="glyphicon  glyphicon-eye-close"></span>
+		<span class="glyphicon  glyphicon-eye-close"></span>
 	<% } %>
+
 	</span>
 
 
