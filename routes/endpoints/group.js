@@ -34,11 +34,16 @@ module.exports = exports = base.RequestHandler.extend({
  				verb: 'put',
 				handler: 'subscribe',
 				url: 'Group/subscribe/:id'
+ 			},
+
+ 			attach: {
+ 				verb: 'put',
+				handler: 'attach',
+				url: 'Group/attach/:lid/:gid'
  			}
  		},
 
  		layer: function(req, res) {
- 		
  		
  		// FIXME
  			var lid = req.params.layer_id;
@@ -67,6 +72,28 @@ module.exports = exports = base.RequestHandler.extend({
  			groupQuery.done(function(group){
  				group.users().attach(user);
  				res.json(self._filterResult(group.toJSON()))
+ 			}, this.queryError(res))
+ 		},
+
+ 		attach: function(req, res){
+ 			var self = this;
+ 			var user = req.user;
+
+ 			var layer_id = parseInt(req.params.lid);
+
+ 			var groupQuery = self._get(req.params.gid, true);
+
+ 			groupQuery.done(function(group){
+ 				user.layers().fetch().then(function(layers){
+ 					console.log('Group.attach', layers);
+ 					layers.each(function(layer){
+ 						console.log('Group.attach.layer', layer.id === layer_id);
+ 						if(layer.id === layer_id){
+	 						group.layers().attach(layer);			
+ 						}
+		 				res.json(self._filterResult(group.toJSON()))
+ 					});
+ 				});
  			}, this.queryError(res))
  		},
 

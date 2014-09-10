@@ -31,8 +31,9 @@ define([
 	'plugins/browser/Layer',
 	'plugins/browser/CreateForm',
 	'plugins/user/User',
+	'plugins/browser/AddLayerForm',
 	],	 
-function (_, config, L, proxy, T, C, TP, Layer, CreateForm, User) {
+function (_, config, L, proxy, T, C, TP, Layer, CreateForm, User, AddLayerForm) {
 	'use strict';
 	
 	
@@ -64,6 +65,7 @@ function (_, config, L, proxy, T, C, TP, Layer, CreateForm, User) {
 
 		events: {
 			'click [data-role=subscribe]' : 'subscribe',
+			'click [data-role=add]' : 'addLayer',
 		},
 		
 		subscribe: function(e){
@@ -72,6 +74,11 @@ function (_, config, L, proxy, T, C, TP, Layer, CreateForm, User) {
 				user.fetch();
 				proxy.delegate('Subscription', 'addGroup', model);
 			});
+		},
+
+		addLayer: function(){
+			var form = new AddLayerForm({model:this.model});
+			proxy.delegate('modal', 'show', form);
 		},
 
 	});

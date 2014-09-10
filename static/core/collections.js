@@ -127,6 +127,17 @@ function(DT)
             }, null, this);
         },
 
+        attach: function(groupId, layerId, callback, ctx){
+            var self = this;
+            this.getOrCreate(groupId, function(model){
+                model.urlRoot = self.apiUrl + 'group/attach/'+layerId+'/';
+                model.save();
+                model.once('sync', function(){
+                    callback.apply(ctx, [model]);    
+                });
+            }, null, this);
+        },
+
     });
 
     var collections = {}
