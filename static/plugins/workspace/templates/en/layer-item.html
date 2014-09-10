@@ -1,3 +1,4 @@
+<%  $("body").tooltip({selector: '[data-toggle="tooltip"]'}); %>
 
 <div class="glyphs <% if(data.active){ %>active<% } %>">
 	<span class="glyphicon layer-color"></span>
@@ -20,6 +21,6 @@
 	</span>
 </div>
 
-<span class="layer-name interaction" data-role="select">
+<span class="layer-name interaction" data-role="select" data-toggle="tooltip" data-placement="left" title="<%= data.description %>">
 <%= data.name %>
 </span>
