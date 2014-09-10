@@ -40,6 +40,12 @@ module.exports = exports = base.RequestHandler.extend({
  				verb: 'put',
 				handler: 'attach',
 				url: 'Group/attach/:lid/:gid'
+ 			},
+
+ 			detach: {
+ 				verb: 'put',
+				handler: 'detach',
+				url: 'Group/detach/:lid/:gid'
  			}
  		},
 
@@ -90,6 +96,26 @@ module.exports = exports = base.RequestHandler.extend({
  						console.log('Group.attach.layer', layer.id === layer_id);
  						if(layer.id === layer_id){
 	 						group.layers().attach(layer);			
+ 						}
+		 				res.json(self._filterResult(group.toJSON()))
+ 					});
+ 				});
+ 			}, this.queryError(res))
+ 		},
+
+ 		detach: function(req, res){
+ 			var self = this;
+ 			var user = req.user;
+
+ 			var layer_id = parseInt(req.params.lid);
+
+ 			var groupQuery = self._get(req.params.gid, true);
+
+ 			groupQuery.done(function(group){
+ 				user.layers().fetch().then(function(layers){
+ 					layers.each(function(layer){
+ 						if(layer.id === layer_id){
+	 						group.layers().detach(layer);			
  						}
 		 				res.json(self._filterResult(group.toJSON()))
  					});

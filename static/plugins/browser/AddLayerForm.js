@@ -37,8 +37,9 @@ function(log, _, T, C, TP, User){
 		className: 'add-layer-form-item',
 		templateName: 'browser/add-layer-form-item',
 
-		initialize: function(){
+		initialize: function(options){
 			this.status(false);
+			this.group = options.group;
 			_.each(this.model.get('groups'), function(g){
 				if(g.id === this.group.id){
 					this.status(true);
@@ -74,7 +75,11 @@ function(log, _, T, C, TP, User){
 		},
 
 		removeLayer: function(){
-
+			C.Group.detach(this.group.id, this.model.id, function(group){
+				this.group = group;
+				this.status(false);
+				this.render();
+			}, this);
 		},
 
 	});
@@ -96,9 +101,11 @@ function(log, _, T, C, TP, User){
 
 		},
 
-		prepareSubview: function(layerItem){
-			layerItem.group = this.model;
-			return layerItem; 
+		instantiateSubview: function(model){
+			return new this.SubviewPrototype({
+				model:model,
+				group:this.model
+			}); 
 		},
 	});
 

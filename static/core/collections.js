@@ -138,6 +138,17 @@ function(DT)
             }, null, this);
         },
 
+        detach: function(groupId, layerId, callback, ctx){
+            var self = this;
+            this.getOrCreate(groupId, function(model){
+                model.urlRoot = self.apiUrl + 'group/detach/'+layerId+'/';
+                model.save();
+                model.once('sync', function(){
+                    callback.apply(ctx, [model]);    
+                });
+            }, null, this);
+        },
+
     });
 
     var collections = {}

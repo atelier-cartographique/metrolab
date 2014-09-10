@@ -12,12 +12,19 @@
 			title="<%= data.properties.description %>" >
 			<%= data.properties.name %>
 		</span>	
-		
-		<button type="button" 
-				class="btn btn-link btn-xs btn-add-layer" 
-				data-role="add">
-			add
-		</button>
+		<% if(data.isAttached){%>
+			<button type="button" 
+					class="btn btn-warning btn-xs btn-add-layer" 
+					data-role="remove">
+				remove
+			</button>
+		<%}else{%>
+			<button type="button" 
+					class="btn btn-link btn-xs btn-add-layer" 
+					data-role="add">
+				add
+			</button>
+		<%} %>
 
 	</li>
 </div>
