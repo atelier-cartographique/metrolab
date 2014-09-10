@@ -29,9 +29,10 @@ define([
 	'core/collections',
 	'core/template',
 	'plugins/browser/Layer',
+	'plugins/browser/CreateForm',
 	'plugins/user/User',
 	],	 
-function (_, config, L, proxy, T, C, TP, Layer, User) {
+function (_, config, L, proxy, T, C, TP, Layer, CreateForm, User) {
 	'use strict';
 	
 	
@@ -93,6 +94,26 @@ function (_, config, L, proxy, T, C, TP, Layer, User) {
 			this.ready = true;
 			this.cursor = C.Group.browse(this.dataAvailable, this);
 
+		},
+
+		events: {
+			'click [data-role=create]' : 'create',
+		},
+		
+		create: function(){
+			var self = this;
+			var model = new C.Group.model;
+			var form = new CreateForm({model:model});
+			form.once('submit', function(){
+				if(model.has('properties')){
+					model.once('sync', function(){
+						var subview = self.instantiateSubview(model);
+		                self.includeSubview(subview);
+					});
+					model.save();
+				}
+			});
+			proxy.delegate('modal', 'show', form);
 		},
 
 	});
