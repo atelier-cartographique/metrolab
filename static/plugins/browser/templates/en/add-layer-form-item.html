@@ -1,14 +1,25 @@
 <% console.log('add-layer-form-item', data); %>
+<%  $("body").tooltip({selector: '[data-toggle="tooltip"]'}); %>
+
+
 <div>
-	<p>
-		<%= data.properties.name %>
-	</p>
-	
-	<button type="button" 
-			class="btn btn-link btn-xs" 
-			data-role="add">
-		add
-	</button>
+	<li class="list-group-item interaction">
+		<span 
+			class="group-add-layer-name" 
+			data-role="select" 
+			data-toggle="tooltip" 
+			data-placement="left" 
+			title="<%= data.properties.description %>" >
+			<%= data.properties.name %>
+		</span>	
+		
+		<button type="button" 
+				class="btn btn-link btn-xs" 
+				data-role="add">
+			add
+		</button>
+
+	</li>
 </div>
 
 
