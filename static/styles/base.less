@@ -42,6 +42,9 @@ background: #fefefe;
 @hover-item: @lightgrey;
 @greyed-glyph : (@darkgrey + 75%);
 
+@marker-width: 50px;
+@marker-border-width: 2px;
+
 
 .route{
     cursor:pointer;
@@ -57,6 +60,10 @@ background: #fefefe;
     position: absolute;
     top: 10px;
     right: 10px;
+
+    .navigation-username {
+
+    }
 
     .btn-link {
         margin-left: @padding;
@@ -77,7 +84,13 @@ background: #fefefe;
         background-color: @brown;
         border: 1px solid @brown;
         color: #fff;
-    };
+    }
+
+    .navigation-username,
+    .navigation-username:hover {
+        background-color: #fff;
+        color: @brown;
+    }
 }
 
 
@@ -195,3 +208,56 @@ background: #fefefe;
     display: inline-block;
 }
 
+
+
+.marker {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    color: red;
+    border: @marker-border-width solid red;
+    font-family: @light;
+    width: @marker-width;
+    background-color: transparent;
+
+    .marker-initials {
+        width: (@marker-width - @marker-border-width);
+        height: 33px;
+        padding-top: 4px;
+        text-align: center;
+
+        .marker-first-letter {
+            text-transform: uppercase;
+            font-size: 19pt;
+            line-height: 20pt;
+        }
+
+        .marker-second-letter {
+            text-transform: lowercase;
+            font-size: 12pt;
+            line-height: 26pt;
+            margin-left: -2pt;
+        }
+    }
+
+    .marker-full-name {
+        border-top: @marker-border-width solid red;
+        font-size: 7pt;
+        text-transform: lowercase;
+        text-align: center;
+        padding: 0px 3px;
+        word-wrap: break-word;
+
+        &::first-letter {
+            text-transform: uppercase;
+        }
+    }
+
+    .marker-arrow-down {
+        width: @marker-width;
+        text-align: center;
+        font-size: 14pt;
+        margin-top: -(@marker-border-width + 2px);
+        position: absolute;
+    }
+}
