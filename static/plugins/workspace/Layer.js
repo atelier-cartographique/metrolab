@@ -130,7 +130,7 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 			var data = this.model.toJSON().properties;
 			log.debug('prepareData', data);
 
-			data.fillColor = "#F00";  					
+			data.fillColor = "";  					
 			if(data.style){ 								
 			  if('fillColor' in data.style){ 			
 			  	data.fillColor = data.style.fillColor; 		

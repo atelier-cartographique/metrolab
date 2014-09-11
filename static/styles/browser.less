@@ -1,4 +1,4 @@
-
+ 
 @brown : #996600;
 
 .create-form{
@@ -9,6 +9,37 @@
 	.absPos(0,0,0,0);
 	padding: 32px;
 	background-color: #fefefe;
+
+	.panel-body {
+		height: 170px;
+		overflow: hidden;
+		margin-bottom: @padding;
+	}
+
+	.create-map-area {
+		float: left;
+		width: 300px;
+		// height: 350px;
+		margin: 12px;
+		border: 1px dashed @brown;
+		border-radius: 4px;
+		background-color: #FAFAFA;
+
+		.panel-heading {
+			border-bottom: 1px dashed @brown;
+			background-color: #FAFAFA;
+			color: @brown;
+		}
+
+		.panel-body {
+			color: #ececec;
+		}
+
+		.panel-footer {
+			border-top: 1px dashed @brown;
+			background-color: #FAFAFA;
+		}
+	}
 
 	.group-item {
 		float:left;

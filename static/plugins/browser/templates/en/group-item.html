@@ -1,11 +1,12 @@
 <% var panelClass = data.isSubscribed ? 'panel-success' : 'panel-default'; %>
 <div class="panel <%= panelClass %>">
-	<div class="group-name panel-heading">
+	<div class="group-name 
+				panel-heading
+				route"
+		  data-route="/display/<%= data.id %>">
+
 		<h2 class="panel-title">
-			<span class="route" 
-				  data-route="/display/<%= data.id %>">
-				<span><%= data.properties.name %></span>
-			</span>
+			<span><%= data.properties.name %></span>
 		</h2>
 	</div>
 
