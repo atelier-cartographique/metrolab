@@ -217,8 +217,10 @@ module.exports.RequestHandler = object.Object.extend({
 		var attrs = req.body;
 		this._post(attrs)
 			.done(function(m){
+
 				res.json(201, m);
-				self.emit('post:' + self.modelName, attrs);
+				self.emit('post:' + self.modelName, m);
+
 		}, function(err){
 			res.json(500, err);
 		});

@@ -52,24 +52,45 @@ module.exports = exports = base.RequestHandler.extend({
 
 
  		notifyPost: function(attrs){
- 			var e = new store.Entity(attrs);
- 			e.fetch({withRelated:['layer']})
- 			 .then(function(entity){
- 			 	var l = entity.related('layer');
- 			 	layer.fetch({withRelated:['groups']})
- 			 	     .then(function(layer){
- 			 	     	var gs = layer.related('groups');
- 			 	     	gs.each(function(g){
- 			 	     		g.fetch({withRelated:['users']})
- 			 	     		 .then(function(group){
- 			 	     		 	var us = group.related('users');
- 			 	     		 	us.each(function(u){
- 			 	     		 		notify(attrs, u.id);
- 			 	     		 	});
- 			 	     		 });
- 			 	     	});
- 			 	     });
- 			 });
+ 			console.log('Entity.notifyPost', attrs);
+
+ 			 	var layer = new store.Layer({
+ 			 		id: attrs.layer_id
+ 			 	});
+
+ 			 	layer.fetch()
+ 			 		.then(function(layer){
+ 			 			layer.load(['groups.users'])
+ 			 				 .then(function(layer){
+ 			 				 	var model = layer.toJSON();
+ 			 			console.log('=====LAYER=====', model);
+ 			 				 	_.each(model.groups, function(g){
+ 			 			console.log('=====GROUP=====', g);
+ 			 				 		_.each(g.users, function(u){
+ 			 			console.log('=====USER=====', u);
+ 			 				 			notify(attrs, u.id);
+ 			 				 		});
+ 			 				 	});
+ 			 				 });
+ 			 		});
+
+ 			 	// layer.fetch({withRelated:['groups.users']})
+ 			 	//      .then(function(layer){
+ 			 	//      	// console.log('***layer', layer);
+ 			 	//      	var us = layer.related('groups').related('users');
+ 			 	//      	console.log('USERS', us);
+ 			 	//      	var gs = layer.related('groups');
+ 			 	//      	gs.each(function(g){
+ 			 	//      		console.log('group', typeof g);
+ 			 	//      		g.fetch({withRelated:['users']})
+ 			 	//      		 .then(function(group){
+ 			 	//      		 	var us = group.related('users');
+ 			 	//      		 	us.each(function(u){
+ 			 	//      		 		notify(attrs, u.id);
+ 			 	//      		 	});
+ 			 	//      		 });
+ 			 	//      	});
+ 			 	//      });
  		},
 
  	});
