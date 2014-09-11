@@ -6,7 +6,7 @@
 		  data-route="/display/<%= data.id %>">
 
 		<h2 class="panel-title">
-			<span><%= data.properties.name %></span>
+			<span>"<%= data.properties.name %>"</span>
 		</h2>
 	</div>
 
@@ -15,13 +15,13 @@
 	 
 	<% if(data.isSubscribed){ %>
 	<div class="panel-footer">
-		<span class="btn btn-link "
+		<span class="btn btn-link btn-xs"
 			  data-role="unsubscribe">
 			unsubscribe
 		</span>
 
 
-		<span class="btn btn-link"
+		<span class="btn btn-link btn-xs"
 			  data-role="add">
 			add layer
 		</span>
@@ -29,7 +29,7 @@
 	</div>
 	<% } else { %>
 	<div class="panel-footer">
-		<span class="btn btn-link"
+		<span class="btn btn-link btn-xs"
 			  data-role="subscribe">
 			subscribe
 		</span>
