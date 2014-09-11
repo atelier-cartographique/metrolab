@@ -37,6 +37,7 @@ function (_, log, proxy, T, C, TP, Live) {
 	var EntityItem = T.Subview.extend({
 		templateName: 'workspace/notification-entity',
 		className: "notification-item",
+		tagName: 'span',
 
 		initialize: function(options){
 			this.ready = true;
