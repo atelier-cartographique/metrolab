@@ -9,13 +9,15 @@
  */
 
 
-
 var _ = require('underscore'); 
 
 
- var base = require('./base');
- var store = require('../../lib/store');
+var base = require('./base'),
+ 	store = require('../../lib/store')
+ 	Queue = require('../../lib/queue');
 
+
+var notify = _.partial(Queue.PUB, 'notify');
 
 module.exports = exports = base.RequestHandler.extend({
  		
@@ -28,6 +30,10 @@ module.exports = exports = base.RequestHandler.extend({
 				handler: 'layer',
 				url: 'Entity/l/:layer_id'
  			}
+ 		},
+
+ 		initialize: function(){
+ 			this.on('post:'+ this.modelName, _.bind(this.notifyPost, this));
  		},
 
  		layer: function(req, res) {
@@ -44,5 +50,26 @@ module.exports = exports = base.RequestHandler.extend({
 				});
  		},
 
+
+ 		notifyPost: function(attrs){
+ 			var e = new store.Entity(attrs);
+ 			e.fetch({withRelated:['layer']})
+ 			 .then(function(entity){
+ 			 	var l = entity.related('layer');
+ 			 	layer.fetch({withRelated:['groups']})
+ 			 	     .then(function(layer){
+ 			 	     	var gs = layer.related('groups');
+ 			 	     	gs.each(function(g){
+ 			 	     		g.fetch({withRelated:['users']})
+ 			 	     		 .then(function(group){
+ 			 	     		 	var us = group.related('users');
+ 			 	     		 	us.each(function(u){
+ 			 	     		 		notify(attrs, u.id);
+ 			 	     		 	});
+ 			 	     		 });
+ 			 	     	});
+ 			 	     });
+ 			 });
+ 		},
 
  	});

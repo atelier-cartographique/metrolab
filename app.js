@@ -9,13 +9,20 @@
  */
 
 
-var config = require('./config');
-require('./lib/db').configure(config.db);
-var app = require('./lib/server')(config.server);
+var config = require('./config'),
+	orm = require('./lib/db').configure(config.db),
+	notifier = require('./lib/notifier'),
+	server = require('./lib/server'),
+	routes = require('./routes');
 
 
-require('./routes')(app);
+app = server(config.server);
+routes(app);
 
-app.start();
+function postStart(app, ex_server){
+	notifier(ex_server, '/notify');
+};
+
+app.start(postStart);
 
 

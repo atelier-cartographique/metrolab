@@ -12,6 +12,14 @@ var _ = require('underscore');
 
 var passport = require('passport');
 
+var Token = require('../lib/token');
+
+
+function getToken(req, res){
+	var t = Token.PUT(req.user);
+	res.json(t);
+};
+
 function processLogin(req, res){
 	console.log('>> processLogin');
 	res.redirect('/');

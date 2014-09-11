@@ -41,6 +41,8 @@ module.exports.where = function(c, o , v){
 module.exports.RequestHandler = object.Object.extend({
 
 	pageSize: 32,
+	modelName: '',
+	model: object.Object,
 
 	_offset: function(page){
 		page = page || 0;
@@ -211,21 +213,25 @@ module.exports.RequestHandler = object.Object.extend({
 	},
 
 	post: function(req, res){
+		var self = this;
 		var attrs = req.body;
 		this._post(attrs)
 			.done(function(m){
 				res.json(201, m);
+				self.emit('post:' + self.modelName, attrs);
 		}, function(err){
 			res.json(500, err);
 		});
 	},
 
 	put: function(req, res){
+		var self = this;
 		var attrs = req.body;
 		attrs.id = req.params.id;
 		this._post(attrs)
 			.done(function(m){
 				res.json(201, m);
+				self.emit('put:' + self.modelName, attrs);
 		}, function(err){
 			res.json(500, err);
 		});

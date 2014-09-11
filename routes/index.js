@@ -21,7 +21,7 @@ module.exports = exports = function(app){
 	});
 
 	/* GET home page. */
-	router.get('/*', function(req, res) {
+	router.get('/', function(req, res) {
 		if (req.isAuthenticated()) { 
 	  		res.render('index');
 		}

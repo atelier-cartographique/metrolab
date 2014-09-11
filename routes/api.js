@@ -12,6 +12,7 @@
 
 var _ = require('underscore');
 var handlers = require('./endpoints/');
+
 var root = '/api/v1/';
 
 
@@ -46,5 +47,4 @@ module.exports = exports = function(router, app){
 		});
 
 	});
-
 };
