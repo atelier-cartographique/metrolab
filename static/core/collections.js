@@ -30,7 +30,7 @@ function(DT)
     var Collection = DT.Collection.extend({
         constructor: function () {
             DT.Collection.apply(this, [arguments]);
-            console.warn('Collections.Collection is deprecated. Please instantiate a new Collection through DataTypes');
+            // console.warn('Collections.Collection is deprecated. Please instantiate a new Collection through DataTypes');
         }
     });
 

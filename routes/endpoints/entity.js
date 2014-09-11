@@ -63,34 +63,19 @@ module.exports = exports = base.RequestHandler.extend({
  			 			layer.load(['groups.users'])
  			 				 .then(function(layer){
  			 				 	var model = layer.toJSON();
- 			 			console.log('=====LAYER=====', model);
  			 				 	_.each(model.groups, function(g){
- 			 			console.log('=====GROUP=====', g);
  			 				 		_.each(g.users, function(u){
- 			 			console.log('=====USER=====', u);
- 			 				 			notify(attrs, u.id);
+ 			 				 			var message = {
+ 			 				 				channel: 'Entity',
+ 			 				 				id: attrs.id,
+ 			 				 				action: 'POST',
+ 			 				 			};
+ 			 				 			notify(message, u.id);
  			 				 		});
  			 				 	});
  			 				 });
  			 		});
 
- 			 	// layer.fetch({withRelated:['groups.users']})
- 			 	//      .then(function(layer){
- 			 	//      	// console.log('***layer', layer);
- 			 	//      	var us = layer.related('groups').related('users');
- 			 	//      	console.log('USERS', us);
- 			 	//      	var gs = layer.related('groups');
- 			 	//      	gs.each(function(g){
- 			 	//      		console.log('group', typeof g);
- 			 	//      		g.fetch({withRelated:['users']})
- 			 	//      		 .then(function(group){
- 			 	//      		 	var us = group.related('users');
- 			 	//      		 	us.each(function(u){
- 			 	//      		 		notify(attrs, u.id);
- 			 	//      		 	});
- 			 	//      		 });
- 			 	//      	});
- 			 	//      });
  		},
 
  	});

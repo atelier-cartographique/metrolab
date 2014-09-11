@@ -29,6 +29,7 @@ requirejs.config({
         'underscore': 'underscore/underscore-min',
         'leaflet': 'leaflet/leaflet-src',
         'leaflet-draw': 'leaflet/leaflet.draw',
+        'sockjs': 'sockjs/sockjs-0.3',
     },
     shim: {
         'backbone': {

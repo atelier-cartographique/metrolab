@@ -33,9 +33,10 @@ define([
 	'core/template',
 	'plugins/user/User',
 	'plugins/workspace/LayerManager',
-	'plugins/workspace/Subscription'
+	'plugins/workspace/Subscription',
+	'plugins/workspace/Notification'
 	], 
-function(_, bootstrap, B, config, log, T, C, L, LD, TP, User, LayerManager, Subscription){
+function(_, bootstrap, B, config, log, T, C, L, LD, TP, User, LayerManager, Subscription, Notification){
 
 
 	function MapEventHandler(options){
@@ -92,6 +93,7 @@ function(_, bootstrap, B, config, log, T, C, L, LD, TP, User, LayerManager, Subs
 
 			this.layerManager = new LayerManager;
 			this.subscription = new Subscription;
+			this.notification = new Notification;
 		},
 
 		setupMap: function(){
@@ -133,6 +135,7 @@ function(_, bootstrap, B, config, log, T, C, L, LD, TP, User, LayerManager, Subs
 				this.$el.html(t({}));
 				this.attachToAnchor(this.layerManager.render(), 'layers');
 				this.attachToAnchor(this.subscription.render(), 'groups');
+				this.attachToAnchor(this.notification.render(), 'notifications');
 				this.setupMap();
 			});
 			return this;

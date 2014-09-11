@@ -30,9 +30,14 @@ function renderLogin(req, res){
 };
 
 module.exports = exports = function(router, app){
+
 	router.get('/login', renderLogin);
+
 	router.post('/login', 
 		passport.authenticate('local', { 
 			failureRedirect: '/login' }),
 		processLogin);
+
+
+	router.get('/token', getToken);
 };

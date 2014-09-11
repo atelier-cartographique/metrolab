@@ -22,26 +22,29 @@
 
 
 
-define([], function(){
+define(['underscore'], function( _ ){
     
-    // TODO please make it fancy - pm
-    
-    var _clog = console.log;
-    console.log = function(){
-        var e = '>>';
-        var args = [e];
-        for(var i=0; i< arguments.length;i++)
-        {
-            args.push(arguments[i]);
-        }
-        _clog.apply(console, args);
+    var css = {
+        log     : 'color:grey;',
+        debug   : 'color:blue;font-weight:bold;',
+        warning : 'color:orange;font-weight:bold;',
+        error   : 'color:red;font-weight:bold;',
+        code   : 'color:blck;font-weight:bold;',        
+    };
+
+    // var _clog = log.log;
+
+    function writeConsole(){
+        var args = _.toArray(arguments);
+        console.log.apply(console, args);
     };
     
     var logger = {
-        log     : console.log,
-        debug   : console.log,
-        warning : console.warn,
-        error   : console.error,
+        log     : _.partial(writeConsole, '%c[log]', css.log),
+        debug   : _.partial(writeConsole, '%c[debug]', css.debug),
+        warning : _.partial(writeConsole, '%c[warning]', css.warning),
+        error   : _.partial(writeConsole, '%c[error]', css.error),
+        code    : _.partial(writeConsole, '%c>>', css.code),
     };
     
     return logger;

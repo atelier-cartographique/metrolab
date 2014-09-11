@@ -19,18 +19,43 @@
  *
  */
 
-define(['underscore', 'sockjs', 'core/auth', 'core/logger', 'config'], 
-function(_, S, auth, log, config){
+define([
+    'underscore', 
+    'jquery', 
+    'sockjs',
+    'core/logger',
+    'config', 
+    'core/collections',
+    'plugins/user/User',
+    ], 
+function(_, $, S, log, config, C, User){
+
+
+    function getToken(cb, ctx){
+        var options = {
+            type: "GET",
+            url: '/token',
+            dataType: 'json',
+        };
+
+        $.ajax(options)
+            .done(_.bind(cb, ctx))
+            .fail(log.error);
+    };
     
-    var live = function(){
+    function Live(){
         log.debug('live.constructor');
         this._inited = false;
         this.subscribers = [];
         this._pendings = [];
-        auth.notifier.on('in', this.connect, this);
+        User(function(user){
+                getToken(this.connect, this);
+        }, this);
     };
-    
-    _.extend(live.prototype, {
+
+
+
+    _.extend(Live.prototype, {
         
         connect: function(token){
             log.debug('live.connect');
@@ -44,7 +69,7 @@ function(_, S, auth, log, config){
         bootstrap: function(){
             log.debug('live.bootstrap');
             var self = this;
-            this._connection.send(JSON.stringify(this._token));
+            this._connection.send(JSON.stringify({access_token:this._token}));
             _.each(this._pendings, function(p){
                 self.subscribe(p.channel, p.callback, p.ctx);
             });
@@ -53,15 +78,31 @@ function(_, S, auth, log, config){
         
         _handleMessage: function(e){
             log.debug('live._handleMessage', e);
-            var data = JSON.parse(e.data);
-            if(data.channel)
+            var data;
+            try{
+                data = JSON.parse(e.data);
+            }
+            catch(e){}
+
+
+            if(data)
             {
-                var rec = _.where(this.subscribers, {channel:data.channel});
-                _.each(rec, function(o){
-                    o.callback.apply(o.ctx, [data]);
-                });
+                if('channel' in data){
+                    log.debug('live._handleMessage data', data);
+                    var rec = _.where(this.subscribers, {channel:data.channel});
+                    _.each(rec, function(o){
+                        o.callback.apply(o.ctx, [data]);
+                    });
+                }
+                else{
+                    log.warning('live._handleMessage: no channel', data);
+                }
+            }
+            else{
+                log.warning('live._handleMessage: no data');
             }
         },
+
         
         subscribe:function(channel, callback, ctx){
             log.debug('live.subscribe', channel);
@@ -75,7 +116,6 @@ function(_, S, auth, log, config){
             if(this._inited 
                 && this._connection.readyState == S.OPEN)
             {
-                this._connection.send(JSON.stringify({channel:channel}));
                 this.subscribers.push(subscriber);
                 return this.subscribers.length;
             }
@@ -87,6 +127,38 @@ function(_, S, auth, log, config){
         
     });
     
+    var live = new Live;
+
+    var Notification = C.Collection.extend({
+
+        modelName: 'Notification',
+
+        initialize: function(options){
+            live.subscribe(options.channel, 
+                           this.handleNotification, this);
+            this.collection = C[options.channel];
+        },
+
+        notify: function(model){
+            this.trigger('notify', model);
+        },
+
+        handleNotification: function(data){
+            log.debug('handleNotification', data);
+            data.ts = Date.now();
+            this.add(data);
+            var model = new this.collection.model({id:data.id});
+
+            model.once('sync', this.notify, this);
+        },
+
+    });
+
+    function notifier(channel){
+        var n = new Notification({channel:channel});
+        return n;
+    };
+
+    return notifier;
     
-    return (new live);
 });
