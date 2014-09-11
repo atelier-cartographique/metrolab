@@ -90,6 +90,7 @@ function(_, $, S, log, config, C, User){
                 if('channel' in data){
                     log.debug('live._handleMessage data', data);
                     var rec = _.where(this.subscribers, {channel:data.channel});
+                    log.debug('live._handleMessage data', data, rec);
                     _.each(rec, function(o){
                         o.callback.apply(o.ctx, [data]);
                     });
@@ -134,6 +135,7 @@ function(_, $, S, log, config, C, User){
         modelName: 'Notification',
 
         initialize: function(options){
+            log.debug('Notification.initialize', options);
             live.subscribe(options.channel, 
                            this.handleNotification, this);
             this.collection = C[options.channel];
@@ -144,12 +146,13 @@ function(_, $, S, log, config, C, User){
         },
 
         handleNotification: function(data){
-            log.debug('handleNotification', data);
             data.ts = Date.now();
             this.add(data);
             var model = new this.collection.model({id:data.id});
 
+            // log.debug('handleNotification', model);
             model.once('sync', this.notify, this);
+            model.fetch();
         },
 
     });

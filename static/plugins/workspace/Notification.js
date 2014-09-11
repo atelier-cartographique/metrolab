@@ -69,7 +69,7 @@ function (_, log, proxy, T, C, TP, Live) {
 				}
 
 				this.entity = new EntityItem({model:model});
-				this.attachToAnchor(this.entity.render(), 'notification')
+				this.attachToAnchor(this.entity.render(), 'item');
 			}
 		},
 

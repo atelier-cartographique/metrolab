@@ -71,7 +71,7 @@ module.exports.RequestHandler = object.Object.extend({
 		if(related){
 			fetchOptions.withRelated = related;
 		}
-		this.model.where({id:id})
+		new this.model({id:id})
 			.fetch(fetchOptions)
 			.then(function(model){
 				if(model){
