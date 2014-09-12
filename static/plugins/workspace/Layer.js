@@ -30,9 +30,10 @@ define([
 	'core/template',
 	'leaflet',
 	'plugins/workspace/Creator',
-	'plugins/workspace/LayerForm'
+	'plugins/workspace/LayerForm',
+	'plugins/marker/Marker',
 	], 
-function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm){
+function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm, Marker){
 	'use strict';
 
 	var Layer = T.View.extend({
@@ -84,22 +85,41 @@ function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm){
 		},
 
 
-		createEntityLayer: function(model){
+		createEntityLayer: function(model, callback, ctx){
 			var geometry = model.get('geometry');
+			var type = ('geometry' in geometry) ? 
+						geometry.geometry.type : 
+						geometry.type;
 
-			var style = _.bind(this.style, this);
-			var options = {
-				style:style,
-			};
-			var layer = L.geoJson(geometry, options);
-			
-			layer.on('click', function(){
-				this.editFeatureMeta(model);
-			}, this);
+			if('Point' === type){
+				var marker = new Marker({model:model});
+				marker.getMarker(function(layer){
+					callback.apply(ctx, [layer]);
+					
+					layer.on('click', function(){
+						this.editFeatureMeta(model);
+					}, this);
+
+				}, this);
+			}
+			else{
+				var style = _.bind(this.style, this);
+				var options = {
+					style:style,
+				};
+				var layer = L.geoJson(geometry, options);
+				
+				layer.on('click', function(){
+					this.editFeatureMeta(model);
+				}, this);
+
+				callback.apply(ctx, [layer]);
+			}
+
 
 			model.once('change', this.updateEntity, this);
 
-			return layer;
+			return this;
 		},
 
 		updateEntity: function(model){
@@ -109,9 +129,10 @@ function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm){
 				if(l){
 					this.group.removeLayer(l);
 				}
-				var layer = this.createEntityLayer(model);
-				c.layer = layer;
-				this.group.addLayer(layer);	
+				this.createEntityLayer(model, function(layer){
+					c.layer = layer;
+					this.group.addLayer(layer);	
+				}, this);
 			}
 			else{
 				this.renderEntity(model);
@@ -121,12 +142,14 @@ function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm){
 
 		renderEntity: function(model){
 			if(model.id in this.entities) return;
-			var layer = this.createEntityLayer(model);
-			this.entities[model.id] = {
-				model: model,
-				layer: layer,
-			};
-			this.group.addLayer(layer);
+			this.createEntityLayer(model, function(layer){
+				this.entities[model.id] = {
+					model: model,
+					layer: layer,
+				};
+				this.group.addLayer(layer);
+			}, this);
+			
 			return this;
 		},
 

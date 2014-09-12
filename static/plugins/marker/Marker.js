@@ -21,12 +21,13 @@
 
 define([
 	'underscore',
+	'jquery',
 	'leaflet',
 	'core/logger',
 	'core/types',
 	'core/template',
 	],	 
-function (_, L, log, T, TP) {
+function (_, $, L, log, T, TP) {
 	'use strict';
 
 	var markerOptions = ['templateName', 'className'];
@@ -43,26 +44,55 @@ function (_, L, log, T, TP) {
 			
 		},
 
+		templateData: function(){
+			var props = this.model.get('properties');
+			var main = props._main || 'NoDescription';
+			if(main.length < 2){
+				main = 'TooShortDescription';
+			}
+			var initials = {
+				first: main[0].toUpperCase(),
+				second: main[1].toLowerCase(),
+			};
+
+			var name = main.split(' ').shift();
+			return {name:name, initials:initials};
+		},
+
 		getMarker: function(callback, ctx){
 			var self = this;
-			if(!this.html){
+			if(!self.html){
 				self.once('rendered', function(){
 					self.getMarker(callback, ctx);
 				});
+				self.render();
 				return false;
 			}
-			if(!this.marker){
-				this.icon = L.divIcon({
+			if(!self.marker){
+				// here a bit of a hack
+				$('body').append(this.$el);
+				var height = this.$el.height();
+				var iconSize = [64, height];
+				this.$el.detach();
+				self.icon = L.divIcon({
 					className: 'marker-icon',
-					html: this.html,
+					html: self.html,
+					iconSize: iconSize,
 				});
-				var point = this.layer.getBounds().getCenter();
-				this.marker = L.marker(point, {icon: this.icon});
+				var point = self.layer.getBounds().getCenter();
+
+				self.marker = L.marker(point, {
+					icon: self.icon,
+					clickable: true,
+					riseOnHover: true,
+				});
 			}
-			callback.apply(ctx, [this.marker]);
+			callback.apply(ctx, [self.marker]);
 			return true;
 		},
 
 	});
+
+	return Marker;
 
 });
