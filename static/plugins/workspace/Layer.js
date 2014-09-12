@@ -25,13 +25,14 @@ define([
 	'core/eproxy',
 	'underscore',
 	'core/types',
+	'core/live',
 	'core/collections',
 	'core/template',
 	'leaflet',
 	'plugins/workspace/Creator',
 	'plugins/workspace/LayerForm'
 	], 
-function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
+function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm){
 	'use strict';
 
 	var Layer = T.View.extend({
@@ -61,6 +62,16 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 				this.render();
 				if(this.visible){
 					this.showFeatures();
+				}
+			}, this);
+
+			Live('Entity').on('notify', function(model){
+				if(model.get('layer_id') === this.model.id){
+					this.renderEntity(model);
+					if(!this.visible){
+						var f = _.bind(this.removeFeatures, this);
+						window.setTimeout(f, 2000);
+					}
 				}
 			}, this);
 		},
@@ -197,7 +208,9 @@ function(log, proxy, _, T, C, TP, L, Creator, LayerForm){
 			var self = this;
 			_.each(self.entities, function(e, id){
 				log.debug('removeFeature', id);
-				self.group.removeLayer(e.layer);
+				if(e.layer){
+					self.group.removeLayer(e.layer);
+				}
 				self.entities[id].layer = null;
 			});
 			return this;
