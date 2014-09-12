@@ -29,8 +29,9 @@ define([
 	'core/template',
 	'leaflet',
 	'core/live',
+	'plugins/marker/Marker',
 	], 
-function (log, proxy, _, T, C, TP, L, Live){
+function (log, proxy, _, T, C, TP, L, Live, Marker){
 
 	function Layer(options){
 			this.map = options.map;
@@ -58,39 +59,70 @@ function (log, proxy, _, T, C, TP, L, Live){
 			return _.extend({}, props.style);
 		},
 
-		createEntityLayer: function(model){
+		createEntityLayer: function(model, callback, ctx){
 			var geometry = model.get('geometry');
+			var type = ('geometry' in geometry) ? 
+						geometry.geometry.type : 
+						geometry.type;
 
-			var style = _.bind(this.style, this);
-			var options = {
-				style:style,
-			};
-			var layer = L.geoJson(geometry, options);
+			if('Point' === type){
+				var marker = new Marker({model:model});
+				marker.getMarker(function(layer){
+					callback.apply(ctx, [layer]);
+					
+					
+
+				}, this);
+			}
+			else{
+				var style = _.bind(this.style, this);
+				var options = {
+					style:style,
+				};
+				var layer = L.geoJson(geometry, options);
+				
 			
-			layer.on('click', function(){
-				this.showFeatureMeta(model);
-			}, this);
+
+				callback.apply(ctx, [layer]);
+			}
+
 
 			model.once('change', this.updateEntity, this);
 
-			return layer;
+			return this;
 		},
 
-
-		renderEntity: function(model, zoom){
-			if(model.id in this.entities) return;
-			var layer = this.createEntityLayer(model);
-			this.entities[model.id] = {
-				model: model,
-				layer: layer,
-			};
-
-			this.group.addLayer(layer);
-			if(zoom && layer.getBounds){
-				this.map.fitBounds(layer.getBounds());
+		updateEntity: function(model){
+			if(model.id in this.entities){
+				var c = this.entities[model.id];
+				var l = c.layer;
+				if(l){
+					this.group.removeLayer(l);
+				}
+				this.createEntityLayer(model, function(layer){
+					c.layer = layer;
+					this.group.addLayer(layer);	
+				}, this);
+			}
+			else{
+				this.renderEntity(model);
 			}
 			return this;
 		},
+
+		renderEntity: function(model){
+			if(model.id in this.entities) return;
+			this.createEntityLayer(model, function(layer){
+				this.entities[model.id] = {
+					model: model,
+					layer: layer,
+				};
+				this.group.addLayer(layer);
+			}, this);
+			
+			return this;
+		},
+
 
         dataAvailable: function (data) {
             _.each(data.references, function (reference) {
