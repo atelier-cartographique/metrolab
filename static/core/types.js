@@ -522,8 +522,8 @@ function(B, _, $, log, $$, C, T, G, CSS, A){
         render: function () {
             if (this.ready) {
                 if (this.template) {
-                    var html = this.applyTemplate(this.template);
-                    this.injectTemplate(html);
+                    this.html = this.applyTemplate(this.template);
+                    this.injectTemplate(this.html);
                     this.anchors = this.collectAnchors();
                     this.markRendered();
                 } else {
