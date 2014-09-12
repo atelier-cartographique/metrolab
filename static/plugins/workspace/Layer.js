@@ -92,7 +92,10 @@ function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm, Marker){
 						geometry.type;
 
 			if('Point' === type){
-				var marker = new Marker({model:model});
+				var marker = new Marker({
+					model:model,
+					style: this.style(),
+				});
 				marker.getMarker(function(layer){
 					callback.apply(ctx, [layer]);
 					

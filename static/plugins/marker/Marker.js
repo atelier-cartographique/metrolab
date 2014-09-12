@@ -30,7 +30,18 @@ define([
 function (_, $, L, log, T, TP) {
 	'use strict';
 
-	var markerOptions = ['templateName', 'className'];
+	var markerOptions = ['templateName', 'className', 'style'];
+
+	var defaultStyle = {
+		color: "#e20f0f",
+		fill: true,
+		opacity: 1,
+		stroke: true,
+		weight: 1,
+		fillColor: "#ffffff",
+		fillOpacity: 1,
+	};
+
 	var Marker = T.BView.extend({
 		templateName: 'marker/marker',
 		className: 'marker',
@@ -64,7 +75,9 @@ function (_, $, L, log, T, TP) {
 			}
 
 			var name = main.split(' ').shift();
-			return {name:name, initials:initials, main:main};
+			var data = {name:name, initials:initials, main:main}
+			data.style = _.defaults(this.style || {}, defaultStyle);
+			return data;
 		},
 
 		getMarker: function(callback, ctx){
