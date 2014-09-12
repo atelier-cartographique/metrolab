@@ -75,6 +75,11 @@ function (_, $, L, log, T, TP) {
 			}
 
 			var name = main.split(' ').shift();
+			if(('label' in props) 
+				&& props.label.length > 0){
+				name = props.label;
+			}
+
 			var data = {name:name, initials:initials, main:main}
 			data.style = _.defaults(this.style || {}, defaultStyle);
 			return data;
