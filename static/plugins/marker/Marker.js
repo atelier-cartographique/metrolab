@@ -55,6 +55,14 @@ function (_, $, L, log, T, TP) {
 				second: main[1].toLowerCase(),
 			};
 
+			if(('init' in props) 
+				&& props.init.length > 1){
+				initials = {
+					first: props.init[0].toUpperCase(),
+					second: props.init[1].toLowerCase(),
+				};
+			}
+
 			var name = main.split(' ').shift();
 			return {name:name, initials:initials, main:main};
 		},
