@@ -56,7 +56,7 @@ function (_, $, L, log, T, TP) {
 			};
 
 			var name = main.split(' ').shift();
-			return {name:name, initials:initials};
+			return {name:name, initials:initials, main:main};
 		},
 
 		getMarker: function(callback, ctx){
