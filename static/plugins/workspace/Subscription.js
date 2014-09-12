@@ -76,6 +76,13 @@ function (_, log, proxy, T, C, TP, L, Layer) {
 			});
 		},
 
+		removeLayers: function(){
+			_.each(this.layers, function(layer){
+				layer.removeFeatures();
+				layer.remove();
+			});
+		},
+
 		fitGroup: function(){
 			var bounds = undefined;
 			_.each(this.layers, function(layer){
@@ -117,13 +124,18 @@ function (_, log, proxy, T, C, TP, L, Layer) {
 			var self = this;
 
 			if(!self.map){
-				self.pendingGroups = self.pendingGroups || [];
-				self.pendingGroups.push(model);
-				self.once('map:ready', function(){
-					_.each(self.pendingGroups, function(g){
-						self.addGroup(g);
+				if(!self.pendingGroups){
+					self.pendingGroups = [];
+
+					self.once('map:ready', function(){
+						_.each(self.pendingGroups, function(g){
+							self.addGroup(g);
+						});
 					});
-				});
+
+				}
+				self.pendingGroups.push(model);
+
 				return;
 			}
 
@@ -143,6 +155,16 @@ function (_, log, proxy, T, C, TP, L, Layer) {
 				self.on('rendered', function(){
 					self.attachToAnchor(self.groups[model.id].render(), 'items');
 				});
+			}
+			
+		},
+
+		removeGroup: function(model){
+			if(!self.map){return;}
+			var group = self.groups[model.id];
+			if(group){
+				group.removeLayers();
+				group.remove();
 			}
 			
 		},

@@ -127,6 +127,17 @@ function(DT)
             }, null, this);
         },
 
+        unsubscribe: function(groupId, callback, ctx){
+            var self = this;
+            this.getOrCreate(groupId, function(model){
+                model.urlRoot = self.apiUrl + 'group/unsubscribe/';
+                model.save();
+                model.once('sync', function(){
+                    callback.apply(ctx, [model]);    
+                });
+            }, null, this);
+        },
+
         attach: function(groupId, layerId, callback, ctx){
             var self = this;
             this.getOrCreate(groupId, function(model){

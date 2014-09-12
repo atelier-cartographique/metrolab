@@ -20,14 +20,14 @@
  */
 
 
-define(['underscore'], function(_){
+define(['underscore', 'core/logger'], function(_, log){
     /*
      * In this first iteration, we go for message passing through events.
      * If it fails, we'll try delegated method calls, hm, sounds even better to 
      * begin with this idea.
      */
     var eproxy = function(){
-//         console.log('eproxy', this.objects.length, this.pendings.length);
+//         log.log('eproxy', this.objects.length, this.pendings.length);
     };
     
     _.extend(eproxy.prototype, {
@@ -54,7 +54,7 @@ define(['underscore'], function(_){
             var c = elt.callback;
             var ctx = elt.ctx;
             
-            console.log('proxy.processPendingCall', elt.objName, m);
+            log.log('proxy.processPendingCall', elt.objName, m);
             
             if(!Array.isArray(a))
                 a = [a];
@@ -68,7 +68,7 @@ define(['underscore'], function(_){
             }
             catch(e)
             {
-                console.error('processPendingCall:', o, m, e);
+                log.error('processPendingCall:', o, m, e);
             }
         },
         
@@ -95,7 +95,7 @@ define(['underscore'], function(_){
             }
             else
             {
-                console.warn('eproxy.register: name already registered', name);
+                log.warn('eproxy.register: name already registered', name);
             }
             if(this.pendings.calls[name] && this.pendings.calls[name].length > 0)
             {
@@ -127,14 +127,13 @@ define(['underscore'], function(_){
          * @return {bool} true if the function has been applied immediately
          */
         delegate: function(name, method, args, callback, ctx){
-            console.log('proxy.delegate', name, method);
             var a = args;
             if(!Array.isArray(a))
                 a = [args];
             
             if(!this.objects[name])
             {
-                console.log('proxy.delegate.pending', name, method);
+                log.log('proxy.delegate.pending', name, method);
                 if(!this.pendings.calls[name])
                 {
                     this.pendings.calls[name] = new Array;
@@ -150,19 +149,19 @@ define(['underscore'], function(_){
             }
             
             var o = this.objects[name];
-            // try
-            // {
-                console.log('proxy.delegate.try', name, method);
+            try
+            {
+                log.log('proxy.delegate.try', name, method);
                 var ret = o[method].apply(o, a);
                 if(callback)
                 {
                     callback.apply(ctx, [ret]);
                 }
-            // }
-            // catch(e)
-            // {
-                // console.error('eproxy.delegate:', name, method, e);
-            // }
+            }
+            catch(e)
+            {
+                log.error('eproxy.delegate:', name, method, e);
+            }
             return true;
         },
         

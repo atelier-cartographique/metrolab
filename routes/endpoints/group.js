@@ -36,6 +36,12 @@ module.exports = exports = base.RequestHandler.extend({
 				url: 'Group/subscribe/:id'
  			},
 
+ 			unsubscribe: {
+ 				verb: 'put',
+				handler: 'unsubscribe',
+				url: 'Group/unsubscribe/:id'
+ 			},
+
  			attach: {
  				verb: 'put',
 				handler: 'attach',
@@ -77,6 +83,16 @@ module.exports = exports = base.RequestHandler.extend({
  			var self = this;
  			groupQuery.done(function(group){
  				group.users().attach(user);
+ 				res.json(self._filterResult(group.toJSON()))
+ 			}, this.queryError(res))
+ 		},
+
+ 		unsubscribe: function(req, res){
+ 			var user = req.user;
+ 			var groupQuery = this._get(req.params.id, true);
+ 			var self = this;
+ 			groupQuery.done(function(group){
+ 				group.users().detach(user);
  				res.json(self._filterResult(group.toJSON()))
  			}, this.queryError(res))
  		},

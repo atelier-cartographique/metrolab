@@ -24,6 +24,7 @@
 define(["backbone", 
        'underscore', 
        'jquery',
+       'core/logger',
        'core/jqplugins',
        'core/collections',
        'core/template',
@@ -31,7 +32,7 @@ define(["backbone",
        'core/css',
        'core/algo',
        ],
-function(B, _, $, $$, C, T, G, CSS, A){
+function(B, _, $, log, $$, C, T, G, CSS, A){
     
 
     var TransformStack  = {
@@ -310,7 +311,7 @@ function(B, _, $, $$, C, T, G, CSS, A){
                     anchors['$' + anchorName].prepend($el);
                 }
             } else {
-                console.warn("Could not attach " + $el + " to " + anchorName + ", anchor doesn't exist", $el, anchorName);
+                log.warning("Could not attach " + $el + " to " + anchorName + ", anchor doesn't exist", $el, anchorName);
             }
 
             return this;
@@ -326,7 +327,7 @@ function(B, _, $, $$, C, T, G, CSS, A){
         * !! Depracated triggers a 'rendered' event on the view
         */
         rendered: function(){
-            console.warn('Please use trigger to trigger rendered event!');
+            log.warning('Please use trigger to trigger rendered event!');
             this.trigger('rendered');
         },
         
@@ -445,7 +446,7 @@ function(B, _, $, $$, C, T, G, CSS, A){
         * @returns Array
         */
         getElementBounds: function (element){
-            console.warn("Perhaps we should deprecate getElementBounds", 'types.js', 335);
+            log.warning("Perhaps we should deprecate getElementBounds", 'types.js', 335);
             return [
                 element.offsetLeft,
                 element.offsetTop,
@@ -519,7 +520,6 @@ function(B, _, $, $$, C, T, G, CSS, A){
         * Renders if view is ready. Otherwise awaits the ready event
         */
         render: function () {
-            console.log('BView.render', this.ready, this.template);
             if (this.ready) {
                 if (this.template) {
                     var html = this.applyTemplate(this.template);
@@ -527,11 +527,9 @@ function(B, _, $, $$, C, T, G, CSS, A){
                     this.anchors = this.collectAnchors();
                     this.markRendered();
                 } else {
-                    console.log('BView.render subscribes to ready:template event');
                     this.on('ready:template', this.render);
                 }
             } else {
-                console.log('BView.render subscribes to ready event');
                 this.on('ready', this.render);
             }
 
@@ -768,7 +766,7 @@ function(B, _, $, $$, C, T, G, CSS, A){
     var IterableView = ContainerView.extend({
         constructor: function () {
             ContainerView.apply(this, arguments);
-            console.warn('IterableView deprecated. Use ContainerView');
+            log.warning('IterableView deprecated. Use ContainerView');
         },
     });
 

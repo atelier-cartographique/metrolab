@@ -65,6 +65,7 @@ function (_, config, L, proxy, T, C, TP, Layer, CreateForm, User, AddLayerForm) 
 
 		events: {
 			'click [data-role=subscribe]' : 'subscribe',
+			'click [data-role=unsubscribe]' : 'unsubscribe',
 			'click [data-role=add]' : 'addLayer',
 		},
 		
@@ -73,6 +74,14 @@ function (_, config, L, proxy, T, C, TP, Layer, CreateForm, User, AddLayerForm) 
 			C.Group.subscribe(this.model.id, function(model){
 				user.fetch();
 				proxy.delegate('Subscription', 'addGroup', model);
+			});
+		},
+
+		unsubscribe: function(e){
+			var user = this.user;
+			C.Group.unsubscribe(this.model.id, function(model){
+				user.fetch();
+				proxy.delegate('Subscription', 'removeGroup', model);
 			});
 		},
 
