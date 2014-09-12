@@ -28,8 +28,9 @@ define([
 	'core/collections',
 	'core/template',
 	'leaflet',
+	'core/live',
 	], 
-function (log, proxy, _, T, C, TP, L){
+function (log, proxy, _, T, C, TP, L, Live){
 
 	function Layer(options){
 			this.map = options.map;
@@ -42,14 +43,19 @@ function (log, proxy, _, T, C, TP, L){
 			this.cursor = C.Entity.forLayer(this.model.id, 
 												this.dataAvailable, this);
 
+			Live('Entity').on('notify', function(model){
+				if(model.get('layer_id') === this.model.id){
+					this.renderEntity(model, true);
+				}
+			}, this);
+
 	};
 
 	_.extend(Layer.prototype, {
 
 		style: function(feature){
 			var props = this.model.get('properties');
-			// TODO the styling thing based on the feature
-			return _.extend({}, props.style); 
+			return _.extend({}, props.style);
 		},
 
 		createEntityLayer: function(model){
@@ -62,7 +68,7 @@ function (log, proxy, _, T, C, TP, L){
 			var layer = L.geoJson(geometry, options);
 			
 			layer.on('click', function(){
-				this.editFeatureMeta(model);
+				this.showFeatureMeta(model);
 			}, this);
 
 			model.once('change', this.updateEntity, this);
@@ -71,14 +77,18 @@ function (log, proxy, _, T, C, TP, L){
 		},
 
 
-		renderEntity: function(model){
+		renderEntity: function(model, zoom){
 			if(model.id in this.entities) return;
 			var layer = this.createEntityLayer(model);
 			this.entities[model.id] = {
 				model: model,
 				layer: layer,
 			};
+
 			this.group.addLayer(layer);
+			if(zoom && layer.getBounds){
+				this.map.fitBounds(layer.getBounds());
+			}
 			return this;
 		},
 
