@@ -33,13 +33,13 @@ function (_, $, L, log, T, TP) {
 	var markerOptions = ['templateName', 'className', 'style'];
 
 	var defaultStyle = {
-		color: "#e20f0f",
+		color: "#996600",
 		fill: true,
-		opacity: 1,
+		opacity: 0.8,
 		stroke: true,
 		weight: 1,
-		fillColor: "#ffffff",
-		fillOpacity: 1,
+		fillColor: "#fefefe",
+		fillOpacity: 0.8,
 	};
 
 	var Marker = T.BView.extend({
@@ -98,7 +98,7 @@ function (_, $, L, log, T, TP) {
 				// here a bit of a hack
 				$('body').append(this.$el);
 				var height = this.$el.height();
-				var iconSize = [64, height];
+				var iconSize = [50, height];
 				this.$el.detach();
 				self.icon = L.divIcon({
 					className: 'marker-icon',
