@@ -55,8 +55,8 @@ function(log, proxy, _, T, Live, C, TP, L, User, Creator, LayerForm, Marker){
 			this.map = options.map;
 			this.group = new L.FeatureGroup();
 			this.group.addTo(this.map);
-
-			this.entities = {};
+			this.map.entities = this.map.entities || {};
+			this.entities = this.map.entities;
 			
 			this.cursor = C.Entity.forLayer(this.model.id, 
 												this.dataAvailable, this);
@@ -141,6 +141,9 @@ function(log, proxy, _, T, Live, C, TP, L, User, Creator, LayerForm, Marker){
 				}
 				this.createEntityLayer(model, function(layer){
 					c.layer = layer;
+					model.on('destroy', function(){
+						this.group.removeLayer(layer);
+					}, this);
 					this.group.addLayer(layer);	
 				}, this);
 			}
