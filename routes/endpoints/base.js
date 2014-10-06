@@ -173,6 +173,9 @@ module.exports.RequestHandler = object.Object.extend({
 				else{
 					D.resolve(self._filterResult(m.toJSON()));
 				}
+			})
+			.catch(function(err){
+				D.reject(err);
 			});
 		return D.promise;
 
@@ -238,6 +241,7 @@ module.exports.RequestHandler = object.Object.extend({
 			res.json(500, err);
 		});
 	},
+
 
 	defaultEndpoints: function(){
 		var endpoints = {
