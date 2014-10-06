@@ -215,12 +215,14 @@ background: #fefefe;
 
 
 .marker {
+     height: 66px;
+     margin-top: -33px;
+
     .marker-icon{
         color: red;
-        border: @marker-border-width solid red;
+        border: solid;
         font-family: @light;
         width: @marker-width;
-        background-color: transparent;
 
         .marker-initials {
             width: (@marker-width - @marker-border-width);
@@ -229,13 +231,11 @@ background: #fefefe;
             text-align: center;
 
             .marker-first-letter {
-                text-transform: uppercase;
                 font-size: 19pt;
                 line-height: 20pt;
             }
 
             .marker-second-letter {
-                text-transform: lowercase;
                 font-size: 12pt;
                 line-height: 26pt;
                 margin-left: -2pt;
@@ -243,12 +243,10 @@ background: #fefefe;
         }
 
         .marker-full-name {
-            border-top: @marker-border-width solid red;
             font-size: 7pt;
-            text-transform: lowercase;
             text-align: center;
             padding: 0px 3px;
-            word-wrap: break-word;
+            overflow: hidden;
 
             &::first-letter {
                 text-transform: uppercase;
@@ -256,11 +254,13 @@ background: #fefefe;
         }
 
         .marker-arrow-down {
-            width: @marker-width;
+            font-family: sans-serif;
             text-align: center;
-            font-size: 14pt;
+            font-size: 17px;
             margin-top: -(@marker-border-width + 2px);
             position: absolute;
+            height:10px;
+            width: (50px - @marker-border-width ) ;
         }
     }
 }
