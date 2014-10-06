@@ -29,11 +29,12 @@ define([
 	'core/collections',
 	'core/template',
 	'leaflet',
+	'plugins/user/User',
 	'plugins/workspace/Creator',
 	'plugins/workspace/LayerForm',
 	'plugins/marker/Marker',
 	], 
-function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm, Marker){
+function(log, proxy, _, T, Live, C, TP, L, User, Creator, LayerForm, Marker){
 	'use strict';
 
 	var Layer = T.View.extend({
@@ -49,6 +50,7 @@ function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm, Marker){
 		},
 
 		initialize: function(options){
+			this.editable = false;
 			this.visible = !!('visible' in options) ? options.visible : true;
 			this.map = options.map;
 			this.group = new L.FeatureGroup();
@@ -74,6 +76,11 @@ function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm, Marker){
 						window.setTimeout(f, 2000);
 					}
 				}
+			}, this);
+
+			User(function(user){
+				this.user = user;
+				this.editable = true;
 			}, this);
 		},
 
@@ -150,6 +157,9 @@ function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm, Marker){
 					model: model,
 					layer: layer,
 				};
+				model.on('destroy', function(){
+					this.group.removeLayer(layer);
+				}, this);
 				this.group.addLayer(layer);
 			}, this);
 			
@@ -187,6 +197,7 @@ function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm, Marker){
 
 			data.visible = this.visible;
 			data.active = this.active;
+			data.editable = data.editable;
 			return data;									
         },
 
@@ -263,9 +274,11 @@ function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm, Marker){
 		},
 
 		createFeature: function(layer){
+			if(!this.editable) return;
 			var self = this;
 			var model = C.Entity.add({
-				layer_id:this.model.id,
+				layer_id: this.model.id,
+				user_id: this.user.id,
 				geometry:layer.toGeoJSON(),
 				properties: {
 					_main:''
@@ -279,6 +292,7 @@ function(log, proxy, _, T, Live, C, TP, L, Creator, LayerForm, Marker){
 		},
 
 		editFeatureMeta: function(model){
+			if(!this.editable) return;
 			var creator = new Creator({model:model});
 			proxy.delegate('modal', 'show', creator);
 			return this;

@@ -29,7 +29,13 @@ module.exports = exports = base.RequestHandler.extend({
  				verb: 'get',
 				handler: 'layer',
 				url: 'Entity/l/:layer_id'
- 			}
+ 			},
+
+ 			deleteEntity: {
+ 				verb: 'delete',
+				handler: 'deleteEntity',
+				url: 'Entity/:id'
+ 			},
  		},
 
  		initialize: function(){
@@ -48,6 +54,36 @@ module.exports = exports = base.RequestHandler.extend({
 				}, function(err){
 					res.json(500, err);
 				});
+ 		},
+
+ 		deleteEntity: function(req, res){
+ 			var id = req.params.id;
+			var model = new this.model({id:id});
+
+			var success = _.bind(function(){
+				res.status(204).end();
+			}, this);
+
+			var error = _.bind(function(err){
+				res.status(403).end();
+			}, this);
+
+			var checkUser = _.bind(function(model){
+				var muid = model.get('user_id');
+				if(req.user.id !== muid){
+					console.error('deleteEntity', req.user.id, model.user, req.user.id !== muid);
+					throw (new Error('this is not yours buddy'));
+				}
+			}, this);
+
+			var destroy = _.bind(function(){
+				model.destroy()
+					.then(success)
+					.catch(error);
+			}, this);
+
+			model.on('destroying', checkUser);
+			model.fetch().then(destroy);
  		},
 
 

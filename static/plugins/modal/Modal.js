@@ -72,6 +72,8 @@ function(log, _, $, T, C, TP, CSS){
 
 			c.one('click', _.bind(this.close, this));
 			this.views.push(view.render());
+
+			view.on('modal:close', this.close, this);
 		},
 
 		close: function(){

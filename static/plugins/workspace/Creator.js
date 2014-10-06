@@ -85,6 +85,7 @@ function(_, $, B, log, T, C, TP){
 		events: {
 			'change .input' : 'updateModel',
 			'click [data-role=kvnew]' : 'newProperty',
+			'click [data-role=delete]' : 'deleteEntity',
 		},
 
 		initialize: function(options){
@@ -158,6 +159,16 @@ function(_, $, B, log, T, C, TP){
 		close: function(e){
 			this.isClosing = true;
 			this.remove();
+		},
+
+		deleteEntity: function(e){
+			var success = _.bind(function(){
+				this.trigger('modal:close');
+			}, this);
+			this.model.destroy({
+				success:success,
+				wait: true,
+			});
 		},
 
 	});
