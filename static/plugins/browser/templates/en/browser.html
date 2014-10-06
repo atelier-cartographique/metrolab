@@ -1,4 +1,5 @@
 <% console.log(data); %>
+<%  $("body").tooltip({selector: '[data-toggle="tooltip"]'}); %>
 
 <div class="browser-list">
 	
@@ -9,7 +10,11 @@
 					 btn 
 					 btn-link 
 					 btn-xs" 
-			  data-route="workspace">
+			  data-route="workspace"
+			  data-route="workspace"
+			  data-toggle="tooltip" 
+			  data-placement="bottom"
+			  title="The workspace is where you create and edit your map layers">
 			workspace
 		</span>
 
@@ -19,7 +24,11 @@
 					 btn-link 
 					 btn-xs
 					 activated" 
-			  data-route="browse">
+			  data-route="browse"
+			  data-route="browse"
+			  data-toggle="tooltip" 
+			  data-placement="bottom"
+			  title="The map browser allows you to see every public maps on the Metrolab plateform">
 			maps browser
 		</span>
 
