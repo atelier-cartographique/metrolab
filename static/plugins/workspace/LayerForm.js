@@ -42,6 +42,7 @@ function(log, _, T, C, TP, Stylist){
 
 		events: {
 			'change .input' : 'updateModel',
+			'click [data-role=delete]' : 'deleteLayer',
 		},
 
 		initialize: function(options){
@@ -79,9 +80,23 @@ function(log, _, T, C, TP, Stylist){
 		},
 
 		close: function(e){
-			this.update();
+			if(!this.doNotUpdate){
+				this.update();
+			}
+				
 			this.isClosing = true;
 			this.remove();
+		},
+
+		deleteLayer: function(e){
+			var success = _.bind(function(){
+				this.doNotUpdate = true;
+				this.trigger('modal:close');
+			}, this);
+			this.model.destroy({
+				success:success,
+				wait: true,
+			});
 		},
 
 	});

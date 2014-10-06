@@ -112,6 +112,12 @@ function (_, proxy, T, C, TP, Layer, WMSLayer, LayerForm, WMSForm) {
 				self.currentLayer = l;
 			});
 
+			layer.on('destroy', function(){
+				if(layer.removeFeatures){layer.removeFeatures();}
+				delete self.layers[layer.id];
+				layerItem.remove();
+			});
+
 			if(layerItem.selectLayer 
 				&& !this.currentLayer){
 				layerItem.selectLayer();
