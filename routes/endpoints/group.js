@@ -106,16 +106,28 @@ module.exports = exports = base.RequestHandler.extend({
  			var groupQuery = self._get(req.params.gid, true);
 
  			groupQuery.done(function(group){
- 				user.layers().fetch().then(function(layers){
- 					console.log('Group.attach', layers);
- 					layers.each(function(layer){
- 						console.log('Group.attach.layer', layer.id === layer_id);
- 						if(layer.id === layer_id){
-	 						group.layers().attach(layer);			
- 						}
-		 				res.json(self._filterResult(group.toJSON()))
- 					});
+ 				group.layers().fetch().then(function(glayers){
+ 					// console.log('Group.attach', glayers);
+ 					var glen = glayers.length;
+ 					user.layers().fetch().then(function(layers){
+	 					// console.log('Group.attach', layers);
+	 					layers.each(function(layer){
+	 						// console.log('Group.attach.layer', layer.id === layer_id);
+	 						if(layer.id === layer_id){
+		 						glayers.attach({ 
+		 							group_id: group.id, 
+									layer_id: layer_id, 
+									order: glen
+								}).done(function(rel){
+ 									res.json(self._filterResult(group.toJSON()))
+		 						});
+	 						}
+	 					});
+		 				
+	 				});
+
  				});
+ 				
  			}, this.queryError(res))
  		},
 
