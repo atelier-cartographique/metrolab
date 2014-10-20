@@ -1,6 +1,14 @@
-
+<% console.log('group-item', data); %>
 <div class="panel-heading">
-	<h4 class="panel-title"><%= data.name %></h4>
+	<h4 class="panel-title"  
+		data-toggle="collapse"
+		data-target="#cg_<%= data.id %>" 
+		data-parent="#accordion" 
+		>
+		<%= data.name %>
+	</h4>
 </div>
 
-<div class="panel-group accordion" data-anchor="group-layers"/>
+<div class="panel-group collapse" 
+	 data-anchor="group-layers"
+	 id="cg_<%= data.id %>" />

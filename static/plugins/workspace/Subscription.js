@@ -55,7 +55,7 @@ function (_, log, proxy, T, C, TP, L, Layer) {
 		},
 
 		templateData: function(){
-			return this.model.toJSON().properties;
+			return _.extend({id:this.model.id},this.model.toJSON().properties);
 		},
 
 		addLayer: function(attrs){
