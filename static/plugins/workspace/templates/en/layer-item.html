@@ -34,6 +34,22 @@
 
 	</span>
 
+	<% if(data.editable){ %>
+	
+	<span class="interaction"  data-role="layerUp">
+		<span class="glyphicon  
+					 glyphicon-arrow-up"
+			  data-toggle="tooltip" 
+			  data-placement="left" 
+			  title="raise layer"/>
+	</span>
+	<span class="interaction"  data-role="layerDown">
+		<span class="glyphicon  
+					 glyphicon-arrow-down"
+			  data-toggle="tooltip" 
+			  data-placement="left" 
+			  title="down layer"/>
+	</span>
 
 	<span class="layer-settings interaction"  data-role="settings">
 		<span class="glyphicon  
@@ -42,6 +58,8 @@
 			  data-placement="left" 
 			  title="Edit layer"/>
 	</span>
+
+	<% } %>
 </div>
 
 

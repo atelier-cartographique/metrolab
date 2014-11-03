@@ -47,6 +47,8 @@ function(log, proxy, _, T, Live, C, TP, L, User, Creator, LayerForm, Marker){
 			'click [data-role=zoom]': 'zoomLayer',
 			'click [data-role=visible]': 'toggleVisible',
 			'click [data-role=settings]': 'settings',
+			'click [data-role=layerUp]': 'layerUp',
+			'click [data-role=layerDown]': 'layerDown',
 		},
 
 		initialize: function(options){
@@ -81,6 +83,7 @@ function(log, proxy, _, T, Live, C, TP, L, User, Creator, LayerForm, Marker){
 			User(function(user){
 				this.user = user;
 				this.editable = true;
+				this.render();
 			}, this);
 		},
 
@@ -200,7 +203,7 @@ function(log, proxy, _, T, Live, C, TP, L, User, Creator, LayerForm, Marker){
 
 			data.visible = this.visible;
 			data.active = this.active;
-			data.editable = data.editable;
+			data.editable = this.editable;
 			return data;									
         },
 
@@ -223,6 +226,14 @@ function(log, proxy, _, T, Live, C, TP, L, User, Creator, LayerForm, Marker){
 			this.$el.removeClass('active');
 			this.active = false;
 			return this;
+		},
+
+		layerUp: function(){
+			this.trigger('layer:up', this.model);
+		},
+
+		layerDown: function(){
+			this.trigger('layer:down', this.model);
 		},
 
 		getBounds: function(){

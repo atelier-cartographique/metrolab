@@ -15,6 +15,15 @@ var _ = require('underscore');
 var base = require('./base');
 var store = require('../../lib/store');
 
+function increment(a){
+	a = a + 1;
+	return a;
+};
+
+function decrement(a){
+	a = a - 1;
+	return a;
+};
 
 module.exports = exports = base.RequestHandler.extend({
 
@@ -24,6 +33,12 @@ module.exports = exports = base.RequestHandler.extend({
  		related: ['layers'],
  		
  		endpoints: {
+ 			// browse: {
+ 			// 	verb: 'get',
+				// handler: 'list',
+				// url: 'Group/'
+ 			// },
+
  			layer: {
  				verb: 'get',
 				handler: 'layer',
@@ -52,6 +67,12 @@ module.exports = exports = base.RequestHandler.extend({
  				verb: 'put',
 				handler: 'detach',
 				url: 'Group/detach/:lid/:gid'
+ 			},
+
+ 			moveLayer: {
+ 				verb: 'put',
+				handler: 'moveLayer',
+				url: 'Group/move/:gid/:lid/:index'
  			}
  		},
 
@@ -151,5 +172,66 @@ module.exports = exports = base.RequestHandler.extend({
  			}, this.queryError(res))
  		},
 
+ 		moveLayer: function(request, response){
+ 			var self = this;
+ 			var user = request.user;
+ 			var index = parseInt(request.params.index);
+ 			var layerId = parseInt(request.params.lid);
+ 			var groupId = parseInt(request.params.gid);
 
+ 			var updateLayerRecord = function(layerRecord, newOrder){
+ 				
+				layerRecord.set({order: newOrder})
+					.save()
+					.done();	
+ 			};
+
+ 			var updateLayers = function(layers){
+ 				_.each(layers, function(layer){
+ 					store.Composition.where({
+ 						layer_id: layer.id,
+ 						group_id: groupId
+ 					}).fetch()
+ 						.then(function(lrs){
+ 							var layerRecord = _.find(lrs, function(lr){
+ 								return lr.layer_id === layer_id;
+ 							});
+
+ 							var from = layerRecord.get('order');
+ 							var op = (index > from) ? decrement : increment;
+ 							var interval = [Math.min(from,index), Math.max(from,index)];
+ 							var toMove = _.filter(lrs, function(lr){
+ 								var o = lr.get('order');
+ 								if(o < interval[0] 
+ 									|| o > interval[1] 
+ 									|| lr.id === layerRecord.id){
+ 									return false;
+ 								}
+ 								return true;
+ 							});
+
+ 							_.each(toMove, function(lr){
+ 								var o = lr.get('order');
+ 								updateLayerRecord(lr, op(o));
+ 							});
+
+ 							layerRecord.set({order: index})
+								.save()
+								.done(function(lr){
+									response.json(200, lr.toJSON());
+								});
+ 						}) ;
+ 				});
+ 			};
+
+ 			self._get(request.params.gid, true)
+ 				.done(function(group){
+ 					if(group.user_id !== user.id){
+ 						return response.json(403, {});
+ 					}
+ 					group.layers()
+ 						.fetch()
+ 						.then(updateLayers);
+ 				}, self.queryError(response))
+ 		}
  	});

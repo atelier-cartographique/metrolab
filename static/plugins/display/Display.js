@@ -175,6 +175,8 @@ function (log, _, config, L, proxy, T, C, TP, Layer, User) {
 				});
 
 				self.markReady();
+				self.render();
+				self.setupMap();
 			});
 		},
 

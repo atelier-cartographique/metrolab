@@ -93,8 +93,10 @@ function (_, log, proxy, T, C, TP, L, Layer) {
 					bounds.extend(layer.getBounds());
 				}
 			});
-			log.debug('fitGroup', bounds.toBBoxString());
-			this.map.fitBounds(bounds);
+			if(bounds){
+				log.debug('fitGroup', bounds.toBBoxString());
+				this.map.fitBounds(bounds);
+			}
 		},
 
 	});
