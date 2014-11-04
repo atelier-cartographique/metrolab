@@ -37,7 +37,7 @@ function (_, proxy, T, C, TP, Layer, WMSLayer, LayerForm, WMSForm) {
 	'use strict';
 
 	var LayerManager = T.View.extend({
-
+		className: 'user-group-item panel panel-primary',
 		template: 'workspace/layer-widget',
 
 		events: {
@@ -47,37 +47,29 @@ function (_, proxy, T, C, TP, Layer, WMSLayer, LayerForm, WMSForm) {
 
 		initialize: function(options){
 			this.layers = {};
+			this.map = options.map;
+			this.user = options.user;
 			this.currentLayer = undefined;
 			this.ready = false;
 			this.rendered = false;
+			var self = this;
+			this.on('rendered', function(){
+				_.each(self.model.get('layers'), self.renderLayerItem, self);
+			});
 		},
 
 		render:function(){
 			TP.render(TP.name(this.template), this, function(t){
 				this.$el.html(t({}));
 				this.rendered = true;
+				this.trigger('rendered');
 			});
 			return this;
 		},
 
-		start: function(map, user){
-			this.map = map;
-			this.user = user;
-			C.Layer.forUser(user.id, this.addLayers, this);
-			this.ready = true;
-		},
 
-		addLayers: function(data){
-			if(!this.rendered){
-				var self = this;
-				return window.setTimeout(function(){
-					self.addLayers(data);
-				}, 400);
-			}
-			_.each(data.references, this.renderLayerItem, this);
-		},
-
-		renderLayerItem: function(layer){
+		renderLayerItem: function(attrs){
+			var layer = new C.Layer.model(attrs);
 			if(layer.id in this.layers) return;
 
 			var layerItem;
@@ -96,6 +88,8 @@ function (_, proxy, T, C, TP, Layer, WMSLayer, LayerForm, WMSForm) {
 				});	
 			}
 
+			layerItem.movable = true;
+			layerItem.editable = true;
 			  
 			this.layers[layer.id] = layerItem;
 			
@@ -111,6 +105,7 @@ function (_, proxy, T, C, TP, Layer, WMSLayer, LayerForm, WMSForm) {
 				});
 				self.currentLayer = l;
 			});
+
 
 			layer.on('destroy', function(){
 				if(layer.removeFeatures){layer.removeFeatures();}

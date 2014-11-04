@@ -108,6 +108,14 @@ function(DT)
             });
         },
 
+        byUser: function(callback, ctx){
+            return this.getCursor({
+                query: 'u',
+                callback: callback,
+                context: ctx,
+            });
+        },
+
         browse: function(callback, ctx){
             return this.getCursor({
                 query: '',

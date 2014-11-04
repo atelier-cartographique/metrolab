@@ -32,11 +32,10 @@ define([
 	'leaflet-draw', 
 	'core/template',
 	'plugins/user/User',
-	'plugins/workspace/LayerManager',
 	'plugins/workspace/Subscription',
 	'plugins/workspace/Notification'
 	], 
-function(_, bootstrap, B, config, log, T, C, L, LD, TP, User, LayerManager, Subscription, Notification){
+function(_, bootstrap, B, config, log, T, C, L, LD, TP, User, Subscription, Notification){
 
 
 	function MapEventHandler(options){
@@ -90,8 +89,6 @@ function(_, bootstrap, B, config, log, T, C, L, LD, TP, User, LayerManager, Subs
 		template: 'workspace/main',
 
 		initialize: function(options){
-
-			this.layerManager = new LayerManager;
 			this.subscription = new Subscription;
 			this.notification = new Notification;
 		},
@@ -117,14 +114,14 @@ function(_, bootstrap, B, config, log, T, C, L, LD, TP, User, LayerManager, Subs
 			}
 
 			this.handler = new MapEventHandler({map:this.map});
-			this.handler.on('create', function(layer){
-				if(this.layerManager.getCurrentLayer()){
-					this.layerManager.getCurrentLayer().createFeature(layer);
-				}
-			}, this);
+			this.map.WEventHandler = this.handler;
+			// this.handler.on('create', function(layer){
+			// 	if(this.layerManager.getCurrentLayer()){
+			// 		this.layerManager.getCurrentLayer().createFeature(layer);
+			// 	}
+			// }, this);
 
 			User(function(user){
-				this.layerManager.start(this.map, user);
 				this.subscription.start(this.map, user);
 			}, this);
 			
@@ -133,7 +130,7 @@ function(_, bootstrap, B, config, log, T, C, L, LD, TP, User, LayerManager, Subs
 		render: function(){
 			TP.render(TP.name(this.template), this, function(t){
 				this.$el.html(t({}));
-				this.attachToAnchor(this.layerManager.render(), 'layers');
+				// this.attachToAnchor(this.layerManager.render(), 'layers');
 				this.attachToAnchor(this.subscription.render(), 'groups');
 				this.attachToAnchor(this.notification.render(), 'notifications');
 				this.setupMap();

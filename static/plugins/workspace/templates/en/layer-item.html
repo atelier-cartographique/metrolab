@@ -34,8 +34,7 @@
 
 	</span>
 
-	<% if(data.editable){ %>
-	
+	<% if(data.movable){ %>
 	<span class="interaction"  data-role="layerUp">
 		<span class="glyphicon  
 					 glyphicon-arrow-up"
@@ -50,6 +49,9 @@
 			  data-placement="left" 
 			  title="down layer"/>
 	</span>
+	<% } %>
+
+	<% if(data.editable){ %>
 
 	<span class="layer-settings interaction"  data-role="settings">
 		<span class="glyphicon  

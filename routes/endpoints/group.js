@@ -39,6 +39,12 @@ module.exports = exports = base.RequestHandler.extend({
 				// url: 'Group/'
  			// },
 
+ 			own: {
+ 				verb: 'get',
+				handler: 'ownGroups',
+				url: 'Group/u'
+ 			},
+
  			layer: {
  				verb: 'get',
 				handler: 'layer',
@@ -74,6 +80,23 @@ module.exports = exports = base.RequestHandler.extend({
 				handler: 'moveLayer',
 				url: 'Group/move/:gid/:lid/:index'
  			}
+ 		},
+
+ 		listOptions: function(req){
+ 			var w0 = base.where('status_flag', '=', 0);
+ 			return {where:w0};
+ 		},
+
+ 		ownGroups: function(req, res){
+ 			var user = req.user;
+ 			var options = { where: base.where('user_id', '=', user.id)};
+ 			options.page = req.query.page;
+			this._list(options)
+				.done(function(result){
+					res.json(result);
+				}, function(err){
+					res.json(500, err);
+				});
  		},
 
  		layer: function(req, res) {

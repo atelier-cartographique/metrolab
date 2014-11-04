@@ -30,10 +30,12 @@ define([
 	'core/collections',
 	'core/template',
 	'leaflet',
-	'plugins/workspace/Layer'
+	'plugins/workspace/Layer',
+	'plugins/workspace/LayerManager'
 	],	 
-function (_, log, proxy, T, C, TP, L, Layer) {
+function (_, log, proxy, T, C, TP, L, Layer, LayerManager) {
 	'use strict';
+
 
 	var GroupItem = T.BView.extend({
 		className: 'group-item panel panel-default',
@@ -55,7 +57,7 @@ function (_, log, proxy, T, C, TP, L, Layer) {
 		},
 
 		templateData: function(){
-			return _.extend({id:this.model.id},this.model.toJSON().properties);
+			return _.extend({id:this.model.id},this.model.get('properties'));
 		},
 
 		addLayer: function(attrs){
@@ -65,7 +67,6 @@ function (_, log, proxy, T, C, TP, L, Layer) {
 				map: this.map
 			});
 			this.layers.push(layer.render());
-			layer.addClass('pull-right');
 			this.attachToAnchor(layer, 'group-layers');
 		},
 
@@ -101,6 +102,25 @@ function (_, log, proxy, T, C, TP, L, Layer) {
 
 	});
 
+	var UserGroupItem = LayerManager;
+
+	var OwnGroupItem = GroupItem.extend({
+		className: 'own-group-item panel panel-info',
+		templateName: 'workspace/own-group-item',
+
+		addLayer: function(attrs){
+			var model = new C.Layer.model(attrs);
+			var layer = new Layer({
+				model: model,
+				map: this.map
+			});
+			layer.movable = true;
+			this.layers.push(layer.render());
+			this.attachToAnchor(layer, 'group-layers');
+		},
+	});
+
+
 	var Subscription = T.View.extend({
 
 		template: 'workspace/subscription',
@@ -122,8 +142,10 @@ function (_, log, proxy, T, C, TP, L, Layer) {
 			return this;
 		},
 
-		addGroup: function(model){
+		addGroup: function(GroupItemProto, model){
 			var self = this;
+
+			if(model.id in self.groups){return;}
 
 			if(!self.map){
 				if(!self.pendingGroups){
@@ -131,25 +153,26 @@ function (_, log, proxy, T, C, TP, L, Layer) {
 
 					self.once('map:ready', function(){
 						_.each(self.pendingGroups, function(g){
-							self.addGroup(g);
+							self.addGroup(g.proto, g.model);
 						});
 					});
 
 				}
-				self.pendingGroups.push(model);
+				self.pendingGroups.push({model:model, proto:GroupItemProto});
 
 				return;
 			}
 
-			self.groups[model.id] = new GroupItem({
+			self.groups[model.id] = new GroupItemProto({
 						model: model,
-						map: self.map
+						map: self.map,
+						user: self.user,
 					})
 					
 			self.groups[model.id].on('rendered', function(){
 				self.groups[model.id].showLayers();
 			});
-			console.log('addGroup');
+
 			if(this.rendered){
 				self.attachToAnchor(self.groups[model.id].render(), 'items');
 			}
@@ -177,9 +200,29 @@ function (_, log, proxy, T, C, TP, L, Layer) {
 			self.user = user;
 			var groups = user.get('groups');
 
-			_.each(groups, function(groupData){
-				C.Group.getOrCreate(groupData.id, self.addGroup, self);
+
+			C.Group.byUser(function(gs){
+				// first render workspace
+				var ugroup = _.find(gs.references, function(g){
+					return (2 === g.get('status_flag'));
+				});
+				self.addGroup(UserGroupItem, ugroup);
+
+				// then own groups
+				var ogroups = _.reject(gs.references, function(g){
+					return (2 === g.get('status_flag'));
+				});
+				_.each(ogroups, function(g){
+					self.addGroup(OwnGroupItem, g);
+				});
+
+				// then subcribed groups
+				_.each(groups, function(groupData){
+					C.Group.getOrCreate(groupData.id, _.partial(self.addGroup, GroupItem), self);
+				});
+
 			});
+
 			self.trigger('map:ready');
 		},
 

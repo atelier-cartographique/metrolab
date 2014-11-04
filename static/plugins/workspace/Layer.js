@@ -41,6 +41,7 @@ function(log, proxy, _, T, Live, C, TP, L, User, Creator, LayerForm, Marker){
 
 		className: 'list-group-item layer',
 		template: 'workspace/layer-item',
+		tagName: 'li',
 
 		events:{
 			'click [data-role=select]': 'selectLayer',
@@ -80,11 +81,11 @@ function(log, proxy, _, T, Live, C, TP, L, User, Creator, LayerForm, Marker){
 				}
 			}, this);
 
-			User(function(user){
-				this.user = user;
-				this.editable = true;
-				this.render();
-			}, this);
+			// User(function(user){
+			// 	this.user = user;
+			// 	this.editable = true;
+			// 	this.render();
+			// }, this);
 		},
 
 		style: function(feature){
@@ -204,6 +205,7 @@ function(log, proxy, _, T, Live, C, TP, L, User, Creator, LayerForm, Marker){
 			data.visible = this.visible;
 			data.active = this.active;
 			data.editable = this.editable;
+			data.movable = this.movable;
 			return data;									
         },
 
