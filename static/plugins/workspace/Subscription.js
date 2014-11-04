@@ -170,15 +170,15 @@ function (_, log, proxy, T, C, TP, L, Layer, LayerManager) {
 					})
 					
 			self.groups[model.id].on('rendered', function(){
-				self.groups[model.id].showLayers();
+				try{self.groups[model.id].showLayers();}catch(e){}
 			});
 
 			if(this.rendered){
-				self.attachToAnchor(self.groups[model.id].render(), 'items');
+				self.attachToAnchor(self.groups[model.id].render(), 'group-items');
 			}
 			else{
 				self.on('rendered', function(){
-					self.attachToAnchor(self.groups[model.id].render(), 'items');
+					self.attachToAnchor(self.groups[model.id].render(), 'group-items');
 				});
 			}
 			
@@ -198,8 +198,6 @@ function (_, log, proxy, T, C, TP, L, Layer, LayerManager) {
 			var self = this;
 			self.map = map;
 			self.user = user;
-			var groups = user.get('groups');
-
 
 			C.Group.byUser(function(gs){
 				// first render workspace
@@ -217,7 +215,7 @@ function (_, log, proxy, T, C, TP, L, Layer, LayerManager) {
 				});
 
 				// then subcribed groups
-				_.each(groups, function(groupData){
+				_.each(user.get('groups'), function(groupData){
 					C.Group.getOrCreate(groupData.id, _.partial(self.addGroup, GroupItem), self);
 				});
 

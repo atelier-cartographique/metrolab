@@ -53,7 +53,7 @@ function (_, proxy, T, C, TP, Layer, WMSLayer, LayerForm, WMSForm) {
 			this.ready = false;
 			this.rendered = false;
 			var self = this;
-			this.on('rendered', function(){
+			this.once('rendered', function(){
 				_.each(self.model.get('layers'), self.renderLayerItem, self);
 			});
 		},

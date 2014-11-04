@@ -91,6 +91,11 @@ function(_, bootstrap, B, config, log, T, C, L, LD, TP, User, Subscription, Noti
 		initialize: function(options){
 			this.subscription = new Subscription;
 			this.notification = new Notification;
+			var self = this;
+			User(function(user){
+				self.user = user;
+				self.trigger('user:ready', user);
+			});
 		},
 
 		setupMap: function(){
@@ -121,20 +126,25 @@ function(_, bootstrap, B, config, log, T, C, L, LD, TP, User, Subscription, Noti
 			// 	}
 			// }, this);
 
-			User(function(user){
-				this.subscription.start(this.map, user);
-			}, this);
+			
+			this.subscription.start(this.map, this.user);
 			
 		},
 
 		render: function(){
-			TP.render(TP.name(this.template), this, function(t){
-				this.$el.html(t({}));
-				// this.attachToAnchor(this.layerManager.render(), 'layers');
-				this.attachToAnchor(this.subscription.render(), 'groups');
-				this.attachToAnchor(this.notification.render(), 'notifications');
-				this.setupMap();
-			});
+			if(this.user){
+				var data = {user:this.user.toJSON()};
+				TP.render(TP.name(this.template), this, function(t){
+					this.$el.html(t(data));
+					// this.attachToAnchor(this.layerManager.render(), 'layers');
+					this.attachToAnchor(this.subscription.render(), 'groups');
+					this.attachToAnchor(this.notification.render(), 'notifications');
+					this.setupMap();
+				});
+			}
+			else{
+				this.once('user:ready', this.render, this);
+			}
 			return this;
 		},
 
